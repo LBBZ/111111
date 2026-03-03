@@ -1,0 +1,7 @@
+conda create -n airsim_env python=3.9
+conda install numpy
+conda install msgpack-rpc-python msgpack-python
+conda install setuptools wheel
+conda install opencv-python pillow
+conda install airsim --no-build-isolation
+conda install msgpack-rpc-python msgpack-python

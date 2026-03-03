@@ -19,6 +19,7 @@ screen.fill((0, 0, 0))
 # 这里改为你要控制的无人机名称(settings文件里面设置的)
 vehicle_name = ""
 AirSim_client = airsim.MultirotorClient()
+AirSim_client.simPause(False)
 AirSim_client.confirmConnection()
 AirSim_client.enableApiControl(True, vehicle_name=vehicle_name)
 AirSim_client.armDisarm(True, vehicle_name=vehicle_name)
