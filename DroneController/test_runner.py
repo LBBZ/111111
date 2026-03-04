@@ -71,9 +71,12 @@ with open(TASK_FILE, "w", encoding="utf-8") as f:
 
         # 随机距离或角度
         if "turn" in name:
-            param = random.uniform(10, 45)  # 随机转 10~45 度
+            param = random.uniform(10, 45)  # 随机转 30~180 度
         else:
             param = random.uniform(5.0, 10.0)  # 随机移动 5~10 米
+
+        # 等待 5 秒
+        time.sleep(5)
 
         # 获取当前状态（动作前）
         state = motion.client.getMultirotorState()
@@ -81,17 +84,32 @@ with open(TASK_FILE, "w", encoding="utf-8") as f:
         ori = state.kinematics_estimated.orientation
         pitch, roll, yaw = airsim.to_eularian_angles(ori)
 
-        # 写入任务文件
+
+        # 写入 Step 信息
         f.write(f"Step {i}:\n")
         f.write(f"  Action: {name}({param:.2f})\n")
+        # 写入开始状态信息
+        f.write(f"  Start Position\n")
         f.write(f"  Position: x={pos.x_val:.2f}, y={pos.y_val:.2f}, z={pos.z_val:.2f}\n")
         f.write(f"  Orientation: pitch={pitch:.2f}, roll={roll:.2f}, yaw={yaw:.2f}\n\n")
 
+        # 执行动作
         print(f"[Step {i}] Executing: {name}({param:.2f})")
         func(param)
 
         # 等待 5 秒
         time.sleep(5)
+
+        # 获取当前状态（动作后）
+        state = motion.client.getMultirotorState()
+        pos = state.kinematics_estimated.position
+        ori = state.kinematics_estimated.orientation
+        pitch, roll, yaw = airsim.to_eularian_angles(ori)
+
+        # 写入结束状态信息
+        f.write(f"  End Position\n")
+        f.write(f"  Position: x={pos.x_val:.2f}, y={pos.y_val:.2f}, z={pos.z_val:.2f}\n")
+        f.write(f"  Orientation: pitch={pitch:.2f}, roll={roll:.2f}, yaw={yaw:.2f}\n\n")
 
         # -----------------------------
         # 三方向拍照
