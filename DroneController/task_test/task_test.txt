@@ -1,0 +1,80 @@
+Step 1:
+  Action: move_backward(5.05)
+  Position: x=7481.67, y=-3555.19, z=-53.37
+  Orientation: pitch=0.00, roll=0.00, yaw=0.00
+
+Step 2:
+  Action: move_down(8.70)
+  Position: x=7478.63, y=-3555.19, z=-53.78
+  Orientation: pitch=-0.04, roll=-0.00, yaw=0.00
+
+Step 3:
+  Action: move_backward(7.11)
+  Position: x=7478.63, y=-3555.19, z=-45.38
+  Orientation: pitch=0.00, roll=0.00, yaw=0.00
+
+Step 4:
+  Action: turn_left(30.24)
+  Position: x=7473.74, y=-3555.19, z=-45.74
+  Orientation: pitch=-0.04, roll=0.00, yaw=0.00
+
+Step 5:
+  Action: move_left(5.34)
+  Position: x=7473.74, y=-3555.19, z=-45.74
+  Orientation: pitch=0.00, roll=0.00, yaw=0.56
+
+Step 6:
+  Action: turn_right(14.85)
+  Position: x=7475.96, y=-3557.42, z=-46.10
+  Orientation: pitch=0.08, roll=0.02, yaw=0.54
+
+Step 7:
+  Action: move_forward(9.48)
+  Position: x=7476.09, y=-3557.86, z=-46.11
+  Orientation: pitch=0.00, roll=0.00, yaw=0.26
+
+Step 8:
+  Action: turn_left(17.69)
+  Position: x=7482.90, y=-3555.77, z=-46.48
+  Orientation: pitch=0.05, roll=-0.03, yaw=0.25
+
+Step 9:
+  Action: move_backward(7.92)
+  Position: x=7483.06, y=-3555.87, z=-46.48
+  Orientation: pitch=-0.00, roll=-0.00, yaw=0.58
+
+Step 10:
+  Action: move_up(7.74)
+  Position: x=7479.01, y=-3559.37, z=-46.84
+  Orientation: pitch=0.01, roll=0.09, yaw=0.56
+
+Step 11:
+  Action: move_down(8.94)
+  Position: x=7478.51, y=-3559.68, z=-54.24
+  Orientation: pitch=-0.00, roll=-0.00, yaw=0.56
+
+Step 12:
+  Action: move_forward(6.10)
+  Position: x=7478.51, y=-3559.68, z=-45.65
+  Orientation: pitch=-0.00, roll=-0.00, yaw=0.56
+
+Step 13:
+  Action: turn_right(43.08)
+  Position: x=7481.27, y=-3557.14, z=-46.01
+  Orientation: pitch=0.01, roll=-0.08, yaw=0.54
+
+Step 14:
+  Action: move_backward(7.07)
+  Position: x=7481.70, y=-3556.96, z=-46.02
+  Orientation: pitch=0.00, roll=-0.00, yaw=-0.27
+
+Step 15:
+  Action: move_right(8.98)
+  Position: x=7476.94, y=-3555.50, z=-46.37
+  Orientation: pitch=-0.05, roll=-0.02, yaw=-0.25
+
+Step 16:
+  Action: move_left(7.23)
+  Position: x=7478.52, y=-3549.13, z=-46.79
+  Orientation: pitch=0.00, roll=-0.04, yaw=-0.23
+
