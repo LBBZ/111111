@@ -90,12 +90,15 @@ while True:
 
     # 设置云台角度
     AirSim_client.simSetCameraPose(
-        camera_name="0",  # 摄像头 ID 为 "0"
+        camera_name="0", # 摄像头 ID 为 "0"
         pose=airsim.Pose(
             airsim.Vector3r(0, 0, 0),  # 摄像头位置保持不变
             airsim.to_quaternion(np.radians(gimbal_pitch), np.radians(gimbal_roll), np.radians(gimbal_yaw))
         )
     )
+
+
+
 
     # print(f"Gimbal angles: Pitch={gimbal_pitch}, Roll={gimbal_roll}, Yaw={gimbal_yaw}")
 
