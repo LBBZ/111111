@@ -3,3 +3,4 @@
 /workspace.xml
 .idea
 .venv
+task_test_img/*

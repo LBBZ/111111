@@ -42,7 +42,7 @@ def main():
         img_rgb = img1d.reshape(response.height, response.width, 3)
 
         # 保存图片到本地
-        cv2.imwrite("front_camera_image.png", img_rgb)
+        cv2.imwrite("task_test_img/front_camera_image.png", img_rgb)
         print(f"图片已保存")
     else:
         print("未能获取前视摄像头的图片！")
