@@ -1,6 +1,6 @@
 import time
+
 import airsim
-import math
 
 client = airsim.MultirotorClient()
 client.confirmConnection()

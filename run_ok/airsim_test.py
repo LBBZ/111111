@@ -1,8 +1,9 @@
-import airsim
-import os
-import numpy as np
-import cv2
 import time
+
+import airsim
+import cv2
+import numpy as np
+
 
 def main():
     # 连接到 AirSim
