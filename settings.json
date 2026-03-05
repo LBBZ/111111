@@ -1,0 +1,68 @@
+{
+  "SettingsVersion": 1.2,
+  "SimMode": "Multirotor",
+  "ClockSpeed": 1.0,
+  "DefaultVehicle": "keli",
+  "ViewMode": "SpringArmChase",
+  "EnableCollisions": true,
+  "AllowAPIAlways": true,
+
+  "Vehicles": {
+    "keli": {
+      "VehicleType": "SimpleFlight",
+      "AutoCreate": true,
+
+      "X": 7400.66602,
+      "Y": -3555.18677,
+      "Z": -53.36726,
+
+      "Cameras": {
+
+        "Front": {
+          "X": 0.4, "Y": 0, "Z": 0,
+          "Pitch": 0, "Roll": 0, "Yaw": 0
+        },
+
+        "Back": {
+          "X": -0.4, "Y": 0, "Z": 0,
+          "Pitch": 0, "Roll": 0, "Yaw": 180
+        },
+
+        "Left": {
+          "X": 0, "Y": -0.4, "Z": 0,
+          "Pitch": 0, "Roll": 0, "Yaw": -90
+        },
+
+        "Right": {
+          "X": 0, "Y": 0.4, "Z": 0,
+          "Pitch": 0, "Roll": 0, "Yaw": 90
+        },
+
+        "FrontLeft": {
+          "X": 0.4, "Y": -0.4, "Z": 0,
+          "Pitch": 0, "Roll": 0, "Yaw": -45
+        },
+
+        "FrontRight": {
+          "X": 0.4, "Y": 0.4, "Z": 0,
+          "Pitch": 0, "Roll": 0, "Yaw": 45
+        },
+
+        "BackLeft": {
+          "X": -0.4, "Y": -0.4, "Z": 0,
+          "Pitch": 0, "Roll": 0, "Yaw": -135
+        },
+
+        "BackRight": {
+          "X": -0.4, "Y": 0.4, "Z": 0,
+          "Pitch": 0, "Roll": 0, "Yaw": 135
+        },
+
+        "TopDown": {
+          "X": 0, "Y": 0, "Z": 0.5,
+          "Pitch": -90, "Roll": 0, "Yaw": 0
+        }
+      }
+    }
+  }
+}
