@@ -3,7 +3,7 @@ import math
 import airsim
 
 class DroneMotion:
-    def __init__(self, vehicle_name="", base_speed=3.0):
+    def __init__(self, vehicle_name = "keli", base_speed=3.0):
         self.client = airsim.MultirotorClient()
         self.client.confirmConnection()
         self.client.enableApiControl(True, vehicle_name)
@@ -44,7 +44,7 @@ class DroneMotion:
             # 这里直接用世界速度，不再做多余旋转，避免左右反
             self.client.moveByVelocityAsync(
                 vx, vy, vz, self.dt,
-                vehicle_name=self.vehicle_name
+                vehicle_name = self.vehicle_name
             )
             time.sleep(self.dt)
 
@@ -80,7 +80,7 @@ class DroneMotion:
         self.move_up(-d)
 
     # ---------- 瞬移 ----------
-    def teleport(self, x, y, z, yaw_rad=0):
+    def teleport(self, x, y, z, yaw_rad = 0):
         # 构造姿态
         target_position = airsim.Vector3r(x, y, z)
         q = airsim.to_quaternion(0, 0, yaw_rad)
@@ -88,7 +88,8 @@ class DroneMotion:
         # 瞬移
         self.client.simSetVehiclePose(
             airsim.Pose(target_position, q),
-            ignore_collision=True
+            ignore_collision = True,
+            vehicle_name = self.vehicle_name
         )
 
     # ---------- 转向：闭环到目标 yaw，方向不反，角度准确 ----------
@@ -118,8 +119,8 @@ class DroneMotion:
 
             self.client.moveByVelocityBodyFrameAsync(
                 0, 0, 0, self.dt,
-                yaw_mode=airsim.YawMode(is_rate=True, yaw_or_rate=math.degrees(yaw_rate)),
-                vehicle_name=self.vehicle_name
+                yaw_mode = airsim.YawMode(is_rate = True, yaw_or_rate = math.degrees(yaw_rate)),
+                vehicle_name = self.vehicle_name
             )
             time.sleep(self.dt)
 

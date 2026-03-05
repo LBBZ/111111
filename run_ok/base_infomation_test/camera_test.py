@@ -51,7 +51,6 @@ responses = client.simGetImages([
     airsim.ImageRequest("BackLeft", airsim.ImageType.Scene, False, False),
     airsim.ImageRequest("BackRight", airsim.ImageType.Scene, False, False),
     airsim.ImageRequest("TopDown", airsim.ImageType.Scene, False, False),
-
 ])
 print(type(responses))
 for idx in range(len(responses)):
