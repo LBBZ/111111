@@ -56,6 +56,8 @@ def capture_views_at_pose(x, y, z, yaw_deg):
     # 瞬移到原始位置
     motion.teleport(x, y, z)
     print(f"瞬移到位置: {airsim.Vector3r(x, y, z)}")
+    motion.client.simPause(False)
+    time.sleep(0.05)   # 只给一帧时间
     motion.client.simPause(True)
 
 # -----------------------------
