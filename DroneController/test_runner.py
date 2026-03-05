@@ -16,9 +16,6 @@ camera = DroneCamera()
 
 motion.client.simPause(False)
 
-print("Taking off...")
-motion.client.takeoffAsync().join()
-
 # 设置初始位置
 target_position = airsim.Vector3r(7400.66602, -3555.18677, -53.36726)
 motion.client.simSetVehiclePose(
@@ -52,7 +49,7 @@ with open(TASK_FILE, "w", encoding="utf-8") as f:
     for i, (name, func) in enumerate(steps, start=1):
 
         if "turn" in name:
-            param = random.uniform(90, 90)
+            param = random.uniform(45, 180)
         else:
             param = random.uniform(5.0, 10.0)
 

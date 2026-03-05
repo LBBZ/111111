@@ -8,6 +8,9 @@ class DroneMotion:
         self.client.confirmConnection()
         self.client.enableApiControl(True, vehicle_name)
         self.client.armDisarm(True, vehicle_name)
+        # self.client.hoverAsync().join()
+        print("Taking off...")
+        self.client.takeoffAsync().join()
         self.vehicle_name = vehicle_name
         self.base_speed = base_speed
         self.dt = 0.02
@@ -75,6 +78,18 @@ class DroneMotion:
 
     def move_down(self, d):
         self.move_up(-d)
+
+    # ---------- 瞬移 ----------
+    def teleport(self, x, y, z, yaw_rad=0):
+        # 构造姿态
+        target_position = airsim.Vector3r(x, y, z)
+        q = airsim.to_quaternion(0, 0, yaw_rad)
+
+        # 瞬移
+        self.client.simSetVehiclePose(
+            airsim.Pose(target_position, q),
+            ignore_collision=True
+        )
 
     # ---------- 转向：闭环到目标 yaw，方向不反，角度准确 ----------
 
