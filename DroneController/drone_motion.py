@@ -2,15 +2,11 @@ import time
 import math
 import airsim
 
+from airsim_client import AirSimClientSingleton
+
 class DroneMotion:
     def __init__(self, vehicle_name = "keli", base_speed=3.0):
-        self.client = airsim.MultirotorClient()
-        self.client.confirmConnection()
-        self.client.enableApiControl(True, vehicle_name)
-        self.client.armDisarm(True, vehicle_name)
-        # self.client.hoverAsync().join()
-        print("Taking off...")
-        self.client.takeoffAsync().join()
+        self.client = AirSimClientSingleton().get_client()
         self.vehicle_name = vehicle_name
         self.base_speed = base_speed
         self.dt = 0.02

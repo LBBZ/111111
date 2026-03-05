@@ -5,18 +5,22 @@ import airsim
 
 from drone_motion import DroneMotion
 from drone_camera import DroneCamera
+from airsim_client import AirSimClientSingleton
 
 OUTPUT_DIR = "task_test"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 TASK_FILE = os.path.join(OUTPUT_DIR, "task_test.txt")
 
+print("Planing Client.")
+client = AirSimClientSingleton().get_client()
 print("Planing DroneMotion.")
 motion = DroneMotion()
 print("Planing DroneCamera.")
 camera = DroneCamera()
 
 motion.client.simPause(False)
+
 print("Init Position.")
 # 设置初始位置
 target_position = airsim.Vector3r(0, 0, 0)

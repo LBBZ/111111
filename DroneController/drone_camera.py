@@ -3,10 +3,11 @@ import airsim
 import numpy as np
 import cv2
 
+from airsim_client import AirSimClientSingleton
+
 class DroneCamera:
     def __init__(self, vehicle_name: str = "keli"):
-        self.client = airsim.MultirotorClient()
-        self.client.confirmConnection()
+        self.client = AirSimClientSingleton().get_client()
         self.vehicle_name = vehicle_name
 
         # -------- 9 个摄像机名称 --------
