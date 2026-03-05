@@ -3,4 +3,5 @@
 /workspace.xml
 .idea
 .venv
-task_test_img/*
+/DroneController/task_test/*
+/run_ok/task_test_img/*
