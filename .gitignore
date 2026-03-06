@@ -5,3 +5,5 @@
 .venv
 /DroneController/task_test/*
 /run_ok/task_test_img/*
+__pycache__/
+*.pyc
