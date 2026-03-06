@@ -31,6 +31,11 @@ def capture_views_at_pose(x, y, z, yaw_deg = 0):
     for name, img in imgs.items():
         camera.save_image(img, os.path.join(OUTPUT_DIR, name + ".png"))
 
+    depths = camera.capture_all_depth()
+    for name, depth in depths.items():
+        camera.save_depth_data(depth, os.path.join(OUTPUT_DIR, name + "_depth.npy"))
+        camera.save_depth_image(depth, os.path.join(OUTPUT_DIR, name + "_depth.png"))
+
 # -----------------------------
 # 测试入口（固定坐标）
 # -----------------------------

@@ -90,9 +90,14 @@ with open(TASK_FILE, "w", encoding="utf-8") as f:
         step_dir = os.path.join(OUTPUT_DIR, f"test_step_{i}")
         os.makedirs(step_dir, exist_ok=True)
         imgs = camera.capture_all()
+        depths = camera.capture_all_depth()
 
         for img_name, img in imgs.items():
             camera.save_image(img, os.path.join(step_dir, img_name + ".png"))
+
+        for cam_name, depth in depths.items():
+            camera.save_depth_data(depth, os.path.join(step_dir, cam_name + "_depth.npy"))
+            camera.save_depth_image(depth, os.path.join(step_dir, cam_name + "_depth.png"))
 
         print(f"[Step {i}] Saved images to {step_dir}")
 

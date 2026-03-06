@@ -1,7 +1,10 @@
 # drone_camera.py
+from typing import Optional
+
 import airsim
 import numpy as np
 import cv2
+import os
 
 from airsim_client import AirSimClientSingleton
 
@@ -32,6 +35,20 @@ class DroneCamera:
         img1d = np.frombuffer(resp.image_data_uint8, dtype=np.uint8)
         img = img1d.reshape(resp.height, resp.width, 3)
         return img
+
+    def _get_depth_by_id(self, cam_id: str, depth_type: int = airsim.ImageType.DepthPlanar):
+        resp = self.client.simGetImages([
+            airsim.ImageRequest(cam_id, depth_type, True, False)
+        ], vehicle_name=self.vehicle_name)[0]
+
+        if resp.height == 0:
+            return None
+
+        depth1d = np.array(resp.image_data_float, dtype=np.float32)
+        if depth1d.size != resp.height * resp.width:
+            return None
+        depth = depth1d.reshape(resp.height, resp.width)
+        return depth
 
     # -------- 原有三个接口 --------
 
@@ -106,6 +123,73 @@ class DroneCamera:
 
         return result
 
+    # -------- Depth 拍摄接口 --------
+
+    def capture_front_depth(self, depth_type: int = airsim.ImageType.DepthPlanar):
+        return self._get_depth_by_id(self.front_cam_id, depth_type=depth_type)
+
+    def capture_down_depth(self, depth_type: int = airsim.ImageType.DepthPlanar):
+        return self._get_depth_by_id(self.down_cam_id, depth_type=depth_type)
+
+    def capture_back_depth(self, depth_type: int = airsim.ImageType.DepthPlanar):
+        return self._get_depth_by_id(self.back_cam_id, depth_type=depth_type)
+
+    def capture_left_depth(self, depth_type: int = airsim.ImageType.DepthPlanar):
+        return self._get_depth_by_id(self.left_cam_id, depth_type=depth_type)
+
+    def capture_right_depth(self, depth_type: int = airsim.ImageType.DepthPlanar):
+        return self._get_depth_by_id(self.right_cam_id, depth_type=depth_type)
+
+    def capture_front_left_depth(self, depth_type: int = airsim.ImageType.DepthPlanar):
+        return self._get_depth_by_id(self.front_left_cam_id, depth_type=depth_type)
+
+    def capture_front_right_depth(self, depth_type: int = airsim.ImageType.DepthPlanar):
+        return self._get_depth_by_id(self.front_right_cam_id, depth_type=depth_type)
+
+    def capture_back_left_depth(self, depth_type: int = airsim.ImageType.DepthPlanar):
+        return self._get_depth_by_id(self.back_left_cam_id, depth_type=depth_type)
+
+    def capture_back_right_depth(self, depth_type: int = airsim.ImageType.DepthPlanar):
+        return self._get_depth_by_id(self.back_right_cam_id, depth_type=depth_type)
+
+    def capture_all_depth(self, depth_type: int = airsim.ImageType.DepthPlanar):
+        """
+        返回 dict:
+        {
+            "Front": depth(HxW,float32, meters),
+            ...
+        }
+        """
+        camera_ids = [
+            self.front_cam_id,
+            self.back_cam_id,
+            self.left_cam_id,
+            self.right_cam_id,
+            self.front_left_cam_id,
+            self.front_right_cam_id,
+            self.back_left_cam_id,
+            self.back_right_cam_id,
+            self.down_cam_id
+        ]
+
+        responses = self.client.simGetImages([
+            airsim.ImageRequest(cam, depth_type, True, False)
+            for cam in camera_ids
+        ], vehicle_name=self.vehicle_name)
+
+        result = {}
+        for cam, resp in zip(camera_ids, responses):
+            if resp.height == 0:
+                result[cam] = None
+                continue
+            depth1d = np.array(resp.image_data_float, dtype=np.float32)
+            if depth1d.size != resp.height * resp.width:
+                result[cam] = None
+                continue
+            result[cam] = depth1d.reshape(resp.height, resp.width)
+
+        return result
+
     # -------- 通用保存接口（不变） --------
 
     @staticmethod
@@ -117,3 +201,39 @@ class DroneCamera:
             return False
         cv2.imwrite(filename, img)
         return True
+
+    # -------- Depth 保存接口 --------
+
+    @staticmethod
+    def save_depth_data(depth_m, filename: str) -> bool:
+        """
+        保存深度原始数据（单位：米）。推荐扩展名：.npy
+        """
+        if depth_m is None:
+            return False
+        os.makedirs(os.path.dirname(filename) or ".", exist_ok=True)
+        np.save(filename, np.asarray(depth_m, dtype=np.float32))
+        return True
+
+    @staticmethod
+    def save_depth_image(depth_m, filename: str, *, max_depth_m: Optional[float] = 100.0) -> bool:
+        """
+        保存深度可视化图（16-bit PNG，单位：毫米）。
+        - depth_m: HxW float32，单位米
+        - max_depth_m: 用于裁剪上限；None 表示不裁剪（可能溢出 16-bit）
+        """
+        if depth_m is None:
+            return False
+
+        depth = np.asarray(depth_m, dtype=np.float32)
+        depth = np.nan_to_num(depth, nan=0.0, posinf=0.0, neginf=0.0)
+        depth = np.maximum(depth, 0.0)
+
+        if max_depth_m is not None:
+            depth = np.minimum(depth, float(max_depth_m))
+
+        depth_mm = np.round(depth * 1000.0).astype(np.uint32)
+        depth_mm = np.clip(depth_mm, 0, 65535).astype(np.uint16)
+
+        os.makedirs(os.path.dirname(filename) or ".", exist_ok=True)
+        return bool(cv2.imwrite(filename, depth_mm))
