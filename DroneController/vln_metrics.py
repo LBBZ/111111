@@ -1,24 +1,24 @@
 import csv
-import math
 import re
+import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, List, Optional, Tuple
+from typing import Iterable, List, Tuple
 
-import numpy as np
+import math
 
 
 @dataclass(frozen=True)
 class EpisodeGT:
     idx: int
-    start_pos_m: np.ndarray  # (3,) meters, AirSim world/NED coords
+    start_pos_m: Tuple[float, float, float]  # (3,) meters, AirSim world/NED coords
     start_yaw_deg: float
     instruction: str
-    target_pos_m: np.ndarray  # (3,) meters
+    target_pos_m: Tuple[float, float, float]  # (3,) meters
     gt_path_len_m: float
 
 
-def _parse_start_loc_line(line: str) -> Tuple[int, np.ndarray, float, str]:
+def _parse_start_loc_line(line: str) -> Tuple[int, Tuple[float, float, float], float, str]:
     """
     Dataset line example:
       0. 650150.258149, -419969.413753, 131.595741; 旋转: 0, 0, 180; Under the traffic light...
@@ -43,8 +43,8 @@ def _parse_start_loc_line(line: str) -> Tuple[int, np.ndarray, float, str]:
     pos_vals = [p.strip() for p in pos_part.split(",")]
     if len(pos_vals) != 3:
         raise ValueError(f"Expected 3 position values, got {pos_vals}")
-    pos_cm = np.array(list(map(float, pos_vals)), dtype=np.float64)
-    pos_m = pos_cm / 100.0
+    pos_cm = list(map(float, pos_vals))
+    pos_m = (pos_cm[0] / 100.0, pos_cm[1] / 100.0, pos_cm[2] / 100.0)
 
     rot_vals = [p.strip() for p in rot_part.split(",")]
     if len(rot_vals) != 3:
@@ -74,7 +74,8 @@ def load_gt_episode(dataset_root: str | Path, idx: int) -> EpisodeGT:
     # 0,0,0,....
     # 1,-10,...  (meters)
     rel = _read_label_relative_positions(label_path)
-    target_pos_m = start_pos_m + rel[-1]
+    last = rel[-1]
+    target_pos_m = (start_pos_m[0] + last[0], start_pos_m[1] + last[1], start_pos_m[2] + last[2])
     gt_len = _path_length(rel)
 
     return EpisodeGT(
@@ -87,55 +88,57 @@ def load_gt_episode(dataset_root: str | Path, idx: int) -> EpisodeGT:
     )
 
 
-def _read_label_relative_positions(csv_path: Path) -> np.ndarray:
+def _read_label_relative_positions(csv_path: Path) -> List[Tuple[float, float, float]]:
     with csv_path.open("r", encoding="utf-8") as f:
         reader = csv.reader(f)
         rows = list(reader)
 
-    # skip header row
     if len(rows) < 2:
         raise ValueError(f"Label csv too short: {csv_path}")
 
-    rel = []
+    rel: List[Tuple[float, float, float]] = []
     for r in rows[1:]:
         # expected: [step_idx, x, y, z]
         if len(r) < 4:
             continue
         x, y, z = map(float, r[1:4])
-        rel.append([x, y, z])
+        rel.append((x, y, z))
 
     if len(rel) == 0:
         raise ValueError(f"No trajectory points parsed from {csv_path}")
 
-    return np.asarray(rel, dtype=np.float64)
+    return rel
 
 
-def _path_length(points: np.ndarray) -> float:
+def _path_length(points: Iterable[Tuple[float, float, float]]) -> float:
     """Sum of Euclidean distances along a polyline of absolute offsets."""
-    points = np.asarray(points, dtype=np.float64)
-    if points.ndim != 2 or points.shape[1] != 3:
-        raise ValueError(f"Expected (N,3) points, got {points.shape}")
     total = 0.0
-    prev = np.zeros(3, dtype=np.float64)
-    for p in points:
-        total += float(np.linalg.norm(p - prev))
-        prev = p
+    px, py, pz = 0.0, 0.0, 0.0
+    for x, y, z in points:
+        dx, dy, dz = x - px, y - py, z - pz
+        total += math.sqrt(dx * dx + dy * dy + dz * dz)
+        px, py, pz = x, y, z
     return total
 
 
 def trajectory_length_m(positions_m: Iterable[Iterable[float]]) -> float:
-    positions = np.asarray(list(positions_m), dtype=np.float64)
-    if positions.shape[0] < 2:
+    pts = [tuple(map(float, p)) for p in positions_m]
+    if len(pts) < 2:
         return 0.0
-    diffs = positions[1:] - positions[:-1]
-    return float(np.sum(np.linalg.norm(diffs, axis=1)))
+    total = 0.0
+    (px, py, pz) = pts[0]
+    for (x, y, z) in pts[1:]:
+        dx, dy, dz = x - px, y - py, z - pz
+        total += math.sqrt(dx * dx + dy * dy + dz * dz)
+        px, py, pz = x, y, z
+    return total
 
 
-def final_position_m(positions_m: Iterable[Iterable[float]]) -> np.ndarray:
-    positions = np.asarray(list(positions_m), dtype=np.float64)
-    if positions.shape[0] == 0:
+def final_position_m(positions_m: Iterable[Iterable[float]]) -> Tuple[float, float, float]:
+    pts = [tuple(map(float, p)) for p in positions_m]
+    if len(pts) == 0:
         raise ValueError("Empty trajectory positions")
-    return positions[-1]
+    return pts[-1]
 
 
 def compute_vln_metrics(
@@ -144,20 +147,22 @@ def compute_vln_metrics(
     success_radius_m: float = 20.0,
 ) -> dict:
     """
-    Continuous-space SR/NE/SPL (same as patched `embodied_vln.py`):
+    Continuous-space SR/NE/SPL:
     - SR_i = 1[dist(final, goal) < success_radius]
     - NE_i = dist(final, goal)
     - SPL_i = SR_i * (L_i / max(L_i, P_i))
       where L_i is GT path length, P_i is predicted path length.
     """
-    pred_positions = np.asarray(list(pred_positions_m), dtype=np.float64)
-    if pred_positions.ndim != 2 or pred_positions.shape[1] != 3:
-        raise ValueError(f"Expected pred positions (N,3), got {pred_positions.shape}")
-
-    final_pos = pred_positions[-1]
-    ne = float(np.linalg.norm(final_pos - gt.target_pos_m))
+    pts = [tuple(map(float, p)) for p in pred_positions_m]
+    if len(pts) == 0:
+        raise ValueError("Empty pred positions")
+    final_pos = pts[-1]
+    dx = final_pos[0] - gt.target_pos_m[0]
+    dy = final_pos[1] - gt.target_pos_m[1]
+    dz = final_pos[2] - gt.target_pos_m[2]
+    ne = math.sqrt(dx * dx + dy * dy + dz * dz)
     sr = float(ne < success_radius_m)
-    p_len = trajectory_length_m(pred_positions)
+    p_len = trajectory_length_m(pts)
     l_len = float(gt.gt_path_len_m)
     denom = max(l_len, p_len) if max(l_len, p_len) > 1e-8 else 1e-8
     spl = sr * (l_len / denom)
@@ -179,10 +184,8 @@ def parse_task_test_positions(task_test_txt: str | Path) -> List[List[float]]:
     """
     task_test_txt = Path(task_test_txt)
     text = task_test_txt.read_text(encoding="utf-8")
-    # Example line: "  Position: x=-7.45, y=0.00, z=-0.02"
     pos_re = re.compile(r"^\s*Position:\s*x=([-\d.]+),\s*y=([-\d.]+),\s*z=([-\d.]+)\s*$", re.M)
 
-    # Keep only "End Position" blocks by scanning sequentially.
     lines = text.splitlines()
     positions: List[List[float]] = []
     in_end_block = False
@@ -202,10 +205,12 @@ def parse_task_test_positions(task_test_txt: str | Path) -> List[List[float]]:
     return positions
 
 
+def _now_task_id() -> str:
+    return time.strftime("%Y%m%d_%H%M%S", time.localtime())
+
+
 if __name__ == "__main__":
-    # Example usage (sanity check only):
-    # - Use a recorded trajectory (here: random motion log) to compute metrics against episode 0 GT.
-    #   Real evaluation should feed positions produced by your policy/controller for the same episode.
+    # Sanity-check example:
     dataset_root = Path("Datasets") / "vln"
     gt0 = load_gt_episode(dataset_root, idx=0)
     pred = parse_task_test_positions(Path("DroneController") / "task_test" / "task_test.txt")
