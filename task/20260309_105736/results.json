@@ -1,0 +1,135 @@
+{
+  "meta": {
+    "task_id": "20260309_105736",
+    "created_at": "2026-03-09 10:57:36",
+    "dataset_root": "Datasets\\vln",
+    "episodes": [
+      0,
+      1,
+      2
+    ],
+    "success_radius_m": 20.0,
+    "note": "Fake trajectories for evaluation pipeline smoke test (no AirSim, no LLM).",
+    "artifacts": {
+      "per_episode": [
+        "plan.json",
+        "traj.csv",
+        "images/"
+      ],
+      "root": [
+        "meta.json",
+        "results.json"
+      ]
+    }
+  },
+  "episodes": [
+    {
+      "episode": {
+        "idx": 0,
+        "instruction": "Under the traffic light beads across the street",
+        "start_yaw_deg": 180.0
+      },
+      "gt": {
+        "start_pos_m": [
+          6501.50258149,
+          -4199.694137529999,
+          1.31595741
+        ],
+        "target_pos_m": [
+          6451.151110542734,
+          -4199.694151863347,
+          -1.6347140244024658
+        ],
+        "gt_path_len_m": 51.50263599353601
+      },
+      "pred": {
+        "traj_csv": "task/20260309_105736/episodes/0/traj.csv",
+        "num_points": 6
+      },
+      "metrics": {
+        "idx": 0,
+        "SR": 1.0,
+        "NE": 1.2400281496827261,
+        "SPL": 1.0,
+        "pred_len_m": 50.27209566049358,
+        "gt_len_m": 51.50263599353601,
+        "success_radius_m": 20.0
+      },
+      "variant": "hi"
+    },
+    {
+      "episode": {
+        "idx": 1,
+        "instruction": "Under the red tree",
+        "start_yaw_deg": 180.0
+      },
+      "gt": {
+        "start_pos_m": [
+          6501.50258149,
+          -4199.694137529999,
+          1.31595741
+        ],
+        "target_pos_m": [
+          6418.483096016367,
+          -4244.7427520319525,
+          -0.8910814693945313
+        ],
+        "gt_path_len_m": 101.38511715515918
+      },
+      "pred": {
+        "traj_csv": "task/20260309_105736/episodes/1/traj.csv",
+        "num_points": 20
+      },
+      "metrics": {
+        "idx": 1,
+        "SR": 1.0,
+        "NE": 3.950277227564354,
+        "SPL": 0.9957194857874268,
+        "pred_len_m": 101.82096323542632,
+        "gt_len_m": 101.38511715515918,
+        "success_radius_m": 20.0
+      },
+      "variant": "mid"
+    },
+    {
+      "episode": {
+        "idx": 2,
+        "instruction": "Cross the road along the right zebra crossing",
+        "start_yaw_deg": 180.0
+      },
+      "gt": {
+        "start_pos_m": [
+          6501.50258149,
+          -4199.694137529999,
+          1.31595741
+        ],
+        "target_pos_m": [
+          6451.185446632822,
+          -4219.922702746064,
+          -0.995596545078125
+        ],
+        "gt_path_len_m": 71.20848803553831
+      },
+      "pred": {
+        "traj_csv": "task/20260309_105736/episodes/2/traj.csv",
+        "num_points": 3
+      },
+      "metrics": {
+        "idx": 2,
+        "SR": 0.0,
+        "NE": 30.0,
+        "SPL": 0.0,
+        "pred_len_m": 32.790134365385214,
+        "gt_len_m": 71.20848803553831,
+        "success_radius_m": 20.0
+      },
+      "variant": "fail"
+    }
+  ],
+  "summary": {
+    "num_episodes": 3,
+    "SR_mean": 0.6666666666666666,
+    "NE_mean": 11.730101792415693,
+    "SPL_mean": 0.6652398285958089
+  }
+}

@@ -138,3 +138,42 @@ Rules:
 one action per step
 valid action name only
 ```
+
+---
+
+# Trajectory Logging and Evaluation Artifacts
+
+The agent **does not** compute SR/NE/SPL itself. Its JSON actions are executed by the controller, which records positions and metrics into files under:
+
+```
+task/<task_id>/
+```
+
+For each episode index (e.g. 0, 1, 2) we log:
+
+```
+task/<task_id>/episodes/<idx>/traj.csv
+task/<task_id>/episodes/<idx>/plan.json
+task/<task_id>/episodes/<idx>/images/   # optional image dumps
+```
+
+- `traj.csv` schema:
+
+```csv
+step,x,y,z
+0,6501.50,-4199.69,1.31
+1,6491.40,-4199.69,1.20
+...
+```
+
+  - each row is the drone pose **after** executing one action, in AirSim world/NED meters.
+- `plan.json` stores the per-step reasoning and chosen action that led to this trajectory.
+
+At the root:
+
+```
+task/<task_id>/meta.json     # dataset_root, episodes, success_radius, timestamps
+task/<task_id>/results.json  # SR/NE/SPL per episode + summary
+```
+
+`results.json` is produced by the evaluation code and is **read-only** for the agent: it summarizes performance, not inputs.

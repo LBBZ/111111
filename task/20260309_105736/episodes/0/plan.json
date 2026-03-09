@@ -1,0 +1,41 @@
+{
+  "episode_idx": 0,
+  "variant": "hi",
+  "instruction": "Under the traffic light beads across the street",
+  "policy": {
+    "type": "fake",
+    "description": "Deterministic fake policy for pipeline validation."
+  },
+  "steps": [
+    {
+      "step": 0,
+      "action": null,
+      "reason": "fake_pred_positions: position-only trajectory (no actions yet)"
+    },
+    {
+      "step": 1,
+      "action": null,
+      "reason": "fake_pred_positions: position-only trajectory (no actions yet)"
+    },
+    {
+      "step": 2,
+      "action": null,
+      "reason": "fake_pred_positions: position-only trajectory (no actions yet)"
+    },
+    {
+      "step": 3,
+      "action": null,
+      "reason": "fake_pred_positions: position-only trajectory (no actions yet)"
+    },
+    {
+      "step": 4,
+      "action": null,
+      "reason": "fake_pred_positions: position-only trajectory (no actions yet)"
+    },
+    {
+      "step": 5,
+      "action": null,
+      "reason": "fake_pred_positions: position-only trajectory (no actions yet)"
+    }
+  ]
+}

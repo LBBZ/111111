@@ -173,6 +173,59 @@ maximize SPL
 
 ---
 
+# Task Artifacts and Offline Evaluation
+
+Each evaluation run writes artifacts under:
+
+```
+task/<task_id>/
+```
+
+Structure:
+
+```
+task/<task_id>/meta.json
+task/<task_id>/results.json
+task/<task_id>/episodes/0/{plan.json,traj.csv,images/}
+task/<task_id>/episodes/1/{...}
+task/<task_id>/episodes/2/{...}
+```
+
+- `meta.json` records:
+
+```
+task_id
+created_at
+dataset_root        # usually "Datasets/vln"
+episodes            # e.g. [0,1,2]
+success_radius_m    # usually 20.0
+```
+
+- `traj.csv` is the predicted trajectory in world/NED coordinates, one row per step.
+- `results.json` contains:
+
+```
+meta      # copy of meta.json info
+episodes  # per-episode GT, prediction and metrics
+summary   # mean SR/NE/SPL over all evaluated episodes
+```
+
+There is also a helper script for **offline smoke testing** (no AirSim, no LLM):
+
+```
+DroneController/run_vln_eval_fake.py
+```
+
+It:
+
+1. Reads GT for a few episodes from `Datasets/vln`.
+2. Generates fake trajectories (high / medium / fail).
+3. Writes `task/<task_id>/episodes/<idx>/traj.csv` and `plan.json`.
+4. Calls `DroneController/vln_metrics.py` to compute SR/NE/SPL.
+5. Produces `task/<task_id>/results.json` with per-episode metrics and a summary.
+
+---
+
 # Common Pitfalls
 
 Camera naming mismatch:
