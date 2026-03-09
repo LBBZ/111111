@@ -3,7 +3,7 @@ import re
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, List, Tuple
+from typing import Iterable, List, Tuple, Union
 
 import math
 
@@ -53,7 +53,7 @@ def _parse_start_loc_line(line: str) -> Tuple[int, Tuple[float, float, float], f
     return idx, pos_m, yaw_deg, instruction
 
 
-def load_gt_episode(dataset_root: str | Path, idx: int) -> EpisodeGT:
+def load_gt_episode(dataset_root: Union[str, Path], idx: int) -> EpisodeGT:
     dataset_root = Path(dataset_root)
     start_loc_path = dataset_root / "start_loc.txt"
     label_path = dataset_root / "label" / f"{idx}.csv"
@@ -177,7 +177,7 @@ def compute_vln_metrics(
     }
 
 
-def parse_task_test_positions(task_test_txt: str | Path) -> List[List[float]]:
+def parse_task_test_positions(task_test_txt: Union[str, Path]) -> List[List[float]]:
     """
     Parse `DroneController/task_test/task_test.txt` for a quick sanity-check.
     We use each step's End Position as a trajectory point.

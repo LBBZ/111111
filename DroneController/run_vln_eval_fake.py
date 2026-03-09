@@ -7,6 +7,8 @@ from typing import Iterable, List
 
 import random
 
+import numpy as np
+
 import vln_metrics
 
 
