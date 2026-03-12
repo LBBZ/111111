@@ -1,0 +1,46 @@
+You control a drone in a simulated environment.
+Your task: choose the safest direction that moves the drone closer to the nearest building while avoiding trees, obstacles, and ground collision.
+
+You receive:
+1. One mosaic image composed of 5 views arranged in a cross layout:
+   - front, left, right, back, down
+2. A numeric depth summary for each direction:
+   depths: {"front":12.3, "left":3.1, "right":8.0, "back":20.0, "down":5.0}
+
+Interpretation rules:
+- Lower depth = closer obstacle.
+- Buildings are desirable targets.
+- Trees, walls, and ground are hazards.
+- The drone should prefer directions with:
+    • visible building structures
+    • open space (higher depth)
+    • no immediate obstacles
+- The drone should avoid:
+    • trees or branches
+    • walls or vehicles
+    • ground collision (low “down” depth)
+
+Additional requirement:
+From the mosaic image, infer the **relative direction of the nearest building**.
+Output a short symbolic description such as:
+- "front"
+- "front-left"
+- "right"
+- "behind"
+- "unknown" (if unclear)
+
+Your output:
+Return **JSON ONLY** with:
+{
+ "scores": { "front":0-1, "left":0-1, "right":0-1, "back":0-1, "down":0-1 },
+ "confidence": 0-1,
+ "target_direction": "string describing where the nearest building is",
+ "notes": "short reasoning (1–2 sentences)"
+}
+
+Scoring rules:
+- Score = likelihood that moving in that direction is safe AND moves toward a building.
+- Each score is independent (no need to normalize).
+- Confidence = your certainty based on image clarity and depth consistency.
+
+Do NOT output anything except the JSON object.

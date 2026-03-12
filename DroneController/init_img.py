@@ -5,7 +5,7 @@ import airsim
 
 from DroneController.drone_camera import DroneCamera
 from DroneController.drone_motion import DroneMotion
-from image_processing import merge_images, compress_image_to_size
+from image_processing import merge_images, compress_image_to_size, compute_depth_index
 
 OUTPUT_DIR = "task_test/task_step_init"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -32,20 +32,21 @@ def capture_views_at_pose(x, y, z, yaw_deg = 0):
     # -----------------------------
     # 1. RGB 图像
     # -----------------------------
-    imgs = camera.capture_all()
+    # 测试完成
+    # imgs = camera.capture_all()
     # for name, img in imgs.items():
     #     camera.save_image(img, os.path.join(OUTPUT_DIR, f"{name}.png"))
 
-    merge_img = merge_images([
-        imgs["Front"],
-        imgs["Left"],
-        imgs["TopDown"],
-        imgs["Right"],
-        imgs["Back"],
-    ])
+    # merge_img = merge_images([
+    #     imgs["Front"],
+    #     imgs["Left"],
+    #     imgs["TopDown"],
+    #     imgs["Right"],
+    #     imgs["Back"],
+    # ])
     # compress_down_img = compress_image_to_size(imgs["TopDown"])
 
-    camera.save_image(merge_img, os.path.join(OUTPUT_DIR, f"CompressedMerge.png"))
+    # camera.save_image(merge_img, os.path.join(OUTPUT_DIR, f"CompressedMerge.png"))
     # camera.save_image(compress_down_img, os.path.join(OUTPUT_DIR, f"CompressedDown.png"))
 
     # -----------------------------
@@ -58,6 +59,11 @@ def capture_views_at_pose(x, y, z, yaw_deg = 0):
     #     camera.save_depth_data(depth, os.path.join(OUTPUT_DIR, f"{name}_depth.npy"))
     #     # 可视化深度（16-bit PNG）
     #     camera.save_depth_image(depth, os.path.join(OUTPUT_DIR, f"{name}_depth.png"))
+    # print("深度指数越小表示障碍越近")
+    # for pose in ["Front", "Left", "TopDown", "Right", "Back"]:
+    #     depth_img = depths[pose]
+    #     depth_index = compute_depth_index(depth_img)
+    #     print(f"{pose} 深度指数: {depth_index}")
 
     # -----------------------------
     # 3. Segmentation 图像

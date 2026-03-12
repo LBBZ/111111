@@ -82,3 +82,40 @@ def compress_image_to_size(img, output_size=(512, 512)):
     # target_size 是 (W, H)，cv2.resize 也是 (W, H)
     resized_img = cv2.resize(img, output_size, interpolation=cv2.INTER_AREA)
     return resized_img
+
+def compute_depth_index(depth: np.ndarray,
+                        min_valid=1e-3,
+                        max_valid=1e4,
+                        percentile=5.0):
+    """
+    输入:
+        depth: AirSim 返回的深度图 (H, W), float32, 单位米
+        min_valid: 过滤无效小值（例如 0）
+        max_valid: 过滤异常大值
+        percentile: 使用最近百分之多少像素来估计最近障碍距离
+
+    返回:
+        depth_index: float，越小表示障碍越近；None 表示无有效像素
+    """
+
+    if depth is None:
+        return None
+
+    # 展平
+    d = depth.reshape(-1).astype(np.float32)
+
+    # 过滤无效值
+    valid_mask = (d > min_valid) & (d < max_valid) & np.isfinite(d)
+    d_valid = d[valid_mask]
+
+    if d_valid.size == 0:
+        return None
+
+    # 最近 percentile% 像素
+    thresh = np.percentile(d_valid, percentile)
+    near_pixels = d_valid[d_valid <= thresh]
+
+    if near_pixels.size == 0:
+        return float(thresh)
+
+    return float(near_pixels.mean())
