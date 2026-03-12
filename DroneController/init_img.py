@@ -5,6 +5,7 @@ import airsim
 
 from DroneController.drone_camera import DroneCamera
 from DroneController.drone_motion import DroneMotion
+from image_processing import merge_images, compress_image_to_size
 
 OUTPUT_DIR = "task_test/task_step_init"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -34,6 +35,18 @@ def capture_views_at_pose(x, y, z, yaw_deg = 0):
     imgs = camera.capture_all()
     for name, img in imgs.items():
         camera.save_image(img, os.path.join(OUTPUT_DIR, f"{name}.png"))
+
+    merge_img = merge_images([
+        imgs["Front"],
+        imgs["Back"],
+        imgs["Left"],
+        imgs["Right"],
+        # imgs["TopDown"]
+    ])
+    compress_down_img = compress_image_to_size(imgs["TopDown"])
+
+    camera.save_image(merge_img, os.path.join(OUTPUT_DIR, f"CompressedMerge.png"))
+    camera.save_image(compress_down_img, os.path.join(OUTPUT_DIR, f"CompressedDown.png"))
 
     # -----------------------------
     # 2. 深度图
