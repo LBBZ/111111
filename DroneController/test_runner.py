@@ -89,15 +89,33 @@ with open(TASK_FILE, "w", encoding="utf-8") as f:
         # 拍照
         step_dir = os.path.join(OUTPUT_DIR, f"test_step_{i}")
         os.makedirs(step_dir, exist_ok=True)
-        imgs = camera.capture_all()
-        depths = camera.capture_all_depth()
 
+        # -----------------------------
+        # 1. RGB 图像
+        # -----------------------------
+        imgs = camera.capture_all()
         for img_name, img in imgs.items():
             camera.save_image(img, os.path.join(step_dir, img_name + ".png"))
 
+        # -----------------------------
+        # 2. 深度图
+        # -----------------------------
+        depths = camera.capture_all_depth()
         for cam_name, depth in depths.items():
             camera.save_depth_data(depth, os.path.join(step_dir, cam_name + "_depth.npy"))
             camera.save_depth_image(depth, os.path.join(step_dir, cam_name + "_depth.png"))
+
+        # -----------------------------
+        # 3. Segmentation 图像（新增）
+        # -----------------------------
+        segs = camera.capture_all_seg()
+        for cam_name, seg in segs.items():
+            # RGB 可视化图
+            camera.save_segmentation_vis(seg, os.path.join(step_dir, cam_name + "_seg.png"))
+            # 单通道 ID mask（PNG）
+            camera.save_segmentation_id(seg, os.path.join(step_dir, cam_name + "_seg_id.png"))
+            # NPY（大模型友好）
+            camera.save_segmentation_npy(seg, os.path.join(step_dir, cam_name + "_seg.npy"))
 
         print(f"[Step {i}] Saved images to {step_dir}")
 

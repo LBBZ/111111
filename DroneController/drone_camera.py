@@ -39,7 +39,7 @@ class DroneCamera:
     def _get_depth_by_id(self, cam_id: str, depth_type: int = airsim.ImageType.DepthPlanar):
         resp = self.client.simGetImages([
             airsim.ImageRequest(cam_id, depth_type, True, False)
-        ], vehicle_name=self.vehicle_name)[0]
+        ], vehicle_name = self.vehicle_name)[0]
 
         if resp.height == 0:
             return None
@@ -49,6 +49,18 @@ class DroneCamera:
             return None
         depth = depth1d.reshape(resp.height, resp.width)
         return depth
+
+    def _get_seg_by_id(self, cam_id: str, seg_type: int = airsim.ImageType.Segmentation):
+        resp = self.client.simGetImages([
+            airsim.ImageRequest(cam_id, seg_type, False, False)
+        ], vehicle_name = self.vehicle_name)[0]
+
+        if resp.height == 0:
+            return None
+
+        img1d = np.frombuffer(resp.image_data_uint8, dtype=np.uint8)
+        img = img1d.reshape(resp.height, resp.width, 3)
+        return img
 
     # -------- 原有三个接口 --------
 
@@ -175,7 +187,7 @@ class DroneCamera:
         responses = self.client.simGetImages([
             airsim.ImageRequest(cam, depth_type, True, False)
             for cam in camera_ids
-        ], vehicle_name=self.vehicle_name)
+        ], vehicle_name = self.vehicle_name)
 
         result = {}
         for cam, resp in zip(camera_ids, responses):
@@ -187,6 +199,49 @@ class DroneCamera:
                 result[cam] = None
                 continue
             result[cam] = depth1d.reshape(resp.height, resp.width)
+
+        return result
+
+    # -------- Segmentation 拍摄接口 --------
+
+    def capture_front_seg(self, seg_type: int = airsim.ImageType.Segmentation):
+        return self._get_seg_by_id(self.front_cam_id, seg_type=seg_type)
+
+    def capture_down_seg(self, seg_type: int = airsim.ImageType.Segmentation):
+        return self._get_seg_by_id(self.down_cam_id, seg_type=seg_type)
+
+    def capture_back_seg(self, seg_type: int = airsim.ImageType.Segmentation):
+        return self._get_seg_by_id(self.back_cam_id, seg_type=seg_type)
+
+    def capture_left_seg(self, seg_type: int = airsim.ImageType.Segmentation):
+        return self._get_seg_by_id(self.left_cam_id, seg_type=seg_type)
+
+    def capture_right_seg(self, seg_type: int = airsim.ImageType.Segmentation):
+        return self._get_seg_by_id(self.right_cam_id, seg_type=seg_type)
+
+    def capture_all_seg(self, seg_type: int = airsim.ImageType.Segmentation):
+        camera_ids = [
+            self.front_cam_id,
+            self.back_cam_id,
+            self.left_cam_id,
+            self.right_cam_id,
+            self.down_cam_id
+        ]
+
+        responses = self.client.simGetImages([
+            airsim.ImageRequest(cam, seg_type, False, False)
+            for cam in camera_ids
+        ], vehicle_name=self.vehicle_name)
+
+        result = {}
+        for cam, resp in zip(camera_ids, responses):
+            if resp.height == 0:
+                result[cam] = None
+                continue
+
+            img1d = np.frombuffer(resp.image_data_uint8, dtype=np.uint8)
+            img = img1d.reshape(resp.height, resp.width, 3)
+            result[cam] = img
 
         return result
 
@@ -237,3 +292,38 @@ class DroneCamera:
 
         os.makedirs(os.path.dirname(filename) or ".", exist_ok=True)
         return bool(cv2.imwrite(filename, depth_mm))
+
+    # -------- Segmentation 保存接口 --------
+    @staticmethod
+    def save_segmentation_vis(seg_rgb, filename: str) -> bool:
+        if seg_rgb is None:
+            return False
+        cv2.imwrite(filename, seg_rgb)
+        return True
+
+    @staticmethod
+    def save_segmentation_id(seg_rgb, filename: str) -> bool:
+        if seg_rgb is None:
+            return False
+        id_mask = seg_rgb[:, :, 0]  # R 通道 = ID
+        cv2.imwrite(filename, id_mask)
+        return True
+
+    @staticmethod
+    def save_segmentation_npy(seg_rgb, filename: str) -> bool:
+        if seg_rgb is None:
+            return False
+        id_mask = seg_rgb[:, :, 0].astype(np.uint16)
+        np.save(filename, id_mask)
+        return True
+
+    @staticmethod
+    def save_segmentation_tiff(seg_rgb, filename: str) -> bool:
+        if seg_rgb is None:
+            return False
+        id_mask = seg_rgb[:, :, 0].astype(np.uint16)
+        cv2.imwrite(filename, id_mask)
+        return True
+
+
+

@@ -16,25 +16,47 @@ camera = DroneCamera()
 # 外部调用入口
 # -----------------------------
 def capture_views_at_pose(x, y, z, yaw_deg = 0):
-    """外部调用入口：移动到指定 pose → 拍 9 张图 → 恢复原位"""
+    """外部调用入口：移动到指定 pose → 拍 9 张图 → 保存 RGB/Depth/Segmentation → 恢复原位"""
     yaw_rad = math.radians(yaw_deg)
 
+    # 暂停仿真，瞬移
     motion.client.simPause(True)
     motion.teleport(x, y, z, yaw_rad)
     print(f"瞬移到位置: {airsim.Vector3r(x, y, z)}")
-    # 确保瞬移发生
+
     motion.client.simPause(False)
     time.sleep(0.05)
     motion.client.simPause(True)
 
+    # -----------------------------
+    # 1. RGB 图像
+    # -----------------------------
     imgs = camera.capture_all()
     for name, img in imgs.items():
-        camera.save_image(img, os.path.join(OUTPUT_DIR, name + ".png"))
+        camera.save_image(img, os.path.join(OUTPUT_DIR, f"{name}.png"))
 
+    # -----------------------------
+    # 2. 深度图
+    # -----------------------------
     depths = camera.capture_all_depth()
     for name, depth in depths.items():
-        camera.save_depth_data(depth, os.path.join(OUTPUT_DIR, name + "_depth.npy"))
-        camera.save_depth_image(depth, os.path.join(OUTPUT_DIR, name + "_depth.png"))
+        # 原始深度（米）
+        camera.save_depth_data(depth, os.path.join(OUTPUT_DIR, f"{name}_depth.npy"))
+        # 可视化深度（16-bit PNG）
+        camera.save_depth_image(depth, os.path.join(OUTPUT_DIR, f"{name}_depth.png"))
+
+    # -----------------------------
+    # 3. Segmentation 图像
+    # -----------------------------
+    segs = camera.capture_all_seg()
+    for name, seg in segs.items():
+        # RGB 可视化图
+        camera.save_segmentation_vis(seg, os.path.join(OUTPUT_DIR, f"{name}_seg.png"))
+        # 单通道 ID mask（PNG）
+        camera.save_segmentation_id(seg, os.path.join(OUTPUT_DIR, f"{name}_seg_id.png"))
+        # NPY（大模型友好）
+        camera.save_segmentation_npy(seg, os.path.join(OUTPUT_DIR, f"{name}_seg.npy"))
+
 
 # -----------------------------
 # 测试入口（固定坐标）
