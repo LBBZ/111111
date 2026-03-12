@@ -1,6 +1,6 @@
 # controller.py
-from llm_interface import LLMInterface
-from logger import Logger
+from DroneController.llm_interface import LLMInterface
+from DroneController.logger import Logger
 from DroneController.motion_executor import MotionExecutor
 
 

@@ -1,4 +1,5 @@
 # motion_executor.py
+import json
 import textwrap
 
 from DroneController.airsim_client import AirSimClientSingleton
@@ -149,17 +150,16 @@ class MotionExecutor:
         """
         把 sensor_data 打包成 prompt 字符串
         """
-
         mosaic = sensor_data["mosaic_image"]
         depths = sensor_data["depth_summary"]
         state = sensor_data["drone_state"]
 
-        prompt = textwrap.dedent(f"""
-            RPG imgs:
-            {mosaic}
-            Depth summary:
-            {depths}
-            Drone state:
-            {state}
-        """).strip()
-        return prompt
+        # TODO: 未来改成真实 base64
+        prompt_json = {
+            "image": "<base64 placeholder>",
+            "depth_summary": depths,
+            "drone_state": state
+        }
+
+        # 返回 JSON 字符串 + 原始图像
+        return json.dumps(prompt_json, ensure_ascii=False)
