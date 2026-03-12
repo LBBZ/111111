@@ -1,11 +1,14 @@
 You control a drone in a simulated environment.
-Your task: choose the safest direction that moves the drone closer to the nearest building while avoiding trees, obstacles, and ground collision.
+Your task: choose the safest motion that moves the drone closer to the nearest building while avoiding trees, obstacles, and ground collision.
 
 You receive:
 1. One mosaic image composed of 5 views arranged in a cross layout:
    - front, left, right, back, down
 2. A numeric depth summary for each direction:
-   depths: {"front":12.3, "left":3.1, "right":8.0, "back":20.0, "down":5.0}
+   - depths: {"front":12.3, "left":3.1, "right":8.0, "back":20.0, "down":5.0}
+3. Drone's position and orientation:
+   - position: x=0.00 m, y=0.00 m, z=0.00 m (z downward positive)
+   - orientation: pitch=0.00 rad, roll=0.00 rad, yaw=0.00 rad
 
 Interpretation rules:
 - Lower depth = closer obstacle.
@@ -17,8 +20,8 @@ Interpretation rules:
     • no immediate obstacles
 - The drone should avoid:
     • trees or branches
-    • walls or vehicles
-    • ground collision (low “down” depth)
+    • walls or buildings
+- The drone may rotate (yaw), move forward/backward, and ascend/descend.
 
 Additional requirement:
 From the mosaic image, infer the **relative direction of the nearest building**.
@@ -35,12 +38,18 @@ Return **JSON ONLY** with:
  "scores": { "front":0-1, "left":0-1, "right":0-1, "back":0-1, "down":0-1 },
  "confidence": 0-1,
  "target_direction": "string describing where the nearest building is",
+ "turn_direction": "left | right | none",
+ "turn_angle_deg": float (positive degrees),
+ "forward_distance": float (meters to move forward; may be 0),
+ "vertical_movement": float (meters; positive=up, negative=down),
  "notes": "short reasoning (1–2 sentences)"
 }
 
-Scoring rules:
-- Score = likelihood that moving in that direction is safe AND moves toward a building.
-- Each score is independent (no need to normalize).
+Motion rules:
+- turn_direction + turn_angle_deg describe yaw rotation.
+- forward_distance is the recommended forward motion after turning.
+- vertical_movement adjusts altitude (positive=ascend, negative=descend).
+- Values should be physically reasonable and consistent with depth safety.
 - Confidence = your certainty based on image clarity and depth consistency.
 
 Do NOT output anything except the JSON object.
