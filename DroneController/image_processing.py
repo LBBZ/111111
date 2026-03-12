@@ -5,22 +5,12 @@ import numpy as np
 def load_and_merge_images(
         folder_path: str,
         img_names: list,
-        output_size=(512, 512)
+        output_size=(512, 512),
+        border_thickness=3
 ):
-    """
-    输入:
-        folder_path: 图片所在目录
-        img_names: 需要读取的图片名列表（长度必须为4）
-        output_size: 拼接后缩放到的分辨率 (W, H)
+    if len(img_names) != 5:
+        raise ValueError("img_names 必须包含 5 个文件名")
 
-    返回:
-        merged_img: 拼接并缩放后的 numpy 图像 (H, W, 3)
-    """
-
-    if len(img_names) != 4:
-        raise ValueError("img_names 必须包含 4 个文件名")
-
-    # 读取四张图
     imgs = []
     for name in img_names:
         path = os.path.join(folder_path, name)
@@ -29,47 +19,51 @@ def load_and_merge_images(
             raise FileNotFoundError(f"无法读取图片: {path}")
         imgs.append(img)
 
-    # 保证四张图大小一致（如果不一致，自动 resize 到第一张的大小）
-    h, w = imgs[0].shape[:2]
-    imgs = [cv2.resize(img, (w, h)) for img in imgs]
-
-    # 2×2 拼接
-    top = np.hstack((imgs[0], imgs[1]))
-    bottom = np.hstack((imgs[2], imgs[3]))
-    merged = np.vstack((top, bottom))
-
-    # 降低分辨率
-    merged_resized = cv2.resize(merged, output_size)
-
-    return merged_resized
+    return merge_images(imgs, output_size, border_thickness)
 
 def merge_images(
         imgs: list,
-        output_size=(512, 512)
+        output_size=(512, 512),
+        border_thickness=3
 ):
     """
-    输入:
-        imgs: 图片列表
-        output_size: 拼接后缩放到的分辨率 (W, H)
-
-    返回:
-        merged_img: 拼接并缩放后的 numpy 图像 (H, W, 3)
+    imgs 顺序必须为:
+        [Front, Left, Down, Right, Back]
     """
 
-    if len(imgs) != 4:
-        raise ValueError("img_names 必须包含 4 图像")
+    if len(imgs) != 5:
+        raise ValueError("imgs 必须包含 5 张图像")
 
-    # 保证四张图大小一致（如果不一致，自动 resize 到第一张的大小）
-    h, w = imgs[0].shape[:2]
-    imgs = [cv2.resize(img, (w, h)) for img in imgs]
+    img_front, img_left, img_down, img_right, img_back = imgs
 
-    # 2×2 拼接
-    top = np.hstack((imgs[0], imgs[1]))
-    bottom = np.hstack((imgs[2], imgs[3]))
-    merged = np.vstack((top, bottom))
+    # 统一大小
+    h, w = img_front.shape[:2]
+    img_left  = cv2.resize(img_left,  (w, h))
+    img_down  = cv2.resize(img_down,  (w, h))
+    img_right = cv2.resize(img_right, (w, h))
+    img_back  = cv2.resize(img_back,  (w, h))
 
-    # 降低分辨率
-    merged_resized = cv2.resize(merged, output_size)
+    # 黑色边框
+    v_border = np.zeros((h, border_thickness, 3), dtype=np.uint8)
+    h_border = np.zeros((border_thickness, 3*w + 2*border_thickness, 3), dtype=np.uint8)
+
+    # 空白区域必须与 row2 宽度一致
+    empty = np.zeros((h, 3*w + 2*border_thickness, 3), dtype=np.uint8)
+
+    # Row1: empty | front | empty
+    row1 = np.hstack((empty[:, :w], v_border, img_front, v_border, empty[:, :w]))
+
+    # Row2: left | down | right
+    row2 = np.hstack((img_left, v_border, img_down, v_border, img_right))
+
+    # Row3: empty | back | empty
+    row3 = np.hstack((empty[:, :w], v_border, img_back, v_border, empty[:, :w]))
+
+    # 拼接三行
+    merged = np.vstack((row1, h_border, row2, h_border, row3))
+
+    # 最终缩放
+    merged_resized = cv2.resize(merged, output_size, interpolation=cv2.INTER_AREA)
 
     return merged_resized
 

@@ -33,42 +33,44 @@ def capture_views_at_pose(x, y, z, yaw_deg = 0):
     # 1. RGB 图像
     # -----------------------------
     imgs = camera.capture_all()
-    for name, img in imgs.items():
-        camera.save_image(img, os.path.join(OUTPUT_DIR, f"{name}.png"))
+    # for name, img in imgs.items():
+    #     camera.save_image(img, os.path.join(OUTPUT_DIR, f"{name}.png"))
 
     merge_img = merge_images([
         imgs["Front"],
-        imgs["Back"],
         imgs["Left"],
+        imgs["TopDown"],
         imgs["Right"],
-        # imgs["TopDown"]
+        imgs["Back"],
     ])
-    compress_down_img = compress_image_to_size(imgs["TopDown"])
+    # compress_down_img = compress_image_to_size(imgs["TopDown"])
 
     camera.save_image(merge_img, os.path.join(OUTPUT_DIR, f"CompressedMerge.png"))
-    camera.save_image(compress_down_img, os.path.join(OUTPUT_DIR, f"CompressedDown.png"))
+    # camera.save_image(compress_down_img, os.path.join(OUTPUT_DIR, f"CompressedDown.png"))
 
     # -----------------------------
     # 2. 深度图
     # -----------------------------
-    depths = camera.capture_all_depth()
-    for name, depth in depths.items():
-        # 原始深度（米）
-        camera.save_depth_data(depth, os.path.join(OUTPUT_DIR, f"{name}_depth.npy"))
-        # 可视化深度（16-bit PNG）
-        camera.save_depth_image(depth, os.path.join(OUTPUT_DIR, f"{name}_depth.png"))
+    # 测试完成
+    # depths = camera.capture_all_depth()
+    # for name, depth in depths.items():
+    #     # 原始深度（米）
+    #     camera.save_depth_data(depth, os.path.join(OUTPUT_DIR, f"{name}_depth.npy"))
+    #     # 可视化深度（16-bit PNG）
+    #     camera.save_depth_image(depth, os.path.join(OUTPUT_DIR, f"{name}_depth.png"))
 
     # -----------------------------
     # 3. Segmentation 图像
     # -----------------------------
-    segs = camera.capture_all_seg()
-    for name, seg in segs.items():
-        # RGB 可视化图
-        camera.save_segmentation_vis(seg, os.path.join(OUTPUT_DIR, f"{name}_seg.png"))
-        # 单通道 ID mask（PNG）
-        camera.save_segmentation_id(seg, os.path.join(OUTPUT_DIR, f"{name}_seg_id.png"))
-        # NPY（大模型友好）
-        camera.save_segmentation_npy(seg, os.path.join(OUTPUT_DIR, f"{name}_seg.npy"))
+    # 测试完成
+    # segs = camera.capture_all_seg()
+    # for name, seg in segs.items():
+    #     # RGB 可视化图
+    #     camera.save_segmentation_vis(seg, os.path.join(OUTPUT_DIR, f"{name}_seg.png"))
+    #     # 单通道 ID mask（PNG）
+    #     camera.save_segmentation_id(seg, os.path.join(OUTPUT_DIR, f"{name}_seg_id.png"))
+    #     # NPY（大模型友好）
+    #     camera.save_segmentation_npy(seg, os.path.join(OUTPUT_DIR, f"{name}_seg.npy"))
 
 
 # -----------------------------
