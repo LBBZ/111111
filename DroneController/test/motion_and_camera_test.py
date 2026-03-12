@@ -3,20 +3,17 @@ import random
 import time
 import airsim
 
-from drone_motion import DroneMotion
-from drone_camera import DroneCamera
-from airsim_client import AirSimClientSingleton
+from DroneController.drone_motion import DroneMotion
+from DroneController.drone_camera import DroneCamera
+from DroneController.airsim_client import AirSimClientSingleton
 
 OUTPUT_DIR = "task_test"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 TASK_FILE = os.path.join(OUTPUT_DIR, "task_test.txt")
 
-print("Planing Client.")
 client = AirSimClientSingleton().get_client()
-print("Planing DroneMotion.")
 motion = DroneMotion()
-print("Planing DroneCamera.")
 camera = DroneCamera()
 
 motion.client.simPause(False)

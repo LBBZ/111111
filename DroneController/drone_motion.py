@@ -2,30 +2,31 @@ import time
 import math
 import airsim
 
-from airsim_client import AirSimClientSingleton
+from DroneController.airsim_client import AirSimClientSingleton
 
 class DroneMotion:
     def __init__(self, vehicle_name = "keli", base_speed=3.0):
+        print("Planing DroneMotion.")
         self.client = AirSimClientSingleton().get_client()
         self.vehicle_name = vehicle_name
         self.base_speed = base_speed
         self.dt = 0.02
 
-    def _get_pos(self):
+    def get_pos(self):
         s = self.client.getMultirotorState()
         p = s.kinematics_estimated.position
         return p.x_val, p.y_val, p.z_val
 
-    def _get_yaw(self):
+    def get_yaw(self):
         s = self.client.getMultirotorState()
         pitch, roll, yaw = airsim.to_eularian_angles(s.kinematics_estimated.orientation)
-        return yaw
+        return pitch, roll, yaw
 
     # ---------- 平移：方向按机头，闭环到目标坐标 ----------
 
     def _move_to_world_target(self, tx, ty, tz):
         while True:
-            x, y, z = self._get_pos()
+            x, y, z = self.get_pos()
             ex, ey, ez = tx - x, ty - y, tz - z
             dist = math.sqrt(ex*ex + ey*ey + ez*ez)
             if dist < 0.05:
@@ -45,8 +46,8 @@ class DroneMotion:
             time.sleep(self.dt)
 
     def move_forward(self, d):
-        yaw = self._get_yaw()
-        x0, y0, z0 = self._get_pos()
+        pitch, roll, yaw = self.get_yaw()
+        x0, y0, z0 = self.get_pos()
         tx = x0 + d * math.cos(yaw)
         ty = y0 + d * math.sin(yaw)
         tz = z0
@@ -56,8 +57,8 @@ class DroneMotion:
         self.move_forward(-d)
 
     def move_left(self, d):
-        yaw = self._get_yaw()
-        x0, y0, z0 = self._get_pos()
+        pitch, roll, yaw = self.get_yaw()
+        x0, y0, z0 = self.get_pos()
         # 右侧 = (sin(yaw), -cos(yaw))
         tx = x0 + d * math.sin(yaw)
         ty = y0 - d * math.cos(yaw)
@@ -68,7 +69,7 @@ class DroneMotion:
         self.move_left(-d)
 
     def move_up(self, d):
-        x0, y0, z0 = self._get_pos()
+        x0, y0, z0 = self.get_pos()
         tz = z0 - d  # NED：上 = z 减小
         self._move_to_world_target(x0, y0, tz)
 
@@ -100,7 +101,7 @@ class DroneMotion:
 
     def _turn_to_yaw(self, target_yaw_rad):
         while True:
-            yaw = self._get_yaw()
+            pitch, roll, yaw = self.get_yaw()
             err = self._normalize_angle(target_yaw_rad - yaw)
             if abs(err) < math.radians(2):  # 误差 < 2°
                 break
@@ -121,13 +122,13 @@ class DroneMotion:
             time.sleep(self.dt)
 
     def turn_left(self, angle_deg):
-        curr = self._get_yaw()
+        pitch, roll, curr = self.get_yaw()
         target = curr - math.radians(angle_deg)  # 左转 = yaw 减小
         target = self._normalize_angle(target)
         self._turn_to_yaw(target)
 
     def turn_right(self, angle_deg):
-        curr = self._get_yaw()
+        pitch, roll, curr = self.get_yaw()
         target = curr + math.radians(angle_deg)  # 右转 = yaw 增大
         target = self._normalize_angle(target)
         self._turn_to_yaw(target)

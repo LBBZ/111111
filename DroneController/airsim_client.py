@@ -14,6 +14,7 @@ class AirSimClientSingleton:
         if cls._instance is None:
             with cls._lock:
                 if cls._instance is None:
+                    print(f"[{threading.current_thread().name}] Planning Client.")
                     cls._instance = super(AirSimClientSingleton, cls).__new__(cls)
                     cls._instance._init_client(vehicle_name)
         return cls._instance

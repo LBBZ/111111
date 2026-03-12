@@ -6,10 +6,11 @@ import numpy as np
 import cv2
 import os
 
-from airsim_client import AirSimClientSingleton
+from DroneController.airsim_client import AirSimClientSingleton
 
 class DroneCamera:
     def __init__(self, vehicle_name: str = "keli"):
+        print("Planing DroneCamera.")
         self.client = AirSimClientSingleton().get_client()
         self.vehicle_name = vehicle_name
 
