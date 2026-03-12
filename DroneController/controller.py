@@ -1,0 +1,94 @@
+# controller.py
+from llm_interface import LLMInterface
+from logger import Logger
+from DroneController.motion_executor import MotionExecutor
+
+
+class DroneController:
+    """
+    主控制器：
+    - 调用 LLMInterface 获取动作
+    - 调用 MotionExecutor 解析并执行动作
+    - 调用 Logger 写日志
+    - 控制任务循环
+    """
+
+    def __init__(self, executor=MotionExecutor(), log_filename="drone_log.txt"):
+        self.llm = LLMInterface()
+        self.executor = executor
+        self.motion = executor.motion
+        self.logger = Logger(log_filename)
+
+
+    def get_drone_state(self):
+        """从 DroneMotion 获取当前状态"""
+        x, y, z = self.motion.get_pos()
+        pitch, roll, yaw = self.motion.get_yaw()
+        return {"x": x, "y": y, "z": z,
+                "pitch": pitch, "roll": roll, "yaw": yaw
+                }
+
+    def run(self):
+        """
+        主循环：
+        - 获取大模型动作
+        - 解析
+        - 执行
+        - 写日志
+        - 判断是否结束
+        """
+        self.motion.client.simPause(False)
+
+        while True:
+            # ---------------------------------------------------------
+            # 1. 获取真实传感器数据（图像 + 深度 + 状态）
+            # ---------------------------------------------------------
+            sensor_data = self.executor.get_sensor_data()
+
+            # ---------------------------------------------------------
+            # 2. 构造 prompt（真实数据 → 文本）
+            # ---------------------------------------------------------
+            prompt = self.executor.build_prompt(sensor_data)
+
+            # ---------------------------------------------------------
+            # 3. 发送 prompt 给 LLMInterface（假装大模型收到了真实数据）
+            # ---------------------------------------------------------
+            action_json, status = self.llm.get_action(prompt)
+
+            # ---------------------------------------------------------
+            # 4. 解析动作
+            # ---------------------------------------------------------
+            parsed = self.executor.parse(action_json)
+
+            # ---------------------------------------------------------
+            # 5. 执行动作
+            # ---------------------------------------------------------
+            exec_status = self.executor.execute(parsed)
+
+            # ---------------------------------------------------------
+            # 6. 获取无人机状态（执行动作后）
+            # ---------------------------------------------------------
+            drone_state = self.get_drone_state()
+
+            # ---------------------------------------------------------
+            # 7. 写日志
+            # ---------------------------------------------------------
+            self.logger.log({
+                "prompt": prompt,
+                "llm_output": action_json,
+                "parsed_action": parsed,
+                "execution_status": exec_status,
+                "drone_state": drone_state,
+                "sensor_data": {
+                    "depth_summary": sensor_data["depth_summary"]
+                }
+            })
+
+            # ---------------------------------------------------------
+            # 8. 判断是否结束任务
+            # ---------------------------------------------------------
+            if parsed["type"] == "done":
+                print("Mission completed.")
+                break
+
+        self.motion.client.simPause(True)

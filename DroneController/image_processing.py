@@ -1,63 +1,47 @@
-import os
 import cv2
 import numpy as np
 
-def load_and_merge_images(
-        folder_path: str,
-        img_names: list,
-        output_size=(512, 512),
-        border_thickness=3
-):
-    if len(img_names) != 5:
-        raise ValueError("img_names 必须包含 5 个文件名")
-
-    imgs = []
-    for name in img_names:
-        path = os.path.join(folder_path, name)
-        img = cv2.imread(path)
-        if img is None:
-            raise FileNotFoundError(f"无法读取图片: {path}")
-        imgs.append(img)
-
-    return merge_images(imgs, output_size, border_thickness)
+import cv2
+import numpy as np
 
 def merge_images(
-        imgs: list,
+        imgs: dict,
         output_size=(512, 512),
         border_thickness=3
 ):
     """
-    imgs 顺序必须为:
-        [Front, Left, Down, Right, Back]
+    根据 9 个方向的图像拼接成 3x3 mosaic。
+    imgs 必须包含以下键：
+        Front, Back, Left, Right,
+        FrontLeft, FrontRight, BackLeft, BackRight,
+        TopDown
     """
 
-    if len(imgs) != 5:
-        raise ValueError("imgs 必须包含 5 张图像")
-
-    img_front, img_left, img_down, img_right, img_back = imgs
+    required_keys = [
+        "Front", "Back", "Left", "Right",
+        "FrontLeft", "FrontRight", "BackLeft", "BackRight",
+        "TopDown"
+    ]
+    for k in required_keys:
+        if k not in imgs:
+            raise ValueError(f"缺少图像: {k}")
 
     # 统一大小
-    h, w = img_front.shape[:2]
-    img_left  = cv2.resize(img_left,  (w, h))
-    img_down  = cv2.resize(img_down,  (w, h))
-    img_right = cv2.resize(img_right, (w, h))
-    img_back  = cv2.resize(img_back,  (w, h))
+    h, w = imgs["Front"].shape[:2]
+    resized = {k: cv2.resize(imgs[k], (w, h)) for k in required_keys}
 
     # 黑色边框
     v_border = np.zeros((h, border_thickness, 3), dtype=np.uint8)
     h_border = np.zeros((border_thickness, 3*w + 2*border_thickness, 3), dtype=np.uint8)
 
-    # 空白区域必须与 row2 宽度一致
-    empty = np.zeros((h, 3*w + 2*border_thickness, 3), dtype=np.uint8)
+    # Row1: FrontLeft | Front | FrontRight
+    row1 = np.hstack((resized["FrontLeft"], v_border, resized["Front"], v_border, resized["FrontRight"]))
 
-    # Row1: empty | front | empty
-    row1 = np.hstack((empty[:, :w], v_border, img_front, v_border, empty[:, :w]))
+    # Row2: Left | TopDown | Right
+    row2 = np.hstack((resized["Left"], v_border, resized["TopDown"], v_border, resized["Right"]))
 
-    # Row2: left | down | right
-    row2 = np.hstack((img_left, v_border, img_down, v_border, img_right))
-
-    # Row3: empty | back | empty
-    row3 = np.hstack((empty[:, :w], v_border, img_back, v_border, empty[:, :w]))
+    # Row3: BackLeft | Back | BackRight
+    row3 = np.hstack((resized["BackLeft"], v_border, resized["Back"], v_border, resized["BackRight"]))
 
     # 拼接三行
     merged = np.vstack((row1, h_border, row2, h_border, row3))
