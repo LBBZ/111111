@@ -20,7 +20,7 @@ camera = DroneCamera()
 # -----------------------------
 def capture_views_at_pose(x, y, z, yaw_deg = 0):
     """外部调用入口：移动到指定 pose → 拍 9 张图 → 保存 RGB/Depth/Segmentation → 恢复原位"""
-    yaw_rad = math.radians(yaw_deg)
+    yaw_rad = int(math.radians(yaw_deg))
 
     # 暂停仿真，瞬移
     motion.client.simPause(True)
