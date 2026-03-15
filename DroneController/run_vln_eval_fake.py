@@ -5,6 +5,9 @@ import time
 from pathlib import Path
 from typing import Iterable, List
 
+# Legacy offline utility for fake/batch evaluation.
+# Online single-case workflow entry: DroneController/run_vln_workflow_eval.py
+
 import random
 
 import numpy as np

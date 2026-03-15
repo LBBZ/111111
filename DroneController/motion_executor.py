@@ -13,15 +13,10 @@ class MotionExecutor:
     解析大模型输出 JSON → 控制器可直接使用的动作参数
     并提供 execute() 调用 DroneMotion 的动作函数。
     """
-    def __init__(self,
-                 client=AirSimClientSingleton().get_client(),
-                 motion=DroneMotion(),
-                 camera=DroneCamera()
-                 ):
-
-        self.client = client
-        self.motion = motion
-        self.camera = camera
+    def __init__(self, client=None, motion=None, camera=None):
+        self.client = client if client is not None else AirSimClientSingleton().get_client()
+        self.motion = motion if motion is not None else DroneMotion()
+        self.camera = camera if camera is not None else DroneCamera()
 
 
     def parse(self, action_json: dict):

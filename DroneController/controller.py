@@ -13,11 +13,11 @@ class DroneController:
     - 控制任务循环
     """
 
-    def __init__(self, executor=MotionExecutor(), log_filename="drone_log.txt"):
+    def __init__(self, executor=None, log_filename="drone_log.txt", output_dir=None, overwrite_logs=True):
         self.llm = LLMInterface()
-        self.executor = executor
-        self.motion = executor.motion
-        self.logger = Logger(log_filename)
+        self.executor = executor if executor is not None else MotionExecutor()
+        self.motion = self.executor.motion
+        self.logger = Logger(log_filename, output_dir=output_dir, overwrite=overwrite_logs)
 
 
     def get_drone_state(self):
@@ -28,7 +28,7 @@ class DroneController:
                 "pitch": pitch, "roll": roll, "yaw": yaw
                 }
 
-    def run(self):
+    def run(self, max_steps=None):
         """
         主循环：
         - 获取大模型动作
@@ -38,6 +38,14 @@ class DroneController:
         - 判断是否结束
         """
         self.motion.client.simPause(False)
+        trajectory = []
+        plan_steps = []
+        step_count = 0
+        end_reason = "unknown"
+
+        # 记录起点，便于后续轨迹评估。
+        start_state = self.get_drone_state()
+        trajectory.append([start_state["x"], start_state["y"], start_state["z"]])
 
         while True:
             # ---------------------------------------------------------
@@ -84,11 +92,35 @@ class DroneController:
                 }
             })
 
+            step_count += 1
+            trajectory.append([drone_state["x"], drone_state["y"], drone_state["z"]])
+            plan_steps.append({
+                "step": step_count,
+                "raw_model_output": action_json,
+                "parsed_action": parsed,
+                "execute_status": exec_status,
+                "drone_state_after": drone_state,
+            })
+
             # ---------------------------------------------------------
             # 8. 判断是否结束任务
             # ---------------------------------------------------------
             if parsed["type"] == "done":
                 print("Mission completed.")
+                end_reason = "done"
+                break
+
+            if max_steps is not None and step_count >= int(max_steps):
+                end_reason = "max_steps"
                 break
 
         self.motion.client.simPause(True)
+        return {
+            "trajectory": trajectory,
+            "plan_steps": plan_steps,
+            "status": {
+                "done": end_reason == "done",
+                "step_count": step_count,
+                "end_reason": end_reason,
+            },
+        }

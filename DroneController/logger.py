@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+from pathlib import Path
 
 class Color:
     BLUE = "\033[34m"
@@ -17,12 +18,23 @@ class Logger:
     - 机器可读 json
     """
 
-    def __init__(self, txt_file="drone_log.txt", json_file="drone_log.jsonl"):
-        self.txt_file = txt_file
-        self.json_file = json_file
+    def __init__(self, txt_file="drone_log.txt", json_file="drone_log.jsonl", output_dir=None, overwrite=True):
+        if output_dir is None:
+            self.txt_file = str(txt_file)
+            self.json_file = str(json_file)
+        else:
+            out_dir = Path(output_dir)
+            out_dir.mkdir(parents=True, exist_ok=True)
+            self.txt_file = str(out_dir / txt_file)
+            self.json_file = str(out_dir / json_file)
+
+        if overwrite:
+            Path(self.txt_file).write_text("", encoding="utf-8")
+            Path(self.json_file).write_text("", encoding="utf-8")
 
     def log(self, entry: dict):
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        prompt_dict = {}
 
         # -----------------------------
         # 1. 写人类可读 txt 日志
@@ -37,6 +49,7 @@ class Logger:
                 prompt_dict = json.loads(entry["prompt"])
                 f.write(json.dumps(prompt_dict, indent=4, ensure_ascii=False) + "\n")
             except:
+                prompt_dict = {"raw_prompt": entry.get("prompt", "")}
                 f.write("<invalid prompt json>\n")
 
             # LLM Output

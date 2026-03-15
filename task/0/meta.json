@@ -1,0 +1,8 @@
+{
+  "task_id": 0,
+  "dataset_root": "Datasets\\vln",
+  "started_at": "2026-03-15 21:48:37",
+  "finished_at": "2026-03-15 21:49:25",
+  "controller_mode": "online_airsim_mock_llm",
+  "script": "DroneController/run_vln_workflow_eval.py"
+}
