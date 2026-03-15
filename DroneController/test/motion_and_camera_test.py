@@ -7,7 +7,8 @@ from DroneController.drone_motion import DroneMotion
 from DroneController.drone_camera import DroneCamera
 from DroneController.airsim_client import AirSimClientSingleton
 
-OUTPUT_DIR = "task_test"
+BASE_DIR = os.path.dirname(__file__)
+OUTPUT_DIR = os.path.join(BASE_DIR, "artifacts", "current")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 TASK_FILE = os.path.join(OUTPUT_DIR, "task_test.txt")

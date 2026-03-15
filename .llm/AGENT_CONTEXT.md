@@ -141,6 +141,12 @@ Typical structure:
 `traj.csv` columns:
 - step, x, y, z
 
+DroneController test artifact layout (refactored, no code-path changes):
+- active test output: `DroneController/test/artifacts/current/`
+- archived run snapshots: `DroneController/test/artifacts/history/<run_id>/`
+- logs: `DroneController/test/artifacts/logs/`
+- refactor note: `DroneController/docs/DIRECTORY_REFACTOR_20260315.md`
+
 ---
 
 ## 8. Practical Entry Points
@@ -157,6 +163,10 @@ Useful args for offline eval:
 - `--task_id <id>`
 - `--episodes 0 1 2`
 - `--success_radius 20.0`
+
+Directory behavior note:
+- test scripts now write to `DroneController/test/artifacts/current/...`.
+- after each run, snapshots can be archived to `DroneController/test/artifacts/history/<run_id>/`.
 
 ---
 

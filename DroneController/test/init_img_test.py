@@ -8,7 +8,8 @@ from DroneController.drone_camera import DroneCamera
 from DroneController.drone_motion import DroneMotion
 from DroneController.image_processing import merge_images, compress_image_to_size
 
-OUTPUT_DIR = "task_test/task_step_init"
+BASE_DIR = os.path.dirname(__file__)
+OUTPUT_DIR = os.path.join(BASE_DIR, "artifacts", "current", "task_step_init")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 motion = DroneMotion()

@@ -179,7 +179,7 @@ def compute_vln_metrics(
 
 def parse_task_test_positions(task_test_txt: Union[str, Path]) -> List[List[float]]:
     """
-    Parse `DroneController/task_test/task_test.txt` for a quick sanity-check.
+    Parse `DroneController/test/artifacts/current/task_test.txt` for a quick sanity-check.
     We use each step's End Position as a trajectory point.
     """
     task_test_txt = Path(task_test_txt)
@@ -213,7 +213,7 @@ if __name__ == "__main__":
     # Sanity-check example:
     dataset_root = Path("Datasets") / "vln"
     gt0 = load_gt_episode(dataset_root, idx=0)
-    pred = parse_task_test_positions(Path("DroneController") / "task_test" / "task_test.txt")
+    pred = parse_task_test_positions(Path("DroneController") / "test" / "artifacts" / "current" / "task_test.txt")
     if len(pred) == 0:
         raise SystemExit("No positions parsed from task_test.txt")
     metrics = compute_vln_metrics(gt0, pred_positions_m=pred, success_radius_m=20.0)
