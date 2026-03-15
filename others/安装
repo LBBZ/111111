@@ -1,8 +1,8 @@
 conda create -n airsim python=3.9
-conda install numpy
+pip install --force-reinstall numpy==1.22.4
 pip install msgpack-rpc-python msgpack-python
 pip install setuptools wheel
-pip install opencv-python pillow
+pip install opencv-python==4.5.5.64 opencv-contrib-python pillow
 pip install airsim --no-build-isolation
 pip install msgpack-rpc-python msgpack-python
 pip install -r others\requirements.txt
