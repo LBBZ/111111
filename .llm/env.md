@@ -1,264 +1,166 @@
-# Drone Navigation Environment
+# Drone Navigation Environment (Refactored)
 
-Environment specification for the drone navigation agent running in **AirSim + EmbodiedCity**.
-
-This file describes the **world model, dataset format, and evaluation metrics**.
-
----
-
-# Coordinate System
-
-AirSim uses **NED coordinates (meters)**.
-
-```
-X : forward
-Y : right
-Z : down (positive)
-```
-
-Important:
-
-```
-move_up(d)   -> z -= d
-move_down(d) -> z += d
-```
+This file summarizes the runtime environment, data format, metrics, and execution entry points after refactoring.
+It is designed for fast agent onboarding with minimal context cost.
 
 ---
 
-# World Origin
+# 1. Runtime Environment
 
-The drone origin is reset by AirSim settings.
+## 1.1 Simulation stack
 
-File:
+- AirSim + EmbodiedCity scene
+- Primary Python control pipeline in `DroneController/`
 
-```
-others/settings.json
-```
+## 1.2 Key AirSim configuration
 
-The initial spawn location becomes the drone's `(0,0,0)`.
+Config file: `others/settings.json`
 
-Do NOT assume a fixed global origin.
-
----
-
-# Unit Conversion
-
-Some dataset coordinates are in **Unreal centimeters**.
-
-Convert before use:
-
-```
-meters = cm / 100
-```
+- `DefaultVehicle`: `keli`
+- 9 cameras are defined: Front/Back/Left/Right/FrontLeft/FrontRight/BackLeft/BackRight/TopDown
+- Initial pose is set by settings; do not hardcode a global origin in logic
 
 ---
 
-# Project Structure
+# 2. Coordinates and Units
 
-Two stacks exist.
+## 2.1 AirSim coordinates
 
-### Primary stack
+AirSim uses NED in meters:
 
-```
-DroneController/
-```
+- X: forward
+- Y: right
+- Z: down is positive
 
-Used for:
+Therefore:
 
-```
-drone control
-camera observations
-trajectory execution
-evaluation
-```
+- `move_up(d)` -> `z` decreases
+- `move_down(d)` -> `z` increases
 
-Main modules:
+## 2.2 Dataset coordinates
 
-```
-DroneCamera
-DroneMotion
-airsim_client
-vln_metrics
-```
+`Datasets/vln/start_loc.txt` stores start position in Unreal centimeters:
+
+`meters = cm / 100`
+
+`Datasets/vln/label/<idx>.csv` stores relative trajectory displacements in meters.
 
 ---
 
-### Reference stack (benchmark only)
+# 3. Architecture and Responsibility Boundaries
 
-```
-embodied_vln.py
-prompts/
-Datasets/vln/
-```
+## 3.1 Primary execution stack (recommended)
 
-Used only for:
+`DroneController/`
 
-```
-dataset format
-evaluation alignment
-```
+- `controller.py`: main loop
+- `motion_executor.py`: action parsing and execution bridge
+- `drone_camera.py`: RGB/Depth/Seg observation capture
+- `drone_motion.py`: flight actions (translation/rotation/teleport)
+- `vln_metrics.py`: SR/NE/SPL computation
+- `run_vln_eval_fake.py`: offline evaluation smoke test without AirSim
 
-Do NOT use its control pipeline.
+## 3.2 Reference stack (alignment/compatibility)
+
+`embodied_vln.py`, `vln/`, `prompts/`, `Datasets/vln/`
+
+Use this stack for benchmark alignment and dataset compatibility, not as the primary online control entry.
 
 ---
 
-# Dataset
+# 4. VLN Dataset Format
 
-Location:
+Root: `Datasets/vln/`
 
-```
-Datasets/vln/
-```
+- `start_loc.txt`
+- `label/<idx>.csv`
 
-Files:
+In `vln_metrics.load_gt_episode()`:
 
-```
-start_loc.txt
-label/*.csv
-```
+1. Parse `start_pos_m`, `start_yaw_deg`, and `instruction`
+2. Read relative trajectory `rel` from `label/<idx>.csv`
+3. Compute goal: `target_pos_m = start_pos_m + rel[-1]`
+4. Compute GT path length: `gt_path_len_m`
 
-Definitions:
+---
 
-```
-start_pos_m
-target_pos_m
-gt_path_len_m
-```
+# 5. Metric Definitions (SR / NE / SPL)
 
-Computation:
+Implementation: `DroneController/vln_metrics.py`
 
-```
-target_pos_m = start_pos_m + rel[-1]
-```
+Given predicted absolute trajectory `pred_positions_m = [(x,y,z), ...]`:
+
+- $NE = ||p_{final} - p_{goal}||_2$
+- $SR = \mathbb{1}[NE < r]$, default $r=20m$
+- $SPL = SR \cdot \frac{L}{\max(L, P)}$
 
 Where:
 
-```
-rel = relative displacements from label csv
-```
+- $L$: GT path length `gt_path_len_m`
+- $P$: predicted path length `pred_len_m`
 
 ---
 
-# Evaluation Metrics
+# 6. Task Artifact Layout
 
-Implemented in:
+Unified output root: `task/<task_id>/`
 
-```
-DroneController/vln_metrics.py
-```
+Typical structure:
 
-Given predicted trajectory:
-
-```
-pred_positions_m = [(x, y, z), ...]
-```
-
-Metrics:
-
-```
-NE   = distance(final_pred_pos, target_pos_m)
-
-SR   = 1 if NE < 20m else 0
-
-SPL  = SR * (gt_path_len_m / max(gt_path_len_m, pred_len_m))
-```
-
-Goal:
-
-```
-minimize NE
-maximize SR
-maximize SPL
-```
-
----
-
-# Task Artifacts and Offline Evaluation
-
-Each evaluation run writes artifacts under:
-
-```
+```text
 task/<task_id>/
+  meta.json
+  results.json
+  episodes/
+    <idx>/
+      traj.csv
+      plan.json
+      images/
 ```
 
-Structure:
+Field summary:
 
-```
-task/<task_id>/meta.json
-task/<task_id>/results.json
-task/<task_id>/episodes/0/{plan.json,traj.csv,images/}
-task/<task_id>/episodes/1/{...}
-task/<task_id>/episodes/2/{...}
-```
-
-- `meta.json` records:
-
-```
-task_id
-created_at
-dataset_root        # usually "Datasets/vln"
-episodes            # e.g. [0,1,2]
-success_radius_m    # usually 20.0
-```
-
-- `traj.csv` is the predicted trajectory in world/NED coordinates, one row per step.
-- `results.json` contains:
-
-```
-meta      # copy of meta.json info
-episodes  # per-episode GT, prediction and metrics
-summary   # mean SR/NE/SPL over all evaluated episodes
-```
-
-There is also a helper script for **offline smoke testing** (no AirSim, no LLM):
-
-```
-DroneController/run_vln_eval_fake.py
-```
-
-It:
-
-1. Reads GT for a few episodes from `Datasets/vln`.
-2. Generates fake trajectories (high / medium / fail).
-3. Writes `task/<task_id>/episodes/<idx>/traj.csv` and `plan.json`.
-4. Calls `DroneController/vln_metrics.py` to compute SR/NE/SPL.
-5. Produces `task/<task_id>/results.json` with per-episode metrics and a summary.
+- `meta.json`: dataset root, episode list, success radius, timestamps
+- `traj.csv`: predicted position per step (world/NED, meters)
+- `plan.json`: per-step plan/action information
+- `results.json`: per-episode metrics + aggregated summary
 
 ---
 
-# Common Pitfalls
+# 7. Practical Entry Points
 
-Camera naming mismatch:
+## 7.1 Online control loop (AirSim required)
 
-```
-DroneController -> Front/Back/.../TopDown
-VLN code       -> "0" / "3"
-```
+- `DroneController/test/workflow_test.py`
 
-Do NOT mix them.
+Triggers: observation capture -> LLM interface -> action execution -> logging.
+
+## 7.2 Offline evaluation smoke test (AirSim not required)
+
+- `DroneController/run_vln_eval_fake.py`
+
+It will:
+
+1. Load GT from `Datasets/vln`
+2. Generate fake trajectories (`hi`/`mid`/`fail`)
+3. Write `traj.csv` and `plan.json`
+4. Compute SR/NE/SPL
+5. Write `results.json`
+
+Common args:
+
+- `--dataset_root` (default `Datasets/vln`)
+- `--out_root` (default `task`)
+- `--task_id`
+- `--episodes 0 1 2`
+- `--success_radius 20.0`
 
 ---
 
-Vehicle name must match AirSim settings:
+# 8. Common Pitfalls
 
-```
-others/settings.json
-DefaultVehicle = "keli"
-```
-
----
-
-Dataset path is case sensitive:
-
-```
-Datasets/
-NOT dataset/
-```
-
----
-
-Remember:
-
-```
-AirSim Z axis points downward
-```
+1. Do not mix current camera names with older VLN camera indexing.
+2. Keep vehicle name aligned with settings (`DefaultVehicle = keli`).
+3. Use `Datasets/vln` path exactly, not `dataset/vln`.
+4. Always convert start positions in `start_loc.txt` from cm to m.
+5. Current `LLMInterface` returns mock outputs for pipeline validation, not production model calls.
