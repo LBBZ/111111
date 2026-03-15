@@ -1,6 +1,7 @@
 # 默认忽略的文件
 /shelf/
 /workspace.xml
+.vscode
 .idea
 .venv
 /run_ok/task_test_img/*
