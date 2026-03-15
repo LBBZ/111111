@@ -1,24 +1,8 @@
 conda create -n airsim python=3.9
-conda install numpy~=1.22.0
-conda install setuptools wheel
+conda install numpy
 pip install msgpack-rpc-python msgpack-python
+pip install setuptools wheel
 pip install opencv-python pillow
 pip install airsim --no-build-isolation
-pip install tqdm~=4.66.1
-conda install -c conda-forge scipy=1.7.3
-conda install networkx~=2.8.4
-conda install pandas~=1.5.3
-conda install pillow~=9.4.0
-conda install openai~=1.28.1
-conda install transformers=4.28.1
-pip install dashscope==1.19.2
-conda install anthropic=0.28.0
-conda install nltk=3.9.1
-conda install pycocoevalcap=1.2
-conda install scikit-learn=1.3.0
-conda install requests=2.31.0
-conda install natsort=8.4.0
-conda install accelerate=0.18.0
-conda install psutil=5.9.0
-pip install torch==2.1.2
-conda install numpy --force-reinstall
+pip install msgpack-rpc-python msgpack-python
+pip install -r others\requirements.txt
