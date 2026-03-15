@@ -1,0 +1,326 @@
+
+============================================================
+Timestamp: 2026-03-15 19:12:00
+
+--- Prompt JSON ---
+{
+    "image": "<base64 placeholder>",
+    "depth_summary": {
+        "front": 68.12129974365234,
+        "left": 48.51569747924805,
+        "topdown": 41.21542739868164,
+        "right": 92.6910629272461,
+        "back": 46.06996536254883
+    },
+    "drone_state": {
+        "x": -0.0,
+        "y": 0.0,
+        "z": -1.53,
+        "pitch": 0.0,
+        "roll": 0.0,
+        "yaw": 0.0
+    }
+}
+
+--- LLM Output ---
+{
+    "scores": {
+        "front": 0.82,
+        "left": 0.4,
+        "right": 0.1,
+        "back": 0.02,
+        "down": 0.15
+    },
+    "confidence": 0.88,
+    "target_direction": "front-left",
+    "turn_direction": "left",
+    "turn_angle_deg": 18.0,
+    "forward_distance": 2.5,
+    "vertical_movement": 0.2,
+    "notes": "Building visible ahead-left; forward path mostly clear."
+}
+
+--- Parsed Action ---
+{
+    "type": "motion",
+    "turn": {
+        "direction": "left",
+        "angle_deg": 18.0
+    },
+    "forward": 2.5,
+    "vertical": 0.2,
+    "raw": {
+        "scores": {
+            "front": 0.82,
+            "left": 0.4,
+            "right": 0.1,
+            "back": 0.02,
+            "down": 0.15
+        },
+        "confidence": 0.88,
+        "target_direction": "front-left",
+        "turn_direction": "left",
+        "turn_angle_deg": 18.0,
+        "forward_distance": 2.5,
+        "vertical_movement": 0.2,
+        "notes": "Building visible ahead-left; forward path mostly clear."
+    }
+}
+
+--- Drone State ---
+{
+    "x": 2.4014265537261963,
+    "y": -0.6978841423988342,
+    "z": -1.6526226997375488,
+    "pitch": 0.0019026219890413334,
+    "roll": -6.145502596178845e-05,
+    "yaw": -0.3143239555398227
+}
+
+--- Depth Summary ---
+{
+    "front": 68.12129974365234,
+    "left": 48.51569747924805,
+    "topdown": 41.21542739868164,
+    "right": 92.6910629272461,
+    "back": 46.06996536254883
+}
+============================================================
+
+============================================================
+Timestamp: 2026-03-15 19:12:12
+
+--- Prompt JSON ---
+{
+    "image": "<base64 placeholder>",
+    "depth_summary": {
+        "front": 57.34394073486328,
+        "left": 48.2435188293457,
+        "topdown": 41.60819625854492,
+        "right": 96.92630004882812,
+        "back": 46.0894889831543
+    },
+    "drone_state": {
+        "x": 2.41,
+        "y": -0.71,
+        "z": -1.65,
+        "pitch": 0.0,
+        "roll": 0.0,
+        "yaw": -0.31
+    }
+}
+
+--- LLM Output ---
+{
+    "scores": {
+        "front": 0.3,
+        "left": 0.05,
+        "right": 0.75,
+        "back": 0.01,
+        "down": 0.2
+    },
+    "confidence": 0.92,
+    "target_direction": "front-right",
+    "turn_direction": "right",
+    "turn_angle_deg": 25.0,
+    "forward_distance": 3.0,
+    "vertical_movement": 0.0,
+    "notes": "Right corridor is open; building visible on the right side."
+}
+
+--- Parsed Action ---
+{
+    "type": "motion",
+    "turn": {
+        "direction": "right",
+        "angle_deg": 25.0
+    },
+    "forward": 3.0,
+    "vertical": 0.0,
+    "raw": {
+        "scores": {
+            "front": 0.3,
+            "left": 0.05,
+            "right": 0.75,
+            "back": 0.01,
+            "down": 0.2
+        },
+        "confidence": 0.92,
+        "target_direction": "front-right",
+        "turn_direction": "right",
+        "turn_angle_deg": 25.0,
+        "forward_distance": 3.0,
+        "vertical_movement": 0.0,
+        "notes": "Right corridor is open; building visible on the right side."
+    }
+}
+
+--- Drone State ---
+{
+    "x": 5.445738792419434,
+    "y": -0.4372446835041046,
+    "z": -1.5961257219314575,
+    "pitch": -0.022368802483237967,
+    "roll": -0.0008724093463963313,
+    "yaw": 0.12568260005060278
+}
+
+--- Depth Summary ---
+{
+    "front": 57.34394073486328,
+    "left": 48.2435188293457,
+    "topdown": 41.60819625854492,
+    "right": 96.92630004882812,
+    "back": 46.0894889831543
+}
+============================================================
+
+============================================================
+Timestamp: 2026-03-15 19:12:23
+
+--- Prompt JSON ---
+{
+    "image": "<base64 placeholder>",
+    "depth_summary": {
+        "front": 63.69477844238281,
+        "left": 79.751708984375,
+        "topdown": 41.81019973754883,
+        "right": 95.27426147460938,
+        "back": 56.219512939453125
+    },
+    "drone_state": {
+        "x": 5.42,
+        "y": -0.45,
+        "z": -1.59,
+        "pitch": -0.0,
+        "roll": 0.0,
+        "yaw": 0.13
+    }
+}
+
+--- LLM Output ---
+{
+    "scores": {
+        "front": 0.1,
+        "left": 0.7,
+        "right": 0.2,
+        "back": 0.05,
+        "down": 0.05
+    },
+    "confidence": 0.8,
+    "target_direction": "left",
+    "turn_direction": "left",
+    "turn_angle_deg": 30.0,
+    "forward_distance": 1.5,
+    "vertical_movement": 0.8,
+    "notes": "Obstacle ahead; safer path is left with required altitude gain."
+}
+
+--- Parsed Action ---
+{
+    "type": "motion",
+    "turn": {
+        "direction": "left",
+        "angle_deg": 30.0
+    },
+    "forward": 1.5,
+    "vertical": 0.8,
+    "raw": {
+        "scores": {
+            "front": 0.1,
+            "left": 0.7,
+            "right": 0.2,
+            "back": 0.05,
+            "down": 0.05
+        },
+        "confidence": 0.8,
+        "target_direction": "left",
+        "turn_direction": "left",
+        "turn_angle_deg": 30.0,
+        "forward_distance": 1.5,
+        "vertical_movement": 0.8,
+        "notes": "Obstacle ahead; safer path is left with required altitude gain."
+    }
+}
+
+--- Drone State ---
+{
+    "x": 6.815659046173096,
+    "y": -0.971870481967926,
+    "z": -2.3009517192840576,
+    "pitch": -0.011398835466810288,
+    "roll": 0.0004672744668677395,
+    "yaw": -0.4050230888940711
+}
+
+--- Depth Summary ---
+{
+    "front": 63.69477844238281,
+    "left": 79.751708984375,
+    "topdown": 41.81019973754883,
+    "right": 95.27426147460938,
+    "back": 56.219512939453125
+}
+============================================================
+
+============================================================
+Timestamp: 2026-03-15 19:12:29
+
+--- Prompt JSON ---
+{
+    "image": "<base64 placeholder>",
+    "depth_summary": {
+        "front": 49.631290435791016,
+        "left": 49.4211540222168,
+        "topdown": 42.96708297729492,
+        "right": 76.52513122558594,
+        "back": 47.62554931640625
+    },
+    "drone_state": {
+        "x": 6.81,
+        "y": -0.95,
+        "z": -2.3,
+        "pitch": -0.0,
+        "roll": -0.0,
+        "yaw": -0.41
+    }
+}
+
+--- LLM Output ---
+{
+    "done": true,
+    "message": "Mission completed.",
+    "target_location_direction": "front-left"
+}
+
+--- Parsed Action ---
+{
+    "type": "done",
+    "message": "Mission completed.",
+    "target_location_direction": "front-left",
+    "raw": {
+        "done": true,
+        "message": "Mission completed.",
+        "target_location_direction": "front-left"
+    }
+}
+
+--- Drone State ---
+{
+    "x": 6.810843467712402,
+    "y": -0.9509268403053284,
+    "z": -2.3000497817993164,
+    "pitch": -0.0017290814965473136,
+    "roll": -0.00224461911473598,
+    "yaw": -0.4050024928422308
+}
+
+--- Depth Summary ---
+{
+    "front": 49.631290435791016,
+    "left": 49.4211540222168,
+    "topdown": 42.96708297729492,
+    "right": 76.52513122558594,
+    "back": 47.62554931640625
+}
+============================================================
