@@ -21,3 +21,4 @@ conda install natsort=8.4.0
 conda install accelerate=0.18.0
 conda install psutil=5.9.0
 pip install torch==2.1.2
+conda install numpy --force-reinstall
