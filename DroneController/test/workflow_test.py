@@ -5,8 +5,16 @@
 workflow_test.py
 用于启动完整的无人机 → 传感器 → Prompt → LLM → 动作执行流程
 """
-from DroneController.airsim_client import AirSimClientSingleton
-from DroneController.controller import DroneController
+import sys
+from pathlib import Path
+
+CURRENT_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = CURRENT_DIR.parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from DroneController.infra.airsim_client import AirSimClientSingleton
+from DroneController.core.controller import DroneController
 
 def main():
     print("=== Drone Workflow Test Started ===")

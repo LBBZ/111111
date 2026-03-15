@@ -1,0 +1,81 @@
+[
+  {
+    "timestamp": "2026-03-15 22:27:17",
+    "prompt": {
+      "image": "<base64 placeholder>",
+      "depth_summary": {
+        "front": 7.488326072692871,
+        "left": 7.4155683517456055,
+        "topdown": 3.5234375,
+        "right": 7.4218363761901855,
+        "back": 7.446274757385254
+      },
+      "drone_state": {
+        "x": 14.52,
+        "y": -29.52,
+        "z": 49.17,
+        "pitch": -0.0,
+        "roll": 0.0,
+        "yaw": -2.42
+      }
+    },
+    "llm_output": {
+      "scores": {
+        "front": 0.82,
+        "left": 0.4,
+        "right": 0.1,
+        "back": 0.02,
+        "down": 0.15
+      },
+      "confidence": 0.88,
+      "target_direction": "front-left",
+      "turn_direction": "left",
+      "turn_angle_deg": 18.0,
+      "forward_distance": 2.5,
+      "vertical_movement": 0.2,
+      "notes": "Building visible ahead-left; forward path mostly clear."
+    },
+    "parsed_action": {
+      "type": "motion",
+      "turn": {
+        "direction": "left",
+        "angle_deg": 18.0
+      },
+      "forward": 2.5,
+      "vertical": 0.2,
+      "raw": {
+        "scores": {
+          "front": 0.82,
+          "left": 0.4,
+          "right": 0.1,
+          "back": 0.02,
+          "down": 0.15
+        },
+        "confidence": 0.88,
+        "target_direction": "front-left",
+        "turn_direction": "left",
+        "turn_angle_deg": 18.0,
+        "forward_distance": 2.5,
+        "vertical_movement": 0.2,
+        "notes": "Building visible ahead-left; forward path mostly clear."
+      }
+    },
+    "drone_state": {
+      "x": 12.258966445922852,
+      "y": -30.579730987548828,
+      "z": 49.04676818847656,
+      "pitch": 0.0019391986361265347,
+      "roll": -6.523033713201113e-05,
+      "yaw": -2.7370753508989836
+    },
+    "sensor_data": {
+      "depth_summary": {
+        "front": 7.488326072692871,
+        "left": 7.4155683517456055,
+        "topdown": 3.5234375,
+        "right": 7.4218363761901855,
+        "back": 7.446274757385254
+      }
+    }
+  }
+]

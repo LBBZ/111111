@@ -2,10 +2,17 @@ import os
 import random
 import time
 import airsim
+import sys
+from pathlib import Path
 
-from DroneController.drone_motion import DroneMotion
-from DroneController.drone_camera import DroneCamera
-from DroneController.airsim_client import AirSimClientSingleton
+CURRENT_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = CURRENT_DIR.parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from DroneController.control.drone_motion import DroneMotion
+from DroneController.perception.drone_camera import DroneCamera
+from DroneController.infra.airsim_client import AirSimClientSingleton
 
 BASE_DIR = os.path.dirname(__file__)
 OUTPUT_DIR = os.path.join(BASE_DIR, "artifacts", "current")
