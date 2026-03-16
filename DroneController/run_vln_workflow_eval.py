@@ -14,6 +14,7 @@ from DroneController.io.artifact_writer import WorkflowArtifactWriter
 
 
 def _run_one_task(task_id: int, dataset_root: Path, task_root: Path) -> int:
+    print(f"[workflow][task={task_id}] ===== start =====")
     output_dir = task_root / str(task_id)
     writer = WorkflowArtifactWriter(output_dir)
     writer.prepare_for_rerun()
@@ -33,9 +34,12 @@ def _run_one_task(task_id: int, dataset_root: Path, task_root: Path) -> int:
         }
     )
     writer.write_json("meta.json", meta)
+    print(f"[workflow][task={task_id}] meta initialized: {output_dir / 'meta.json'}")
 
     try:
+        print(f"[workflow][task={task_id}] load_gt:start")
         gt = vln_metrics.load_gt_episode(dataset_root, task_id)
+        print(f"[workflow][task={task_id}] load_gt:ok idx={gt.idx} instruction={gt.instruction}")
     except Exception as e:
         meta["finished_at"] = writer.now_str()
         meta["error"] = f"Failed to load ground truth episode: {e}"
@@ -44,10 +48,13 @@ def _run_one_task(task_id: int, dataset_root: Path, task_root: Path) -> int:
         return 1
 
     try:
+        print(f"[workflow][task={task_id}] controller:init")
         controller = DroneController(output_dir=str(output_dir), overwrite_logs=True)
         # start_pos_m is already normalized by vln_metrics.load_gt_episode.
         start_pos_m_for_init = tuple(map(float, gt.start_pos_m))
+        print(f"[workflow][task={task_id}] initialize_episode:start pos={start_pos_m_for_init} rot={gt.start_rot_deg}")
         init_state = controller.initialize_episode(start_pos_m_for_init, gt.start_rot_deg)
+        print(f"[workflow][task={task_id}] initialize_episode:ok state={init_state}")
         task_context = {
             "task_id": int(task_id),
             "instruction": gt.instruction,
@@ -65,15 +72,20 @@ def _run_one_task(task_id: int, dataset_root: Path, task_root: Path) -> int:
             "applied_state": init_state,
         }
         writer.write_json("meta.json", meta)
+        print(f"[workflow][task={task_id}] meta updated with episode_init")
 
         def on_step_end(**kwargs):
+            print(f"[workflow][task={task_id}][step={kwargs.get('step_count')}] save_step_visual:start")
             writer.save_step_visual(
                 step_idx=int(kwargs["step_count"]),
                 sensor_data=kwargs["sensor_data"],
                 camera=controller.executor.camera,
             )
+            print(f"[workflow][task={task_id}][step={kwargs.get('step_count')}] save_step_visual:ok")
 
+        print(f"[workflow][task={task_id}] controller.run:start")
         run_artifacts = controller.run(max_steps=200, on_step_end=on_step_end, task_context=task_context)
+        print(f"[workflow][task={task_id}] controller.run:ok")
     except Exception as e:
         meta["finished_at"] = writer.now_str()
         meta["error"] = f"Controller run failed (AirSim may be unavailable): {e}"
@@ -92,7 +104,9 @@ def _run_one_task(task_id: int, dataset_root: Path, task_root: Path) -> int:
         print(meta["error"])
         return 1
 
+    print(f"[workflow][task={task_id}] metrics:start")
     metrics = vln_metrics.compute_vln_metrics(gt, pred_positions_m=pred_positions)
+    print(f"[workflow][task={task_id}] metrics:ok SR={metrics['SR']:.3f} NE={metrics['NE']:.3f} SPL={metrics['SPL']:.3f}")
 
     success = int(metrics["SR"])
     results = {
@@ -110,6 +124,7 @@ def _run_one_task(task_id: int, dataset_root: Path, task_root: Path) -> int:
     writer.write_traj_csv("traj.csv", pred_positions)
     writer.write_json("plan.json", plan_steps)
     writer.write_json("results.json", results)
+    print(f"[workflow][task={task_id}] artifacts written (traj/plan/results)")
 
     meta["finished_at"] = writer.now_str()
     writer.write_json("meta.json", meta)
@@ -118,6 +133,7 @@ def _run_one_task(task_id: int, dataset_root: Path, task_root: Path) -> int:
         f"task={task_id} SR={results['sr']:.3f} NE={results['ne']:.3f} SPL={results['spl']:.3f} "
         f"steps={results['steps']} end_reason={results['end_reason']} out={output_dir}"
     )
+    print(f"[workflow][task={task_id}] ===== end =====")
     return 0
 
 
@@ -140,10 +156,16 @@ def main() -> int:
         task_ids = [0]
 
     exit_code = 0
+    print(f"[workflow] task sequence={task_ids}")
     for tid in task_ids:
+        print(f"[workflow] dispatch task_id={tid}")
         code = _run_one_task(tid, dataset_root=dataset_root, task_root=task_root)
         if code != 0:
             exit_code = 1
+            print(f"[workflow] task_id={tid} failed")
+        else:
+            print(f"[workflow] task_id={tid} success")
+    print(f"[workflow] all done exit_code={exit_code}")
     return exit_code
 
 
