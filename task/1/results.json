@@ -1,0 +1,11 @@
+{
+  "task_id": 1,
+  "success": 0,
+  "ne": 89.05173160190054,
+  "spl": 0.0,
+  "sr": 0.0,
+  "path_length_pred": 7.272284092447559,
+  "path_length_gt": 101.38511715515918,
+  "steps": 4,
+  "end_reason": "done"
+}

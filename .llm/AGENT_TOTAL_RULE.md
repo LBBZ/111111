@@ -1,6 +1,6 @@
 # Development Agent Total Rule
 
-Last updated: 2026-03-15
+Last updated: 2026-03-16
 Status: SINGLE SOURCE OF TRUTH FOR CODING AGENTS
 Usage: Import this file only for normal development tasks.
 
@@ -70,7 +70,9 @@ Use layered imports instead, for example:
 - Constructor:
   - DroneController(executor=None, log_filename="drone_log.txt", output_dir=None, overwrite_logs=True)
 - Main method:
-  - run(max_steps=None, on_step_end=None) -> dict
+  - run(max_steps=None, on_step_end=None, task_context=None) -> dict
+- Init helper:
+  - initialize_episode(start_pos_m, start_rot_deg) -> dict (expects per-task preprocessed pose)
 - Return contract:
   - {
     "trajectory": [[x,y,z], ...],
@@ -100,7 +102,7 @@ Use layered imports instead, for example:
   - depth_maps
   - depth_summary
   - drone_state
-- build_prompt(sensor_data) -> json string
+- build_prompt(sensor_data, task_context=None) -> json string
   - current image field is placeholder string.
 
 ### 6.3 io.logger.Logger
@@ -124,6 +126,9 @@ Use layered imports instead, for example:
 - Behavior:
   - one run = one dataset case id
   - task_id == dataset case id
+  - initialize vehicle pose from dataset start_loc before loop
+  - convert start pos cm->m and apply z sign inversion: z_m = -(z_cm / 100)
+  - inject instruction + heading info as task_context into prompt loop
   - flat outputs under task/<task_id>/
 
 Required files under task/<task_id>/:
@@ -151,6 +156,7 @@ Required files under task/<task_id>/:
   - X forward, Y right, Z down-positive
 - move_up decreases z; move_down increases z.
 - Datasets/vln/start_loc.txt stores cm; convert by /100.
+- Dataset start_loc z axis is opposite to AirSim NED z; use z_m = -(z_cm / 100).
 - Vehicle name expected in runtime settings: keli.
 
 ## 10) Known Runtime Caveats
@@ -216,3 +222,6 @@ These are supplementary only. This file remains authoritative.
 ## 16) Change Log
 - 2026-03-15: Established single-source development-agent rule file for .llm.
 - 2026-03-15: Expanded to executable handbook level (interfaces, schemas, commands, playbooks).
+- 2026-03-16: Added dataset-driven episode initialization (cm->m + configurable negative-z subtraction), task context injection, and workflow CLI arg --start_z_negative_offset_m.
+- 2026-03-16: Replaced z-offset conversion with direct z sign inversion, removed --start_z_negative_offset_m, and moved dataset pose initialization API into control/drone_motion.py.
+- 2026-03-16: Refined responsibilities: workflow task section now performs dataset conversion, while DroneMotion only executes pose initialization (simSetVehiclePose + takeoff + hover).

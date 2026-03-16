@@ -12,19 +12,24 @@ import math
 class EpisodeGT:
     idx: int
     start_pos_m: Tuple[float, float, float]  # (3,) meters, AirSim world/NED coords
+    start_rot_deg: Tuple[float, float, float]
     start_yaw_deg: float
     instruction: str
     target_pos_m: Tuple[float, float, float]  # (3,) meters
     gt_path_len_m: float
+    start_pos_raw_cm: Tuple[float, float, float]
 
 
-def _parse_start_loc_line(line: str) -> Tuple[int, Tuple[float, float, float], float, str]:
+def _parse_start_loc_line(
+    line: str,
+) -> Tuple[int, Tuple[float, float, float], Tuple[float, float, float], str, Tuple[float, float, float]]:
     """
     Dataset line example:
       0. 650150.258149, -419969.413753, 131.595741; 旋转: 0, 0, 180; Under the traffic light...
 
-    Assumptions (aligned with `embodied_vln.py`):
+    Assumptions (aligned with workflow init):
     - Position in file is Unreal units (cm); convert to meters by /100.
+    - Dataset z axis is opposite to AirSim NED z; use z_m = -(z_cm / 100).
     - Yaw is in degrees (the 3rd number after '旋转:').
     """
     line = line.strip()
@@ -43,14 +48,18 @@ def _parse_start_loc_line(line: str) -> Tuple[int, Tuple[float, float, float], f
     pos_vals = [p.strip() for p in pos_part.split(",")]
     if len(pos_vals) != 3:
         raise ValueError(f"Expected 3 position values, got {pos_vals}")
-    pos_cm = list(map(float, pos_vals))
-    pos_m = (pos_cm[0] / 100.0, pos_cm[1] / 100.0, pos_cm[2] / 100.0)
+    pos_cm = tuple(map(float, pos_vals))
+    pos_m = (
+        pos_cm[0] / 100.0,
+        pos_cm[1] / 100.0,
+        -(pos_cm[2] / 100.0),
+    )
 
     rot_vals = [p.strip() for p in rot_part.split(",")]
     if len(rot_vals) != 3:
         raise ValueError(f"Expected 3 rotation values, got {rot_vals}")
-    yaw_deg = float(rot_vals[2])
-    return idx, pos_m, yaw_deg, instruction
+    rot_deg = tuple(map(float, rot_vals))
+    return idx, pos_m, rot_deg, instruction, pos_cm
 
 
 def load_gt_episode(dataset_root: Union[str, Path], idx: int) -> EpisodeGT:
@@ -67,7 +76,7 @@ def load_gt_episode(dataset_root: Union[str, Path], idx: int) -> EpisodeGT:
     if idx < 0 or idx >= len(start_lines):
         raise IndexError(f"idx={idx} out of range for {start_loc_path} ({len(start_lines)} lines)")
 
-    ep_idx, start_pos_m, yaw_deg, instruction = _parse_start_loc_line(start_lines[idx])
+    ep_idx, start_pos_m, rot_deg, instruction, start_pos_raw_cm = _parse_start_loc_line(start_lines[idx])
 
     # label/*.csv stores a sequence of relative displacements (meters) from start, one per step:
     # ,x,y,z
@@ -81,10 +90,12 @@ def load_gt_episode(dataset_root: Union[str, Path], idx: int) -> EpisodeGT:
     return EpisodeGT(
         idx=ep_idx,
         start_pos_m=start_pos_m,
-        start_yaw_deg=yaw_deg,
+        start_rot_deg=rot_deg,
+        start_yaw_deg=float(rot_deg[2]),
         instruction=instruction,
         target_pos_m=target_pos_m,
         gt_path_len_m=float(gt_len),
+        start_pos_raw_cm=start_pos_raw_cm,
     )
 
 

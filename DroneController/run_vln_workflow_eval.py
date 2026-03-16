@@ -16,7 +16,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Run online single-case VLN workflow evaluation.")
     parser.add_argument("--dataset_root", type=str, default=str(Path("Datasets") / "vln"))
     parser.add_argument("--task_root", type=str, default="task")
-    parser.add_argument("--task_id", type=int, required=True)
+    parser.add_argument("--task_id", type=int, default=0)
     args = parser.parse_args()
 
     task_id = int(args.task_id)
@@ -33,6 +33,7 @@ def main() -> int:
         "finished_at": None,
         "controller_mode": "online_airsim_mock_llm",
         "script": "DroneController/run_vln_workflow_eval.py",
+        "dataset_coord_transform": "x,y,z from cm to m; z uses sign inversion",
     }
     writer.write_json("meta.json", meta)
 
@@ -47,6 +48,30 @@ def main() -> int:
 
     try:
         controller = DroneController(output_dir=str(output_dir), overwrite_logs=True)
+        # Per-task dataset preprocessing for initialization: cm -> m and z-axis sign inversion.
+        start_pos_m_for_init = (
+            float(gt.start_pos_raw_cm[0]) / 100.0,
+            float(gt.start_pos_raw_cm[1]) / 100.0,
+            -float(gt.start_pos_raw_cm[2]) / 100.0,
+        )
+        init_state = controller.initialize_episode(start_pos_m_for_init, gt.start_rot_deg)
+        task_context = {
+            "task_id": int(task_id),
+            "instruction": gt.instruction,
+            "start_rot_deg": list(gt.start_rot_deg),
+            "start_yaw_deg": float(gt.start_rot_deg[2]),
+            "start_pos_m": list(start_pos_m_for_init),
+        }
+        meta["episode_init"] = {
+            "dataset_index": int(gt.idx),
+            "start_pos_raw_cm": list(gt.start_pos_raw_cm),
+            "start_pos_m": list(start_pos_m_for_init),
+            "start_rot_deg": list(gt.start_rot_deg),
+            "start_yaw_deg": float(gt.start_rot_deg[2]),
+            "instruction": gt.instruction,
+            "applied_state": init_state,
+        }
+        writer.write_json("meta.json", meta)
 
         def on_step_end(**kwargs):
             writer.save_step_visual(
@@ -55,7 +80,7 @@ def main() -> int:
                 camera=controller.executor.camera,
             )
 
-        run_artifacts = controller.run(max_steps=200, on_step_end=on_step_end)
+        run_artifacts = controller.run(max_steps=200, on_step_end=on_step_end, task_context=task_context)
     except Exception as e:
         meta["finished_at"] = writer.now_str()
         meta["error"] = f"Controller run failed (AirSim may be unavailable): {e}"

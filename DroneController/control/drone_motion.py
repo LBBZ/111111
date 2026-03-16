@@ -9,7 +9,7 @@ from DroneController.infra.airsim_client import AirSimClientSingleton
 class DroneMotion:
     def __init__(self, vehicle_name="keli", base_speed=3.0):
         print("Planing DroneMotion.")
-        self.client = AirSimClientSingleton().get_client()
+        self.client = AirSimClientSingleton()
         self.vehicle_name = vehicle_name
         self.base_speed = base_speed
         self.dt = 0.02
@@ -76,6 +76,24 @@ class DroneMotion:
             ignore_collision=True,
             vehicle_name=self.vehicle_name,
         )
+
+    def initialize_pose(self, x, y, z, yaw_deg=0.0, pitch_deg=0.0, roll_deg=0.0):
+        """Initialize vehicle pose in NED meters, then take off and hover."""
+        # AirSim client may be paused by singleton bootstrap; unpause before async motion calls.
+        self.client.simPause(False)
+        pose = airsim.Pose(
+            airsim.Vector3r(float(x), float(y), float(z)),
+            airsim.to_quaternion(
+                math.radians(float(pitch_deg)),
+                math.radians(float(roll_deg)),
+                math.radians(float(yaw_deg)),
+            ),
+        )
+        self.client.simSetVehiclePose(pose, ignore_collision=True, vehicle_name=self.vehicle_name)
+        state = self.client.getMultirotorState(vehicle_name=self.vehicle_name)
+        if state.landed_state == airsim.LandedState.Landed:
+            self.client.takeoffAsync(vehicle_name=self.vehicle_name).join()
+        self.client.hoverAsync(vehicle_name=self.vehicle_name).join()
 
     def _normalize_angle(self, a):
         while a > math.pi:

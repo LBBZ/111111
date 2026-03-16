@@ -17,7 +17,13 @@ class DroneController:
         pitch, roll, yaw = self.motion.get_yaw()
         return {"x": x, "y": y, "z": z, "pitch": pitch, "roll": roll, "yaw": yaw}
 
-    def run(self, max_steps=None, on_step_end=None):
+    def initialize_episode(self, start_pos_m, start_rot_deg):
+        x_m, y_m, z_m = map(float, start_pos_m)
+        pitch_deg, roll_deg, yaw_deg = map(float, start_rot_deg)
+        self.motion.initialize_pose(x_m, y_m, z_m, yaw_deg=yaw_deg, pitch_deg=pitch_deg, roll_deg=roll_deg)
+        return self.get_drone_state()
+
+    def run(self, max_steps=None, on_step_end=None, task_context=None):
         self.motion.client.simPause(False)
         trajectory = []
         plan_steps = []
@@ -29,7 +35,7 @@ class DroneController:
 
         while True:
             sensor_data = self.executor.get_sensor_data()
-            prompt = self.executor.build_prompt(sensor_data)
+            prompt = self.executor.build_prompt(sensor_data, task_context=task_context)
             action_json, _status = self.llm.get_action(prompt)
             parsed = self.executor.parse(action_json)
             exec_status = self.executor.execute(parsed)
@@ -43,6 +49,7 @@ class DroneController:
                     "execution_status": exec_status,
                     "drone_state": drone_state,
                     "sensor_data": {"depth_summary": sensor_data["depth_summary"]},
+                    "task_context": task_context,
                 }
             )
 

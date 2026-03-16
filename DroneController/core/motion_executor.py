@@ -10,7 +10,7 @@ class MotionExecutor:
     """Parse model output and execute motion commands."""
 
     def __init__(self, client=None, motion=None, camera=None):
-        self.client = client if client is not None else AirSimClientSingleton().get_client()
+        self.client = client if client is not None else AirSimClientSingleton()
         self.motion = motion if motion is not None else DroneMotion()
         self.camera = camera if camera is not None else DroneCamera()
 
@@ -91,10 +91,12 @@ class MotionExecutor:
             "drone_state": drone_state,
         }
 
-    def build_prompt(self, sensor_data):
+    def build_prompt(self, sensor_data, task_context=None):
         prompt_json = {
             "image": "<base64 placeholder>",
             "depth_summary": sensor_data["depth_summary"],
             "drone_state": sensor_data["drone_state"],
         }
+        if task_context:
+            prompt_json["task_context"] = task_context
         return json.dumps(prompt_json, ensure_ascii=False)

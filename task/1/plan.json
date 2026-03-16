@@ -1,0 +1,188 @@
+[
+  {
+    "step": 1,
+    "raw_model_output": {
+      "scores": {
+        "front": 0.82,
+        "left": 0.4,
+        "right": 0.1,
+        "back": 0.02,
+        "down": 0.15
+      },
+      "confidence": 0.88,
+      "target_direction": "front-left",
+      "turn_direction": "left",
+      "turn_angle_deg": 18.0,
+      "forward_distance": 2.5,
+      "vertical_movement": 0.2,
+      "notes": "Building visible ahead-left; forward path mostly clear."
+    },
+    "parsed_action": {
+      "type": "motion",
+      "turn": {
+        "direction": "left",
+        "angle_deg": 18.0
+      },
+      "forward": 2.5,
+      "vertical": 0.2,
+      "raw": {
+        "scores": {
+          "front": 0.82,
+          "left": 0.4,
+          "right": 0.1,
+          "back": 0.02,
+          "down": 0.15
+        },
+        "confidence": 0.88,
+        "target_direction": "front-left",
+        "turn_direction": "left",
+        "turn_angle_deg": 18.0,
+        "forward_distance": 2.5,
+        "vertical_movement": 0.2,
+        "notes": "Building visible ahead-left; forward path mostly clear."
+      }
+    },
+    "execute_status": "ok",
+    "drone_state_after": {
+      "x": 6499.1015625,
+      "y": -4198.99755859375,
+      "z": -1.441545844078064,
+      "pitch": 0.0012964387532821268,
+      "roll": -0.0007435976211840794,
+      "yaw": 2.8281479100472864
+    }
+  },
+  {
+    "step": 2,
+    "raw_model_output": {
+      "scores": {
+        "front": 0.3,
+        "left": 0.05,
+        "right": 0.75,
+        "back": 0.01,
+        "down": 0.2
+      },
+      "confidence": 0.92,
+      "target_direction": "front-right",
+      "turn_direction": "right",
+      "turn_angle_deg": 25.0,
+      "forward_distance": 3.0,
+      "vertical_movement": 0.0,
+      "notes": "Right corridor is open; building visible on the right side."
+    },
+    "parsed_action": {
+      "type": "motion",
+      "turn": {
+        "direction": "right",
+        "angle_deg": 25.0
+      },
+      "forward": 3.0,
+      "vertical": 0.0,
+      "raw": {
+        "scores": {
+          "front": 0.3,
+          "left": 0.05,
+          "right": 0.75,
+          "back": 0.01,
+          "down": 0.2
+        },
+        "confidence": 0.92,
+        "target_direction": "front-right",
+        "turn_direction": "right",
+        "turn_angle_deg": 25.0,
+        "forward_distance": 3.0,
+        "vertical_movement": 0.0,
+        "notes": "Right corridor is open; building visible on the right side."
+      }
+    },
+    "execute_status": "ok",
+    "drone_state_after": {
+      "x": 6496.06298828125,
+      "y": -4199.31591796875,
+      "z": -1.3859587907791138,
+      "pitch": -0.02273005038942314,
+      "roll": -0.0032677253968351897,
+      "yaw": -3.0141051161225696
+    }
+  },
+  {
+    "step": 3,
+    "raw_model_output": {
+      "scores": {
+        "front": 0.1,
+        "left": 0.7,
+        "right": 0.2,
+        "back": 0.05,
+        "down": 0.05
+      },
+      "confidence": 0.8,
+      "target_direction": "left",
+      "turn_direction": "left",
+      "turn_angle_deg": 30.0,
+      "forward_distance": 1.5,
+      "vertical_movement": 0.8,
+      "notes": "Obstacle ahead; safer path is left with required altitude gain."
+    },
+    "parsed_action": {
+      "type": "motion",
+      "turn": {
+        "direction": "left",
+        "angle_deg": 30.0
+      },
+      "forward": 1.5,
+      "vertical": 0.8,
+      "raw": {
+        "scores": {
+          "front": 0.1,
+          "left": 0.7,
+          "right": 0.2,
+          "back": 0.05,
+          "down": 0.05
+        },
+        "confidence": 0.8,
+        "target_direction": "left",
+        "turn_direction": "left",
+        "turn_angle_deg": 30.0,
+        "forward_distance": 1.5,
+        "vertical_movement": 0.8,
+        "notes": "Obstacle ahead; safer path is left with required altitude gain."
+      }
+    },
+    "execute_status": "ok",
+    "drone_state_after": {
+      "x": 6494.6728515625,
+      "y": -4198.75244140625,
+      "z": -2.096465826034546,
+      "pitch": -0.011628973833106612,
+      "roll": 0.0017997966939634043,
+      "yaw": 2.738187525605269
+    }
+  },
+  {
+    "step": 4,
+    "raw_model_output": {
+      "done": true,
+      "message": "Mission completed.",
+      "target_location_direction": "front-left"
+    },
+    "parsed_action": {
+      "type": "done",
+      "message": "Mission completed.",
+      "target_location_direction": "front-left",
+      "raw": {
+        "done": true,
+        "message": "Mission completed.",
+        "target_location_direction": "front-left"
+      }
+    },
+    "execute_status": "done",
+    "drone_state_after": {
+      "x": 6494.7265625,
+      "y": -4198.75244140625,
+      "z": -2.0960946083068848,
+      "pitch": -1.9563778414266328e-07,
+      "roll": 5.6149070600626554e-08,
+      "yaw": 2.7381634768540213
+    }
+  }
+]

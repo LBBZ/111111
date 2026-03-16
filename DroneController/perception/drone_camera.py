@@ -11,7 +11,7 @@ from DroneController.infra.airsim_client import AirSimClientSingleton
 class DroneCamera:
     def __init__(self, vehicle_name: str = "keli"):
         print("Planing DroneCamera.")
-        self.client = AirSimClientSingleton().get_client()
+        self.client = AirSimClientSingleton()
         self.vehicle_name = vehicle_name
 
         self.front_cam_id = "Front"

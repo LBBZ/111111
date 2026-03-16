@@ -1,6 +1,6 @@
 # DEV_AGENT_NAV (Upload This File)
 
-Last updated: 2026-03-15
+Last updated: 2026-03-16
 Use case: This is the single file to upload for a coding agent.
 
 ## A. Development Goal
@@ -36,13 +36,14 @@ Use case: This is the single file to upload for a coding agent.
 ## E. Core Module Map
 - DroneController/core/controller.py
   - class DroneController
-  - run(max_steps=None, on_step_end=None) -> dict
+  - initialize_episode(start_pos_m, start_rot_deg) -> dict
+  - run(max_steps=None, on_step_end=None, task_context=None) -> dict
 - DroneController/core/motion_executor.py
   - class MotionExecutor
   - parse(action_json)
   - execute(parsed_action)
   - get_sensor_data()
-  - build_prompt(sensor_data)
+  - build_prompt(sensor_data, task_context=None)
 - DroneController/core/llm_interface.py
   - class LLMInterface (mock output source)
 
@@ -93,6 +94,7 @@ Online workflow output path:
   - AirSim uses NED meters (X forward, Y right, Z down-positive)
   - move_up decreases z, move_down increases z
   - Datasets/vln/start_loc.txt positions are cm and must be divided by 100
+  - workflow start z transform: z_m = -(z_cm / 100)
 
 ## J. Deprecated Imports (Do Not Use)
 - DroneController.controller

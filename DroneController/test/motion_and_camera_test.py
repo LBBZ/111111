@@ -20,7 +20,7 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 TASK_FILE = os.path.join(OUTPUT_DIR, "task_test.txt")
 
-client = AirSimClientSingleton().get_client()
+client = AirSimClientSingleton()
 motion = DroneMotion()
 camera = DroneCamera()
 
