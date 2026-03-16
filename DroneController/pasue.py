@@ -1,4 +1,4 @@
 import airsim
 
 client = airsim.MultirotorClient()
-client.simPause(True)
+client.simPause(not client.simIsPause())

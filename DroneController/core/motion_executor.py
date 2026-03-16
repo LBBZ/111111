@@ -1,3 +1,4 @@
+import time
 import json
 
 from DroneController.control.drone_motion import DroneMotion
@@ -43,21 +44,37 @@ class MotionExecutor:
         turn = parsed_action["turn"]
         direction = turn["direction"]
         angle = turn["angle_deg"]
+        print(f"[execute] turn direction={direction} angle_deg={angle}")
 
         if direction == "left" and angle > 0:
+            t0 = time.time()
+            print("[execute] turn_left:start")
             self.motion.turn_left(angle)
+            print(f"[execute] turn_left:ok dt={int((time.time() - t0) * 1000)}ms")
         elif direction == "right" and angle > 0:
+            t0 = time.time()
+            print("[execute] turn_right:start")
             self.motion.turn_right(angle)
+            print(f"[execute] turn_right:ok dt={int((time.time() - t0) * 1000)}ms")
 
         forward = parsed_action["forward"]
         if forward > 0:
+            t0 = time.time()
+            print(f"[execute] move_forward:start d={forward}")
             self.motion.move_forward(forward)
+            print(f"[execute] move_forward:ok dt={int((time.time() - t0) * 1000)}ms")
 
         vertical = parsed_action["vertical"]
         if vertical > 0:
+            t0 = time.time()
+            print(f"[execute] move_up:start d={abs(vertical)}")
             self.motion.move_up(abs(vertical))
+            print(f"[execute] move_up:ok dt={int((time.time() - t0) * 1000)}ms")
         elif vertical < 0:
+            t0 = time.time()
+            print(f"[execute] move_down:start d={abs(vertical)}")
             self.motion.move_down(abs(vertical))
+            print(f"[execute] move_down:ok dt={int((time.time() - t0) * 1000)}ms")
 
         return "ok"
 

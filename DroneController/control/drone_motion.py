@@ -24,13 +24,23 @@ class DroneMotion:
         pitch, roll, yaw = airsim.to_eularian_angles(s.kinematics_estimated.orientation)
         return pitch, roll, yaw
 
-    def _move_to_world_target(self, tx, ty, tz):
+    def _move_to_world_target(self, tx, ty, tz, timeout_s=20.0):
+        t0 = time.time()
+        print(f"[motion] move_to_target:start target=({tx:.3f},{ty:.3f},{tz:.3f})")
         while True:
+            # Guard against simulator paused state between tasks.
+            self.client.simPause(False)
             x, y, z = self.get_pos()
             ex, ey, ez = tx - x, ty - y, tz - z
             dist = math.sqrt(ex * ex + ey * ey + ez * ez)
             if dist < 0.05:
+                print(f"[motion] move_to_target:arrived dist={dist:.4f} pos=({x:.3f},{y:.3f},{z:.3f})")
                 break
+            if time.time() - t0 > float(timeout_s):
+                raise TimeoutError(
+                    f"[motion] move_to_target timeout target=({tx:.3f},{ty:.3f},{tz:.3f}) "
+                    f"current=({x:.3f},{y:.3f},{z:.3f}) dist={dist:.3f}"
+                )
 
             vx, vy, vz = ex, ey, ez
             speed = self.base_speed
@@ -122,12 +132,21 @@ class DroneMotion:
             a += 2 * math.pi
         return a
 
-    def _turn_to_yaw(self, target_yaw_rad):
+    def _turn_to_yaw(self, target_yaw_rad, timeout_s=20.0):
+        t0 = time.time()
+        print(f"[motion] turn_to_yaw:start target={target_yaw_rad:.6f}")
         while True:
+            # Guard against simulator paused state between tasks.
+            self.client.simPause(False)
             _, _, yaw = self.get_yaw()
             err = self._normalize_angle(target_yaw_rad - yaw)
             if abs(err) < math.radians(2):
+                print(f"[motion] turn_to_yaw:arrived yaw={yaw:.6f} err={err:.6f}")
                 break
+            if time.time() - t0 > float(timeout_s):
+                raise TimeoutError(
+                    f"[motion] turn_to_yaw timeout target={target_yaw_rad:.6f} current={yaw:.6f} err={err:.6f}"
+                )
 
             k = 1.5
             yaw_rate = k * err
