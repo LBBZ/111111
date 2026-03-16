@@ -1,9 +1,10 @@
 import csv
+import json
 import re
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, List, Tuple, Union
+from typing import Any, Dict, Iterable, List, Tuple, Union
 
 import math
 
@@ -18,6 +19,14 @@ class EpisodeGT:
     target_pos_m: Tuple[float, float, float]  # (3,) meters
     gt_path_len_m: float
     start_pos_raw_cm: Tuple[float, float, float]
+
+
+def _cm_to_start_pos_m(pos_cm: Tuple[float, float, float]) -> Tuple[float, float, float]:
+    return (
+        float(pos_cm[0]) / 100.0,
+        float(pos_cm[1]) / 100.0,
+        -float(pos_cm[2]) / 100.0,
+    )
 
 
 def _parse_start_loc_line(
@@ -48,35 +57,98 @@ def _parse_start_loc_line(
     pos_vals = [p.strip() for p in pos_part.split(",")]
     if len(pos_vals) != 3:
         raise ValueError(f"Expected 3 position values, got {pos_vals}")
-    pos_cm = tuple(map(float, pos_vals))
-    pos_m = (
-        pos_cm[0] / 100.0,
-        pos_cm[1] / 100.0,
-        -(pos_cm[2] / 100.0),
-    )
+    pos_cm = (float(pos_vals[0]), float(pos_vals[1]), float(pos_vals[2]))
+    pos_m = _cm_to_start_pos_m(pos_cm)
 
     rot_vals = [p.strip() for p in rot_part.split(",")]
     if len(rot_vals) != 3:
         raise ValueError(f"Expected 3 rotation values, got {rot_vals}")
-    rot_deg = tuple(map(float, rot_vals))
-    return idx, pos_m, rot_deg, instruction, pos_cm
+    rot_deg = (float(rot_vals[0]), float(rot_vals[1]), float(rot_vals[2]))
+    return idx, pos_m, rot_deg, str(instruction), pos_cm
 
 
-def load_gt_episode(dataset_root: Union[str, Path], idx: int) -> EpisodeGT:
-    dataset_root = Path(dataset_root)
+def _load_episode_from_json(dataset_root: Path, idx: int) -> Dict[str, Any]:
+    idx_path = dataset_root / "episode_index.json"
+    groups_path = dataset_root / "groups.json"
+    if not idx_path.is_file() or not groups_path.is_file():
+        raise FileNotFoundError("JSON dataset files not found")
+
+    idx_obj = json.loads(idx_path.read_text(encoding="utf-8"))
+    episodes = idx_obj.get("episodes", {})
+    ep_ref = episodes.get(str(idx))
+    if ep_ref is None:
+        raise IndexError(f"idx={idx} not found in {idx_path}")
+
+    group_id = int(ep_ref["group_id"])
+    target_key = str(ep_ref["target_key"])
+
+    groups_obj = json.loads(groups_path.read_text(encoding="utf-8"))
+    groups = groups_obj.get("groups", [])
+    group = next((g for g in groups if int(g.get("group_id", -1)) == group_id), None)
+    if group is None:
+        raise KeyError(f"group_id={group_id} not found in {groups_path}")
+
+    init = group.get("init", {})
+    targets = group.get("targets", {})
+    instruction = targets.get(target_key)
+    if instruction is None:
+        raise KeyError(f"target_key={target_key} missing in group_id={group_id}")
+
+    pos_cm_arr = init.get("pos_cm", [])
+    rot_deg_arr = init.get("rot_deg", [])
+    if len(pos_cm_arr) != 3 or len(rot_deg_arr) != 3:
+        raise ValueError(f"Invalid init pose in group_id={group_id}")
+
+    pos_cm = (float(pos_cm_arr[0]), float(pos_cm_arr[1]), float(pos_cm_arr[2]))
+    rot_deg = (float(rot_deg_arr[0]), float(rot_deg_arr[1]), float(rot_deg_arr[2]))
+    return {
+        "ep_idx": idx,
+        "start_pos_raw_cm": pos_cm,
+        "start_pos_m": _cm_to_start_pos_m(pos_cm),
+        "rot_deg": rot_deg,
+        "instruction": str(instruction),
+        "label_path": dataset_root / "label" / f"{idx}.csv",
+        "source": "json",
+    }
+
+
+def _load_episode_from_start_loc(dataset_root: Path, idx: int) -> Dict[str, Any]:
     start_loc_path = dataset_root / "start_loc.txt"
-    label_path = dataset_root / "label" / f"{idx}.csv"
-
     if not start_loc_path.is_file():
         raise FileNotFoundError(f"Missing start_loc.txt: {start_loc_path}")
-    if not label_path.is_file():
-        raise FileNotFoundError(f"Missing label csv: {label_path}")
 
     start_lines = start_loc_path.read_text(encoding="utf-8").splitlines()
     if idx < 0 or idx >= len(start_lines):
         raise IndexError(f"idx={idx} out of range for {start_loc_path} ({len(start_lines)} lines)")
 
     ep_idx, start_pos_m, rot_deg, instruction, start_pos_raw_cm = _parse_start_loc_line(start_lines[idx])
+    return {
+        "ep_idx": ep_idx,
+        "start_pos_raw_cm": start_pos_raw_cm,
+        "start_pos_m": start_pos_m,
+        "rot_deg": rot_deg,
+        "instruction": instruction,
+        "label_path": dataset_root / "label" / f"{idx}.csv",
+        "source": "start_loc",
+    }
+
+
+def load_gt_episode(dataset_root: Union[str, Path], idx: int) -> EpisodeGT:
+    dataset_root = Path(dataset_root)
+    try:
+        ep = _load_episode_from_json(dataset_root, idx)
+    except Exception:
+        ep = _load_episode_from_start_loc(dataset_root, idx)
+
+    ep_idx = int(ep["ep_idx"])
+    start_pos_m = ep["start_pos_m"]
+    rot_deg = ep["rot_deg"]
+    instruction = ep["instruction"]
+    start_pos_raw_cm = ep["start_pos_raw_cm"]
+    label_path = Path(ep["label_path"])
+
+    if not label_path.is_file():
+        raise FileNotFoundError(f"Missing label csv: {label_path}")
 
     # label/*.csv stores a sequence of relative displacements (meters) from start, one per step:
     # ,x,y,z
@@ -149,7 +221,8 @@ def final_position_m(positions_m: Iterable[Iterable[float]]) -> Tuple[float, flo
     pts = [tuple(map(float, p)) for p in positions_m]
     if len(pts) == 0:
         raise ValueError("Empty trajectory positions")
-    return pts[-1]
+    x, y, z = pts[-1]
+    return float(x), float(y), float(z)
 
 
 def compute_vln_metrics(

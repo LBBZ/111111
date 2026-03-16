@@ -1,6 +1,7 @@
 import argparse
 import sys
 from pathlib import Path
+from typing import Any, Dict
 
 CURRENT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = CURRENT_DIR.parent
@@ -12,29 +13,25 @@ from DroneController import vln_metrics
 from DroneController.io.artifact_writer import WorkflowArtifactWriter
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser(description="Run online single-case VLN workflow evaluation.")
-    parser.add_argument("--dataset_root", type=str, default=str(Path("Datasets") / "vln"))
-    parser.add_argument("--task_root", type=str, default="task")
-    parser.add_argument("--task_id", type=int, default=0)
-    args = parser.parse_args()
-
-    task_id = int(args.task_id)
-    dataset_root = Path(args.dataset_root)
-    output_dir = Path(args.task_root) / str(task_id)
+def _run_one_task(task_id: int, dataset_root: Path, task_root: Path) -> int:
+    output_dir = task_root / str(task_id)
     writer = WorkflowArtifactWriter(output_dir)
     writer.prepare_for_rerun()
 
     started_at = writer.now_str()
-    meta = {
-        "task_id": task_id,
-        "dataset_root": str(dataset_root),
-        "started_at": started_at,
-        "finished_at": None,
-        "controller_mode": "online_airsim_mock_llm",
-        "script": "DroneController/run_vln_workflow_eval.py",
-        "dataset_coord_transform": "x,y,z from cm to m; z uses sign inversion",
-    }
+    meta: Dict[str, Any] = {}
+    meta.update(
+        {
+            "task_id": task_id,
+            "dataset_root": str(dataset_root),
+            "started_at": started_at,
+            "finished_at": None,
+            "controller_mode": "online_airsim_mock_llm",
+            "script": "DroneController/run_vln_workflow_eval.py",
+            "dataset_input_priority": "json(episode_index.json+groups.json) > start_loc.txt",
+            "dataset_coord_transform": "x,y,z from cm to m; z uses sign inversion",
+        }
+    )
     writer.write_json("meta.json", meta)
 
     try:
@@ -126,6 +123,32 @@ def main() -> int:
         f"steps={results['steps']} end_reason={results['end_reason']} out={output_dir}"
     )
     return 0
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Run online VLN workflow evaluation (single task or task sequence).")
+    parser.add_argument("--dataset_root", type=str, default=str(Path("Datasets") / "vln"))
+    parser.add_argument("--task_root", type=str, default="task")
+    parser.add_argument("--task_id", type=int, default=None, help="Single task id (kept for compatibility).")
+    parser.add_argument("--task_ids", type=int, nargs="+", default=None, help="Task sequence, e.g. --task_ids 1 2 3")
+    args = parser.parse_args()
+
+    dataset_root = Path(args.dataset_root)
+    task_root = Path(args.task_root)
+
+    if args.task_ids is not None and len(args.task_ids) > 0:
+        task_ids = [int(t) for t in args.task_ids]
+    elif args.task_id is not None:
+        task_ids = [int(args.task_id)]
+    else:
+        task_ids = [0]
+
+    exit_code = 0
+    for tid in task_ids:
+        code = _run_one_task(tid, dataset_root=dataset_root, task_root=task_root)
+        if code != 0:
+            exit_code = 1
+    return exit_code
 
 
 if __name__ == "__main__":

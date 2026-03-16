@@ -122,10 +122,11 @@ Use layered imports instead, for example:
 - CLI (only):
   - --dataset_root (default Datasets/vln)
   - --task_root (default task)
-  - --task_id (required int)
+  - --task_id (single task id; compatibility)
+  - --task_ids (task sequence, e.g. 1 2 3)
 - Behavior:
-  - one run = one dataset case id
-  - task_id == dataset case id
+  - each task id maps to one dataset case id
+  - sequence mode executes tasks in given order, one-by-one
   - initialize vehicle pose from dataset start_loc before loop
   - convert start pos cm->m and apply z sign inversion: z_m = -(z_cm / 100)
   - inject instruction + heading info as task_context into prompt loop
@@ -156,6 +157,7 @@ Required files under task/<task_id>/:
   - X forward, Y right, Z down-positive
 - move_up decreases z; move_down increases z.
 - Datasets/vln/start_loc.txt stores cm; convert by /100.
+- Input priority for task metadata: Datasets/vln/episode_index.json + Datasets/vln/groups.json, fallback to Datasets/vln/start_loc.txt.
 - Dataset start_loc z axis is opposite to AirSim NED z; use z_m = -(z_cm / 100).
 - Vehicle name expected in runtime settings: keli.
 
@@ -225,3 +227,4 @@ These are supplementary only. This file remains authoritative.
 - 2026-03-16: Added dataset-driven episode initialization (cm->m + configurable negative-z subtraction), task context injection, and workflow CLI arg --start_z_negative_offset_m.
 - 2026-03-16: Replaced z-offset conversion with direct z sign inversion, removed --start_z_negative_offset_m, and moved dataset pose initialization API into control/drone_motion.py.
 - 2026-03-16: Refined responsibilities: workflow task section now performs dataset conversion, while DroneMotion only executes pose initialization (simSetVehiclePose + takeoff + hover).
+- 2026-03-16: Switched task input to JSON-first (episode_index/groups) with start_loc fallback; added workflow task sequence CLI (--task_ids).

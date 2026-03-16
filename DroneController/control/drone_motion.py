@@ -78,22 +78,42 @@ class DroneMotion:
         )
 
     def initialize_pose(self, x, y, z, yaw_deg=0.0, pitch_deg=0.0, roll_deg=0.0):
-        """Initialize vehicle pose in NED meters, then take off and hover."""
-        # AirSim client may be paused by singleton bootstrap; unpause before async motion calls.
-        self.client.simPause(False)
-        pose = airsim.Pose(
-            airsim.Vector3r(float(x), float(y), float(z)),
-            airsim.to_quaternion(
-                math.radians(float(pitch_deg)),
-                math.radians(float(roll_deg)),
-                math.radians(float(yaw_deg)),
-            ),
+        """Initialize vehicle pose in NED meters and keep simulator running for follow-up steps."""
+        v3d = airsim.Vector3r(float(x), float(y), float(z))
+        qua = airsim.to_quaternion(
+            math.radians(float(pitch_deg)),
+            math.radians(float(roll_deg)),
+            math.radians(float(yaw_deg)),
         )
-        self.client.simSetVehiclePose(pose, ignore_collision=True, vehicle_name=self.vehicle_name)
+        pose = airsim.Pose(v3d, qua)
+        print(f"初始化位置: \n{v3d}")
+        print(f"初始化朝向: \n{qua}")
+
+        self.client.simPause(True)
+        self.client.simSetVehiclePose(
+            pose,
+            ignore_collision=True,
+            vehicle_name=self.vehicle_name
+        )
+        self.client.simPause(False)
+        time.sleep(0.05)
+        self.client.simPause(True)
+        print("等待姿态稳定...")
+        # 同步控制器目标
         state = self.client.getMultirotorState(vehicle_name=self.vehicle_name)
-        if state.landed_state == airsim.LandedState.Landed:
-            self.client.takeoffAsync(vehicle_name=self.vehicle_name).join()
-        self.client.hoverAsync(vehicle_name=self.vehicle_name).join()
+        p = state.kinematics_estimated.position
+
+        self.client.simPause(False)
+        self.client.moveToPositionAsync(
+            p.x_val,
+            p.y_val,
+            p.z_val,
+            1,
+            vehicle_name=self.vehicle_name
+        ).join()
+        print("姿态稳定完毕, 进入悬停状态")
+        print(f"当前实际位置: {self.get_pos()}")
+
 
     def _normalize_angle(self, a):
         while a > math.pi:

@@ -1,0 +1,307 @@
+{
+  "schema_version": 1,
+  "source": "Datasets/vln/start_loc.txt",
+  "group_key": "(x_cm,y_cm,z_cm,pitch_deg,roll_deg,yaw_deg)",
+  "groups": [
+    {
+      "group_id": 0,
+      "init": {"pos_cm": [650150.258149, -419969.413753, 131.595741], "rot_deg": [0, 0, 180]},
+      "targets": {
+        "0": "Under the traffic light beads across the street",
+        "1": "Under the red tree",
+        "2": "Cross the road along the right zebra crossing",
+        "3": "Go to Right front red building",
+        "4": "Following the zebra crossing, cross the road twice to the opposite side diagonally",
+        "5": "Go to left front red building",
+        "6": "Keep walking until you see the bus stop"
+      }
+    },
+    {
+      "group_id": 1,
+      "init": {"pos_cm": [644350.258149, -420539.413753, 131.595741], "rot_deg": [0, 0, 180]},
+      "targets": {
+        "7": "Go ahead and find the first shop",
+        "8": "Go ahead and find the a bicycle",
+        "9": "Fly to the air conditioner on the second floor of the right building",
+        "10": "Fly to the air conditioner on the third floor of the right building",
+        "11": "Fly to the air conditioner on the fourth floor of the right building",
+        "12": "Go ahead and find the shop with yellow billboard.",
+        "13": "Go ahead and find the second shop.",
+        "14": "Go ahead and find the shop named '酒便利'.",
+        "15": "Go ahead and find a destbin.",
+        "16": "Go ahead and find a yellow electric bike.",
+        "17": "Go ahead and find a brown electric bike.",
+        "18": "Go ahead and find a green electric bike.",
+        "19": "Go ahead and arrive on the stairs to the first shop",
+        "20": "Go ahead and find the third shop.",
+        "21": "Go ahead and find the shop named 'ALL-STAR'.",
+        "22": "Walk forward and find the table in front of the third shop",
+        "23": "Walk forward and find the sunshade umbrella in front of the 'ALL-STAR' cafe",
+        "24": "Fly to the rooftop of the red building on the right"
+      }
+    },
+    {
+      "group_id": 2,
+      "init": {"pos_cm": [644350.258149, -419969.413753, 131.595741], "rot_deg": [0, 0, 180]},
+      "targets": {"25": "Fly to the rooftop of the red building on the right"}
+    },
+    {
+      "group_id": 3,
+      "init": {"pos_cm": [645760.258149, -419639.413753, 131.595741], "rot_deg": [0, 0, 180]},
+      "targets": {
+        "26": "Fly to the rooftop of the red building on the right",
+        "27": "Keep playing and walking forward until you see the iron gate",
+        "28": "Walk to the entrance of \"中国海关\" on the opposite street"
+      }
+    },
+    {
+      "group_id": 4,
+      "init": {"pos_cm": [644780.258149, -420439.413753, 131.595741], "rot_deg": [0, 0, 180]},
+      "targets": {"29": "Walk to the entrance of \"中国海关\" on the opposite street"}
+    },
+    {
+      "group_id": 5,
+      "init": {"pos_cm": [641830.258149, -420439.413753, 131.595741], "rot_deg": [0, 0, 180]},
+      "targets": {"30": "Walk to the entrance of \"中国海关\" on the opposite street"}
+    },
+    {
+      "group_id": 6,
+      "init": {"pos_cm": [639890.258149, -420439.413753, 131.595741], "rot_deg": [0, 0, 180]},
+      "targets": {"31": "Walk to the entrance of \"中国海关\" on the opposite street"}
+    },
+    {
+      "group_id": 7,
+      "init": {"pos_cm": [637510.258149, -420439.413753, 131.595741], "rot_deg": [0, 0, 180]},
+      "targets": {
+        "32": "The iron gate on the right side",
+        "33": "Fly to the rooftop of the white building on your right",
+        "34": "Move to the right front substation box",
+        "35": "Move to the table at the rear right",
+        "36": "Move to the street light in front of you on the right",
+        "37": "Move to the second street light in front of you on the right"
+      }
+    },
+    {
+      "group_id": 8,
+      "init": {"pos_cm": [635040.258149, -420259.413753, 1071.595741], "rot_deg": [0, 0, 270]},
+      "targets": {"38": "Moving in front of the red billboard on the third floor"}
+    },
+    {
+      "group_id": 9,
+      "init": {"pos_cm": [649319.295351, -446963.560393, 3145.703472], "rot_deg": [0, 0, 0]},
+      "targets": {
+        "39": "Move clockwise around the building once",
+        "40": "Move counterclockwise around the building once"
+      }
+    },
+    {
+      "group_id": 10,
+      "init": {"pos_cm": [639230.0, -472980.0, 3220.0], "rot_deg": [0, 0, 0]},
+      "targets": {
+        "41": "Move clockwise around the building, which is on your left",
+        "42": "Move to the opposite side of the building, which is on your left",
+        "43": "Fly to the rooftop of the building, which is on your left"
+      }
+    },
+    {
+      "group_id": 11,
+      "init": {"pos_cm": [634260.0, -480250.0, 30.0], "rot_deg": [0, 0, 0]},
+      "targets": {
+        "44": "Move clockwise around the building, which is on your left",
+        "45": "Move to the opposite side of the building, which is on your left",
+        "46": "Fly to the rooftop of the building, which is on your left",
+        "47": "Move to the tree on your right"
+      }
+    },
+    {
+      "group_id": 12,
+      "init": {"pos_cm": [619133.561402, -526475.39262, 743.598747], "rot_deg": [0, 0, 0]},
+      "targets": {
+        "48": "Move to the gray building on you front left",
+        "49": "Move to the building with glass surface on you front right.",
+        "50": "Move to the gray building on you back right."
+      }
+    },
+    {
+      "group_id": 13,
+      "init": {"pos_cm": [609521.115281, -520411.189398, 498.403824], "rot_deg": [0, 0, 0]},
+      "targets": {
+        "51": "Move to the front door of the gray building on you front right.",
+        "52": "Move to the gray and white building on your right side.",
+        "53": "Move to the front door of the gray and white building on you front right.",
+        "54": "Move to the dark and brown building on you back right."
+      }
+    },
+    {
+      "group_id": 14,
+      "init": {"pos_cm": [561639.919262, -430462.680677, 813.592191], "rot_deg": [0, 0, 0]},
+      "targets": {
+        "55": "Move to the brown building and land on its roof.",
+        "56": "Move to the dark gray building on your right.",
+        "57": "Move to the geometric building with glass surface on your left."
+      }
+    },
+    {
+      "group_id": 15,
+      "init": {"pos_cm": [562019.173207, -541354.680269, 2107.326445], "rot_deg": [0, 0, 0]},
+      "targets": {"58": "Move to the front door of the building in front of you."}
+    },
+    {
+      "group_id": 16,
+      "init": {"pos_cm": [614969.999998, -417910.00014, 92.000087], "rot_deg": [0, 0, 0]},
+      "targets": {
+        "59": "Move to the building with a blue billboard.",
+        "60": "Move to the building with a white billboard.",
+        "61": "Move to the dark tall building behind of you.",
+        "62": "Move to '中国海关' behind the building with a blue billboard.",
+        "63": "Move to residential building in the front and fly to the window with '家电维修' sign."
+      }
+    },
+    {
+      "group_id": 17,
+      "init": {"pos_cm": [625579.999998, -418700.00014, 342.000087], "rot_deg": [0, 0, 0]},
+      "targets": {
+        "64": "Move along the road and reach the bus stop on the left side of the road.",
+        "65": "Move along the road and reach the 'CENTRAL ALL-STAR' store in the residential building.",
+        "66": "Move along the road. Pass the 'CENTRAL ALL-STAR' store and reach the 'Cheesspod' in the residential building."
+      }
+    },
+    {
+      "group_id": 18,
+      "init": {"pos_cm": [635950.0, -427300.0, 122.0], "rot_deg": [0, 0, 0]},
+      "targets": {
+        "67": "Move to the '中国海关' building on your right.",
+        "68": "Move to the first blue building in front of you.",
+        "69": "Fly to the bus stop near the road.",
+        "70": "Fly to the front door of '酒便利'."
+      }
+    },
+    {
+      "group_id": 19,
+      "init": {"pos_cm": [532830.0, -359520.0, 4902.0], "rot_deg": [0, 0, 180]},
+      "targets": {"71": "Fly to the top of the building with '北京烟草' sign, and land on the its roof."}
+    },
+    {
+      "group_id": 20,
+      "init": {"pos_cm": [532830.0, -359520.0, 4902.0], "rot_deg": [0, 0, -90]},
+      "targets": {"72": "Fly to the top of the building with '北京烟草' sign, and land on the its roof."}
+    },
+    {
+      "group_id": 21,
+      "init": {"pos_cm": [721310.0, -358830.0, 92.0], "rot_deg": [0, 0, 180]},
+      "targets": {
+        "73": "Move to the brown building in front of you and land next to the red tree.",
+        "75": "Fly up and land on the roof of the blue building on your left."
+      }
+    },
+    {
+      "group_id": 22,
+      "init": {"pos_cm": [713780.000004, -419339.999714, 92.000179], "rot_deg": [0, 0, 0]},
+      "targets": {
+        "74": "Move to the pink tree on your right.",
+        "76": "Move to traffic light on left side of the road."
+      }
+    },
+    {
+      "group_id": 23,
+      "init": {"pos_cm": [712200.0, -414390.0, 2362.0], "rot_deg": [0, 0, 90]},
+      "targets": {
+        "77": "Move to the pink tree in the front.",
+        "78": "Move to the pink house on your left.",
+        "79": "Move to the dark gray building behind the pink house."
+      }
+    },
+    {
+      "group_id": 24,
+      "init": {"pos_cm": [728910.0, -391460.0, 92.0], "rot_deg": [0, 0, 0]},
+      "targets": {"80": "Fly along the road and reach the traffic light on right side of the intersection."}
+    },
+    {
+      "group_id": 25,
+      "init": {"pos_cm": [647819.999846, -418209.999915, 92.000147], "rot_deg": [0, 0, 0]},
+      "targets": {"81": "Move to the door of the blue building which is near the pink tree."}
+    },
+    {
+      "group_id": 26,
+      "init": {"pos_cm": [684080.0, -524520.0, 92.0], "rot_deg": [0, 0, 180]},
+      "targets": {"82": "Move to the gray building in front of you."}
+    },
+    {
+      "group_id": 27,
+      "init": {"pos_cm": [684080.0, -524520.0, 92.0], "rot_deg": [0, 0, 0]},
+      "targets": {
+        "83": "Move to the center of the twin buildings in front of you and land.",
+        "84": "Turn right and move along the road. Stop at the first crossroad.",
+        "85": "Fly to the top of the right blue building and land on its roof."
+      }
+    },
+    {
+      "group_id": 28,
+      "init": {"pos_cm": [652900.0, -542290.0, 142.0], "rot_deg": [0, 0, 180]},
+      "targets": {"86": "Fly to the nearest door of the front gray building."}
+    },
+    {
+      "group_id": 29,
+      "init": {"pos_cm": [602110.0, -542500.0, 92.0], "rot_deg": [0, 0, 90]},
+      "targets": {"87": "Fly to the lowest platform of the glass-surface building in front of you."}
+    },
+    {
+      "group_id": 30,
+      "init": {"pos_cm": [606030.0, -513400.0, 92.0], "rot_deg": [0, 0, -135]},
+      "targets": {"88": "Fly to the lowest platform of the glass-surface building in front of you."}
+    },
+    {
+      "group_id": 31,
+      "init": {"pos_cm": [606030.0, -513400.0, 92.0], "rot_deg": [0, 0, 135]},
+      "targets": {"89": "Fly to the lowest platform of the brown and white building in front of you."}
+    },
+    {
+      "group_id": 32,
+      "init": {"pos_cm": [606030.0, -523070.0, 1252.0], "rot_deg": [0, 0, 0]},
+      "targets": {"90": "Fly to the gray platform of the dark building in front of you and land on it."}
+    },
+    {
+      "group_id": 33,
+      "init": {"pos_cm": [623220.0, -523320.0, 92.0], "rot_deg": [0, 0, 180]},
+      "targets": {"91": "Fly to the gray platform of the dark building in front of you and land on it."}
+    },
+    {
+      "group_id": 34,
+      "init": {"pos_cm": [644060.0, -480669.999996, 92.0], "rot_deg": [0, 0, 0]},
+      "targets": {"92": "Fly to the platform of the hump shaped, blue building in front of you and land on it."}
+    },
+    {
+      "group_id": 35,
+      "init": {"pos_cm": [644060.0, -480669.999996, 92.0], "rot_deg": [0, 0, -90]},
+      "targets": {"93": "Move to the front door of the brown building in the front left."}
+    },
+    {
+      "group_id": 36,
+      "init": {"pos_cm": [647220.0, -488269.999996, 92.0], "rot_deg": [0, 0, 180]},
+      "targets": {"94": "Move to the front door of the brown building on your front."}
+    },
+    {
+      "group_id": 37,
+      "init": {"pos_cm": [673450.0, -486349.999996, 92.0], "rot_deg": [0, 0, 180]},
+      "targets": {
+        "95": "Fly to the roof of the gray building ahead and land on it.",
+        "96": "Fly to the platform of the hump shaped, blue building in front of you and land on it."
+      }
+    },
+    {
+      "group_id": 38,
+      "init": {"pos_cm": [678519.571819, -460869.419117, 92.000152], "rot_deg": [0, 0, 0]},
+      "targets": {
+        "97": "Move to the front door of the glass-surface building in front of you.",
+        "98": "Fly to roof of the long white buiding on your left and land on it.",
+        "99": "Turn right, and move to door of the blue buiding."
+      }
+    },
+    {
+      "group_id": 39,
+      "init": {"pos_cm": [678519.571819, -460869.419117, 92.000152], "rot_deg": [0, 0, 90]},
+      "targets": {"100": "Fly to roof of the long blue buiding on your front left and land on it."}
+    }
+  ]
+}
+

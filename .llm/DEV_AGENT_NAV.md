@@ -80,7 +80,7 @@ Online workflow output path:
 ## H. Workflow Entrypoints
 - Online single-case eval:
   - DroneController/run_vln_workflow_eval.py
-  - args: --dataset_root, --task_root, --task_id
+  - args: --dataset_root, --task_root, --task_id, --task_ids
 - Offline fake eval:
   - DroneController/run_vln_eval_fake.py
 
@@ -95,6 +95,7 @@ Online workflow output path:
   - move_up decreases z, move_down increases z
   - Datasets/vln/start_loc.txt positions are cm and must be divided by 100
   - workflow start z transform: z_m = -(z_cm / 100)
+  - task metadata input is JSON-first: Datasets/vln/episode_index.json + Datasets/vln/groups.json, fallback to start_loc.txt
 
 ## J. Deprecated Imports (Do Not Use)
 - DroneController.controller
