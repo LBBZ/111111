@@ -1,9 +1,9 @@
 {
   "task_kind": "bootstrap_simple",
-  "source_task_id": 2,
+  "source_task_id": 0,
   "dataset_root": "Datasets\\vln",
-  "started_at": "2026-03-16 17:23:07",
-  "finished_at": "2026-03-16 17:23:30",
+  "started_at": "2026-03-16 17:38:44",
+  "finished_at": "2026-03-16 17:39:06",
   "script": "DroneController/run_vln_workflow_eval.py",
   "episode_init": {
     "start_pos_raw_cm": [
@@ -24,10 +24,10 @@
     "applied_state": {
       "x": 6501.50244140625,
       "y": -4199.6943359375,
-      "z": -1.3144718408584595,
-      "pitch": 3.600472610674374e-06,
-      "roll": 1.6783180836189297e-06,
-      "yaw": 3.1415926525990288
+      "z": -1.314761757850647,
+      "pitch": 8.461054079588234e-10,
+      "roll": -1.0840798753146642e-11,
+      "yaw": 3.1415926535700742
     }
   }
 }

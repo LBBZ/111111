@@ -124,7 +124,6 @@ class DroneMotion:
         print("姿态稳定完毕, 进入悬停状态")
         print(f"当前实际位置: {self.get_pos()}")
 
-
     def _normalize_angle(self, a):
         while a > math.pi:
             a -= 2 * math.pi

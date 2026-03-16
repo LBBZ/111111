@@ -1,7 +1,9 @@
 import csv
+from concurrent.futures import ThreadPoolExecutor
 import json
 import shutil
 import time
+from threading import Lock
 from pathlib import Path
 from typing import Iterable
 
@@ -12,6 +14,9 @@ class WorkflowArtifactWriter:
     def __init__(self, output_dir: Path):
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
+        self._executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="artifact_writer")
+        self._pending = []
+        self._lock = Lock()
 
     def prepare_for_rerun(self) -> None:
         old_episodes_dir = self.output_dir / "episodes"
@@ -58,3 +63,32 @@ class WorkflowArtifactWriter:
         depth_maps = sensor_data.get("depth_maps", {})
         for view_name in ["Front", "Back", "Left", "Right", "TopDown"]:
             camera.save_depth_image(depth_maps.get(view_name), str(step_dir / f"{view_name}_depth.png"))
+
+    def save_step_visual_async(self, step_idx: int, sensor_data: dict, camera):
+        """Queue visual saving in a background worker to reduce step latency."""
+        future = self._executor.submit(self.save_step_visual, int(step_idx), sensor_data, camera)
+        with self._lock:
+            self._pending.append(future)
+        return future
+
+    def wait_for_pending(self) -> None:
+        """Block until all queued save jobs finish and raise first error if any."""
+        with self._lock:
+            pending = self._pending
+            self._pending = []
+        first_exc = None
+        for f in pending:
+            try:
+                f.result()
+            except Exception as e:  # pragma: no cover - surfaced to caller
+                if first_exc is None:
+                    first_exc = e
+        if first_exc is not None:
+            raise first_exc
+
+    def close(self) -> None:
+        try:
+            self.wait_for_pending()
+        finally:
+            self._executor.shutdown(wait=True)
+
