@@ -29,7 +29,7 @@ def _run_one_task(task_id: int, dataset_root: Path, task_root: Path) -> int:
             "controller_mode": "online_airsim_mock_llm",
             "script": "DroneController/run_vln_workflow_eval.py",
             "dataset_input_priority": "json(episode_index.json+groups.json) > start_loc.txt",
-            "dataset_coord_transform": "x,y,z from cm to m; z uses sign inversion",
+            "dataset_coord_transform": "use preprocessed start_pos_m from vln_metrics (cm->m, z sign handled there)",
         }
     )
     writer.write_json("meta.json", meta)
@@ -45,12 +45,8 @@ def _run_one_task(task_id: int, dataset_root: Path, task_root: Path) -> int:
 
     try:
         controller = DroneController(output_dir=str(output_dir), overwrite_logs=True)
-        # Per-task dataset preprocessing for initialization: cm -> m and z-axis sign inversion.
-        start_pos_m_for_init = (
-            float(gt.start_pos_raw_cm[0]) / 100.0,
-            float(gt.start_pos_raw_cm[1]) / 100.0,
-            -float(gt.start_pos_raw_cm[2]) / 100.0,
-        )
+        # start_pos_m is already normalized by vln_metrics.load_gt_episode.
+        start_pos_m_for_init = tuple(map(float, gt.start_pos_m))
         init_state = controller.initialize_episode(start_pos_m_for_init, gt.start_rot_deg)
         task_context = {
             "task_id": int(task_id),
