@@ -1,0 +1,82 @@
+[
+  {
+    "step": 1,
+    "raw_model_output": {
+      "scores": {
+        "front": 0.1,
+        "left": 0.1,
+        "right": 0.1,
+        "back": 0.1,
+        "down": 0.9
+      },
+      "confidence": 0.99,
+      "target_direction": "up",
+      "turn_direction": "none",
+      "turn_angle_deg": 0.0,
+      "forward_distance": 0.0,
+      "vertical_movement": 1.0,
+      "notes": "Bootstrap warm-up: move up once."
+    },
+    "parsed_action": {
+      "type": "motion",
+      "turn": {
+        "direction": "none",
+        "angle_deg": 0.0
+      },
+      "forward": 0.0,
+      "vertical": 1.0,
+      "raw": {
+        "scores": {
+          "front": 0.1,
+          "left": 0.1,
+          "right": 0.1,
+          "back": 0.1,
+          "down": 0.9
+        },
+        "confidence": 0.99,
+        "target_direction": "up",
+        "turn_direction": "none",
+        "turn_angle_deg": 0.0,
+        "forward_distance": 0.0,
+        "vertical_movement": 1.0,
+        "notes": "Bootstrap warm-up: move up once."
+      }
+    },
+    "execute_status": "ok",
+    "drone_state_after": {
+      "x": 6501.50244140625,
+      "y": -4199.6943359375,
+      "z": -2.215792655944824,
+      "pitch": 1.3042674571246072e-08,
+      "roll": 7.824029298868978e-09,
+      "yaw": 3.141592634349493
+    }
+  },
+  {
+    "step": 2,
+    "raw_model_output": {
+      "done": true,
+      "message": "Bootstrap completed.",
+      "target_location_direction": "up"
+    },
+    "parsed_action": {
+      "type": "done",
+      "message": "Bootstrap completed.",
+      "target_location_direction": "up",
+      "raw": {
+        "done": true,
+        "message": "Bootstrap completed.",
+        "target_location_direction": "up"
+      }
+    },
+    "execute_status": "done",
+    "drone_state_after": {
+      "x": 6501.50244140625,
+      "y": -4199.6943359375,
+      "z": -2.218134880065918,
+      "pitch": -2.5843512029010292e-08,
+      "roll": 2.1322558171941765e-08,
+      "yaw": 3.141592635757453
+    }
+  }
+]

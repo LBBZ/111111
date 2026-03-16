@@ -1,0 +1,164 @@
+[
+  {
+    "timestamp": "2026-03-16 17:23:22",
+    "prompt": {
+      "image": "<base64 placeholder>",
+      "depth_summary": {
+        "front": 1.9755439758300781,
+        "left": 2.1230108737945557,
+        "topdown": 0.6416015625,
+        "right": 1.6397879123687744,
+        "back": 1.9613842964172363
+      },
+      "drone_state": {
+        "x": 6501.5,
+        "y": -4199.69,
+        "z": -1.31,
+        "pitch": 0.0,
+        "roll": -0.0,
+        "yaw": 3.14
+      },
+      "task_context": {
+        "task_id": "bootstrap",
+        "task_kind": "bootstrap_simple",
+        "instruction": "Simple warm-up: move up once from initial position.",
+        "start_pos_m": [
+          6501.50258149,
+          -4199.694137529999,
+          -1.31595741
+        ],
+        "start_rot_deg": [
+          0.0,
+          0.0,
+          180.0
+        ]
+      }
+    },
+    "llm_output": {
+      "scores": {
+        "front": 0.1,
+        "left": 0.1,
+        "right": 0.1,
+        "back": 0.1,
+        "down": 0.9
+      },
+      "confidence": 0.99,
+      "target_direction": "up",
+      "turn_direction": "none",
+      "turn_angle_deg": 0.0,
+      "forward_distance": 0.0,
+      "vertical_movement": 1.0,
+      "notes": "Bootstrap warm-up: move up once."
+    },
+    "parsed_action": {
+      "type": "motion",
+      "turn": {
+        "direction": "none",
+        "angle_deg": 0.0
+      },
+      "forward": 0.0,
+      "vertical": 1.0,
+      "raw": {
+        "scores": {
+          "front": 0.1,
+          "left": 0.1,
+          "right": 0.1,
+          "back": 0.1,
+          "down": 0.9
+        },
+        "confidence": 0.99,
+        "target_direction": "up",
+        "turn_direction": "none",
+        "turn_angle_deg": 0.0,
+        "forward_distance": 0.0,
+        "vertical_movement": 1.0,
+        "notes": "Bootstrap warm-up: move up once."
+      }
+    },
+    "drone_state": {
+      "x": 6501.50244140625,
+      "y": -4199.6943359375,
+      "z": -2.215792655944824,
+      "pitch": 1.3042674571246072e-08,
+      "roll": 7.824029298868978e-09,
+      "yaw": 3.141592634349493
+    },
+    "sensor_data": {
+      "depth_summary": {
+        "front": 1.9755439758300781,
+        "left": 2.1230108737945557,
+        "topdown": 0.6416015625,
+        "right": 1.6397879123687744,
+        "back": 1.9613842964172363
+      }
+    }
+  },
+  {
+    "timestamp": "2026-03-16 17:23:30",
+    "prompt": {
+      "image": "<base64 placeholder>",
+      "depth_summary": {
+        "front": 3.625854730606079,
+        "left": 3.619575023651123,
+        "topdown": 1.327373743057251,
+        "right": 2.473626136779785,
+        "back": 3.6112124919891357
+      },
+      "drone_state": {
+        "x": 6501.5,
+        "y": -4199.69,
+        "z": -2.22,
+        "pitch": -0.0,
+        "roll": 0.0,
+        "yaw": 3.14
+      },
+      "task_context": {
+        "task_id": "bootstrap",
+        "task_kind": "bootstrap_simple",
+        "instruction": "Simple warm-up: move up once from initial position.",
+        "start_pos_m": [
+          6501.50258149,
+          -4199.694137529999,
+          -1.31595741
+        ],
+        "start_rot_deg": [
+          0.0,
+          0.0,
+          180.0
+        ]
+      }
+    },
+    "llm_output": {
+      "done": true,
+      "message": "Bootstrap completed.",
+      "target_location_direction": "up"
+    },
+    "parsed_action": {
+      "type": "done",
+      "message": "Bootstrap completed.",
+      "target_location_direction": "up",
+      "raw": {
+        "done": true,
+        "message": "Bootstrap completed.",
+        "target_location_direction": "up"
+      }
+    },
+    "drone_state": {
+      "x": 6501.50244140625,
+      "y": -4199.6943359375,
+      "z": -2.218134880065918,
+      "pitch": -2.5843512029010292e-08,
+      "roll": 2.1322558171941765e-08,
+      "yaw": 3.141592635757453
+    },
+    "sensor_data": {
+      "depth_summary": {
+        "front": 3.625854730606079,
+        "left": 3.619575023651123,
+        "topdown": 1.327373743057251,
+        "right": 2.473626136779785,
+        "back": 3.6112124919891357
+      }
+    }
+  }
+]
