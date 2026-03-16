@@ -15,16 +15,16 @@ class DroneMotion:
         self.dt = 0.02
 
     def get_pos(self):
-        s = self.client.getMultirotorState()
+        s = self.client.getMultirotorState(vehicle_name=self.vehicle_name)
         p = s.kinematics_estimated.position
         return p.x_val, p.y_val, p.z_val
 
     def get_yaw(self):
-        s = self.client.getMultirotorState()
+        s = self.client.getMultirotorState(vehicle_name=self.vehicle_name)
         pitch, roll, yaw = airsim.to_eularian_angles(s.kinematics_estimated.orientation)
         return pitch, roll, yaw
 
-    def _move_to_world_target(self, tx, ty, tz, timeout_s=20.0):
+    def _move_to_world_target(self, tx, ty, tz, timeout_s=20.0, arrive_dist_m=0.10):
         t0 = time.time()
         print(f"[motion] move_to_target:start target=({tx:.3f},{ty:.3f},{tz:.3f})")
         while True:
@@ -33,13 +33,13 @@ class DroneMotion:
             x, y, z = self.get_pos()
             ex, ey, ez = tx - x, ty - y, tz - z
             dist = math.sqrt(ex * ex + ey * ey + ez * ez)
-            if dist < 0.05:
+            if dist <= float(arrive_dist_m):
                 print(f"[motion] move_to_target:arrived dist={dist:.4f} pos=({x:.3f},{y:.3f},{z:.3f})")
                 break
             if time.time() - t0 > float(timeout_s):
                 raise TimeoutError(
                     f"[motion] move_to_target timeout target=({tx:.3f},{ty:.3f},{tz:.3f}) "
-                    f"current=({x:.3f},{y:.3f},{z:.3f}) dist={dist:.3f}"
+                    f"current=({x:.3f},{y:.3f},{z:.3f}) dist={dist:.3f} arrive_dist_m={arrive_dist_m:.3f}"
                 )
 
             vx, vy, vz = ex, ey, ez
@@ -133,35 +133,44 @@ class DroneMotion:
         return a
 
     def _turn_to_yaw(self, target_yaw_rad, timeout_s=20.0):
-        t0 = time.time()
         print(f"[motion] turn_to_yaw:start target={target_yaw_rad:.6f}")
+        self.client.simPause(False)
+        target_deg = math.degrees(self._normalize_angle(target_yaw_rad))
+        print(f"[motion] turn_to_yaw:rotateToYawAsync target_deg={target_deg:.3f}")
+        self.client.rotateToYawAsync(target_deg, timeout_sec=float(timeout_s), vehicle_name=self.vehicle_name).join()
+
+        # Poll for convergence because some simulator states return from async before yaw settles.
+        t0 = time.time()
+        yaw = 0.0
+        err = math.pi
         while True:
-            # Guard against simulator paused state between tasks.
             self.client.simPause(False)
             _, _, yaw = self.get_yaw()
             err = self._normalize_angle(target_yaw_rad - yaw)
-            if abs(err) < math.radians(2):
-                print(f"[motion] turn_to_yaw:arrived yaw={yaw:.6f} err={err:.6f}")
+            if abs(err) < math.radians(3):
                 break
             if time.time() - t0 > float(timeout_s):
-                raise TimeoutError(
-                    f"[motion] turn_to_yaw timeout target={target_yaw_rad:.6f} current={yaw:.6f} err={err:.6f}"
-                )
+                break
+            time.sleep(0.03)
 
-            k = 1.5
-            yaw_rate = k * err
-            max_rate = math.radians(90)
-            yaw_rate = max(-max_rate, min(max_rate, yaw_rate))
-
-            self.client.moveByVelocityBodyFrameAsync(
-                0,
-                0,
-                0,
-                self.dt,
-                yaw_mode=airsim.YawMode(is_rate=True, yaw_or_rate=math.degrees(yaw_rate)),
+        if abs(err) >= math.radians(3):
+            # Fallback: force-set yaw directly if rotate API is unavailable/stalled.
+            print("[motion] turn_to_yaw:fallback simSetVehiclePose")
+            x, y, z = self.get_pos()
+            q = airsim.to_quaternion(0.0, 0.0, self._normalize_angle(target_yaw_rad))
+            self.client.simSetVehiclePose(
+                airsim.Pose(airsim.Vector3r(x, y, z), q),
+                ignore_collision=True,
                 vehicle_name=self.vehicle_name,
             )
-            time.sleep(self.dt)
+            _, _, yaw = self.get_yaw()
+            err = self._normalize_angle(target_yaw_rad - yaw)
+
+        if abs(err) >= math.radians(3):
+            raise TimeoutError(
+                f"[motion] turn_to_yaw timeout target={target_yaw_rad:.6f} current={yaw:.6f} err={err:.6f}"
+            )
+        print(f"[motion] turn_to_yaw:arrived yaw={yaw:.6f} err={err:.6f}")
 
     def turn_left(self, angle_deg):
         _, _, curr = self.get_yaw()

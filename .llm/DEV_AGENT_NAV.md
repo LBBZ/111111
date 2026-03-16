@@ -80,7 +80,8 @@ Online workflow output path:
 ## H. Workflow Entrypoints
 - Online single-case eval:
   - DroneController/run_vln_workflow_eval.py
-  - args: --dataset_root, --task_root, --task_id, --task_ids
+  - args: --dataset_root, --task_root, --task_ids
+  - always prepends a bootstrap_simple warm-up task using first task init pose
 - Offline fake eval:
   - DroneController/run_vln_eval_fake.py
 

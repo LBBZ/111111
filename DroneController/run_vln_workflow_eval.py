@@ -13,6 +13,80 @@ from DroneController import vln_metrics
 from DroneController.io.artifact_writer import WorkflowArtifactWriter
 
 
+def _run_bootstrap_task(first_task_id: int, dataset_root: Path, task_root: Path) -> int:
+    bootstrap_dir = task_root / "bootstrap"
+    writer = WorkflowArtifactWriter(bootstrap_dir)
+    writer.prepare_for_rerun()
+
+    meta: Dict[str, Any] = {
+        "task_kind": "bootstrap_simple",
+        "source_task_id": int(first_task_id),
+        "dataset_root": str(dataset_root),
+        "started_at": writer.now_str(),
+        "finished_at": None,
+        "script": "DroneController/run_vln_workflow_eval.py",
+    }
+    writer.write_json("meta.json", meta)
+    print(f"[workflow][bootstrap] start source_task_id={first_task_id}")
+
+    try:
+        gt = vln_metrics.load_gt_episode(dataset_root, first_task_id)
+        controller = DroneController(output_dir=str(bootstrap_dir), overwrite_logs=True)
+        start_pos_m_for_init = tuple(map(float, gt.start_pos_m))
+        init_state = controller.initialize_episode(start_pos_m_for_init, gt.start_rot_deg)
+        meta["episode_init"] = {
+            "start_pos_raw_cm": list(gt.start_pos_raw_cm),
+            "start_pos_m": list(start_pos_m_for_init),
+            "start_rot_deg": list(gt.start_rot_deg),
+            "applied_state": init_state,
+        }
+        writer.write_json("meta.json", meta)
+
+        task_context = {
+            "task_id": "bootstrap",
+            "task_kind": "bootstrap_simple",
+            "instruction": "Simple warm-up: move up once from initial position.",
+            "start_pos_m": list(start_pos_m_for_init),
+            "start_rot_deg": list(gt.start_rot_deg),
+        }
+
+        def on_step_end(**kwargs):
+            writer.save_step_visual(
+                step_idx=int(kwargs["step_count"]),
+                sensor_data=kwargs["sensor_data"],
+                camera=controller.executor.camera,
+            )
+
+        run_artifacts = controller.run(max_steps=5, on_step_end=on_step_end, task_context=task_context)
+    except Exception as e:
+        meta["finished_at"] = writer.now_str()
+        meta["error"] = f"Bootstrap task failed: {e}"
+        writer.write_json("meta.json", meta)
+        print(meta["error"])
+        return 1
+
+    pred_positions = run_artifacts.get("trajectory", [])
+    plan_steps = run_artifacts.get("plan_steps", [])
+    status = run_artifacts.get("status", {})
+
+    writer.write_traj_csv("traj.csv", pred_positions)
+    writer.write_json("plan.json", plan_steps)
+    writer.write_json(
+        "results.json",
+        {
+            "task_kind": "bootstrap_simple",
+            "source_task_id": int(first_task_id),
+            "steps": int(status.get("step_count", len(plan_steps))),
+            "end_reason": str(status.get("end_reason", "unknown")),
+            "done": bool(status.get("done", False)),
+        },
+    )
+    meta["finished_at"] = writer.now_str()
+    writer.write_json("meta.json", meta)
+    print("[workflow][bootstrap] done")
+    return 0
+
+
 def _run_one_task(task_id: int, dataset_root: Path, task_root: Path) -> int:
     print(f"[workflow][task={task_id}] ===== start =====")
     output_dir = task_root / str(task_id)
@@ -138,22 +212,21 @@ def _run_one_task(task_id: int, dataset_root: Path, task_root: Path) -> int:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Run online VLN workflow evaluation (single task or task sequence).")
+    parser = argparse.ArgumentParser(description="Run online VLN workflow evaluation with mandatory task sequence.")
     parser.add_argument("--dataset_root", type=str, default=str(Path("Datasets") / "vln"))
     parser.add_argument("--task_root", type=str, default="task")
-    parser.add_argument("--task_id", type=int, default=None, help="Single task id (kept for compatibility).")
-    parser.add_argument("--task_ids", type=int, nargs="+", default=None, help="Task sequence, e.g. --task_ids 1 2 3")
+    parser.add_argument("--task_ids", type=int, nargs="+", required=True, help="Task sequence, e.g. --task_ids 1 2 3")
     args = parser.parse_args()
 
     dataset_root = Path(args.dataset_root)
     task_root = Path(args.task_root)
 
-    if args.task_ids is not None and len(args.task_ids) > 0:
-        task_ids = [int(t) for t in args.task_ids]
-    elif args.task_id is not None:
-        task_ids = [int(args.task_id)]
-    else:
-        task_ids = [0]
+    task_ids = [int(t) for t in args.task_ids]
+
+    bootstrap_code = _run_bootstrap_task(first_task_id=task_ids[0], dataset_root=dataset_root, task_root=task_root)
+    if bootstrap_code != 0:
+        print("[workflow] bootstrap failed, aborting sequence")
+        return 1
 
     exit_code = 0
     print(f"[workflow] task sequence={task_ids}")

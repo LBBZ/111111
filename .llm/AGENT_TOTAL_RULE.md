@@ -122,9 +122,9 @@ Use layered imports instead, for example:
 - CLI (only):
   - --dataset_root (default Datasets/vln)
   - --task_root (default task)
-  - --task_id (single task id; compatibility)
-  - --task_ids (task sequence, e.g. 1 2 3)
+  - --task_ids (required task sequence, e.g. 1 2 3; single task uses one id)
 - Behavior:
+  - always run bootstrap_simple task first using init pose from first task id
   - each task id maps to one dataset case id
   - sequence mode executes tasks in given order, one-by-one
   - initialize vehicle pose from dataset start_loc before loop
@@ -228,3 +228,4 @@ These are supplementary only. This file remains authoritative.
 - 2026-03-16: Replaced z-offset conversion with direct z sign inversion, removed --start_z_negative_offset_m, and moved dataset pose initialization API into control/drone_motion.py.
 - 2026-03-16: Refined responsibilities: workflow task section now performs dataset conversion, while DroneMotion only executes pose initialization (simSetVehiclePose + takeoff + hover).
 - 2026-03-16: Switched task input to JSON-first (episode_index/groups) with start_loc fallback; added workflow task sequence CLI (--task_ids).
+- 2026-03-16: Removed single-task CLI entry; all runs go through task sequence with mandatory bootstrap_simple warm-up task.
