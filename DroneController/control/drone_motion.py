@@ -49,7 +49,7 @@ class DroneMotion:
                 vx, vy, vz = vx / norm * speed, vy / norm * speed, vz / norm * speed
 
             self.client.moveByVelocityAsync(vx, vy, vz, self.dt, vehicle_name=self.vehicle_name)
-            time.sleep(self.dt)
+            time.sleep(self.dt + 0.1)
 
     def move_forward(self, d):
         _, _, yaw = self.get_yaw()
