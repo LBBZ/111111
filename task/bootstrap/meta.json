@@ -2,8 +2,8 @@
   "task_id": "bootstrap",
   "task_kind": "bootstrap_simple",
   "dataset_root": "Datasets\\vln",
-  "started_at": "2026-03-18 14:47:29",
-  "finished_at": "2026-03-18 14:48:01",
+  "started_at": "2026-03-18 14:59:22",
+  "finished_at": "2026-03-18 14:59:53",
   "script": "DroneController/run_vln_workflow_eval.py",
   "source_task_id": 2,
   "episode_init": {
@@ -28,11 +28,11 @@
     "applied_state": {
       "x": 6501.50244140625,
       "y": -4199.6943359375,
-      "z": -1.3143603801727295,
-      "pitch": -2.7780848723981897e-09,
-      "roll": -4.312307400608886e-09,
-      "yaw": -3.1415926531918816
+      "z": -1.3145726919174194,
+      "pitch": -1.2739228560928806e-09,
+      "roll": -8.084487987272277e-12,
+      "yaw": -3.1415926535159038
     }
   },
-  "error": "[motion] move_to_target timeout target=(6501.502,-4199.694,-2.313) current=(6501.502,-4199.694,-2.176) dist=0.137 arrive_dist_m=0.100"
+  "error": "[motion] move_to_target timeout target=(6501.502,-4199.694,-2.313) current=(6501.502,-4199.694,-2.173) dist=0.140 arrive_dist_m=0.100"
 }
