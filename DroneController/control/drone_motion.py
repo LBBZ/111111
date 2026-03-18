@@ -25,55 +25,43 @@ class DroneMotion:
         return pitch, roll, yaw
 
     def _move_to_world_target(self, tx, ty, tz, timeout_s=20.0, arrive_dist_m=0.10):
-        t0 = time.time()
-        while True:
-            # Guard against simulator paused state between tasks.
-            self.client.simPause(False)
-            x, y, z = self.get_pos()
-            ex, ey, ez = tx - x, ty - y, tz - z
-            dist = math.sqrt(ex * ex + ey * ey + ez * ez)
-            if dist <= float(arrive_dist_m):
-                # Wait briefly to ensure hover is stable before returning.
-                time.sleep(0.1)
-                break
-            if time.time() - t0 > float(timeout_s):
-                raise TimeoutError(
-                    f"[motion] move_to_target timeout target=({tx:.3f},{ty:.3f},{tz:.3f}) "
-                    f"current=({x:.3f},{y:.3f},{z:.3f}) dist={dist:.3f} arrive_dist_m={arrive_dist_m:.3f}"
-                )
+        # Use AirSim position API directly; tx/ty/tz are already world-frame targets.
+        self.client.simPause(False)
+        self.client.moveToPositionAsync(
+            float(tx),
+            float(ty),
+            float(tz),
+            float(self.base_speed),
+            timeout_sec=float(timeout_s),
+            vehicle_name=self.vehicle_name,
+        ).join()
 
-            vx, vy, vz = ex, ey, ez
-            speed = self.base_speed
-            norm = math.sqrt(vx * vx + vy * vy + vz * vz)
-            if norm > speed:
-                vx, vy, vz = vx / norm * speed, vy / norm * speed, vz / norm * speed
-
-            self.client.moveByVelocityAsync(vx, vy, vz, self.dt, vehicle_name=self.vehicle_name)
-            time.sleep(self.dt + 0.1)
-
-    def move_forward(self, d):
+    def _body_offset_to_world_target(self, forward_m=0.0, right_m=0.0, up_m=0.0):
         _, _, yaw = self.get_yaw()
         x0, y0, z0 = self.get_pos()
-        tx = x0 + d * math.cos(yaw)
-        ty = y0 + d * math.sin(yaw)
-        self._move_to_world_target(tx, ty, z0)
+        # AirSim NED: x-forward, y-right, z-down.
+        dx = forward_m * math.cos(yaw) + right_m * math.sin(yaw)
+        dy = forward_m * math.sin(yaw) - right_m * math.cos(yaw)
+        dz = -up_m
+        return x0 + dx, y0 + dy, z0 + dz
+
+    def move_forward(self, d):
+        tx, ty, tz = self._body_offset_to_world_target(forward_m=d)
+        self._move_to_world_target(tx, ty, tz)
 
     def move_backward(self, d):
         self.move_forward(-d)
 
     def move_left(self, d):
-        _, _, yaw = self.get_yaw()
-        x0, y0, z0 = self.get_pos()
-        tx = x0 + d * math.sin(yaw)
-        ty = y0 - d * math.cos(yaw)
-        self._move_to_world_target(tx, ty, z0)
+        tx, ty, tz = self._body_offset_to_world_target(right_m=-d)
+        self._move_to_world_target(tx, ty, tz)
 
     def move_right(self, d):
         self.move_left(-d)
 
     def move_up(self, d):
-        x0, y0, z0 = self.get_pos()
-        self._move_to_world_target(x0, y0, z0 - d)
+        tx, ty, tz = self._body_offset_to_world_target(up_m=d)
+        self._move_to_world_target(tx, ty, tz)
 
     def move_down(self, d):
         self.move_up(-d)

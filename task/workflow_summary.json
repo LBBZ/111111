@@ -3,22 +3,32 @@
   "task_root": "task",
   "bootstrap": {
     "task_id": "bootstrap",
-    "ok": false,
-    "end_reason": "error",
-    "error": "[motion] move_to_target timeout target=(6501.502,-4199.694,-2.313) current=(6501.502,-4199.694,-2.172) dist=0.141 arrive_dist_m=0.100",
+    "ok": true,
+    "end_reason": "done",
+    "error": null,
     "output_dir": "task\\bootstrap"
   },
   "tasks": [
     {
       "task_id": 2,
       "task_kind": "vln",
-      "ok": false,
-      "end_reason": "error",
-      "steps": 0,
-      "error": "[motion] move_to_target timeout target=(6499.105,-4198.874,-2.267) current=(6499.048,-4198.845,-2.123) dist=0.157 arrive_dist_m=0.100",
-      "metrics": {},
+      "ok": true,
+      "end_reason": "done",
+      "steps": 4,
+      "error": null,
+      "metrics": {
+        "task_id": 2,
+        "success": 0,
+        "ne": 73.0725793665928,
+        "spl": 0.0,
+        "sr": 0.0,
+        "path_length_pred": 33.22503876886113,
+        "path_length_gt": 71.20848803553831,
+        "steps": 4,
+        "end_reason": "done"
+      },
       "output_dir": "task\\2"
     }
   ],
-  "all_ok": false
+  "all_ok": true
 }

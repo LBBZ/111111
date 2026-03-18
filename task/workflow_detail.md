@@ -10,7 +10,7 @@
 - step_visual/: 每步图像和深度快照
 
 ## 运行事件
-- 2026-03-18 15:32:17 START task_id=bootstrap kind=bootstrap_simple
-- 2026-03-18 15:32:48 END task_id=bootstrap status=FAILED end_reason=error
-- 2026-03-18 15:32:48 START task_id=2 kind=vln
-- 2026-03-18 15:33:22 END task_id=2 status=FAILED end_reason=error
+- 2026-03-18 15:58:31 START task_id=bootstrap kind=bootstrap_simple
+- 2026-03-18 15:58:52 END task_id=bootstrap status=OK end_reason=done
+- 2026-03-18 15:58:52 START task_id=2 kind=vln
+- 2026-03-18 16:00:08 END task_id=2 status=OK end_reason=done

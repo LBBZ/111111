@@ -1,0 +1,390 @@
+
+============================================================
+Timestamp: 2026-03-18 15:59:08
+
+--- Prompt JSON ---
+{
+    "image": "<base64 placeholder>",
+    "depth_summary": {
+        "front": 2.0198566913604736,
+        "left": 2.169921875,
+        "topdown": 0.6669921875,
+        "right": 1.6866629123687744,
+        "back": 2.000493049621582
+    },
+    "drone_state": {
+        "x": 6501.5,
+        "y": -4199.69,
+        "z": -1.31,
+        "pitch": 0.0,
+        "roll": 0.0,
+        "yaw": 3.14
+    },
+    "task_context": {
+        "task_id": 2,
+        "task_kind": "vln",
+        "instruction": "Cross the road along the right zebra crossing",
+        "start_rot_deg": [
+            0.0,
+            0.0,
+            180.0
+        ],
+        "start_yaw_deg": 180.0,
+        "start_pos_m": [
+            6501.50258149,
+            -4199.694137529999,
+            -1.31595741
+        ]
+    }
+}
+
+--- LLM Output ---
+{
+    "scores": {
+        "front": 0.82,
+        "left": 0.4,
+        "right": 0.1,
+        "back": 0.02,
+        "down": 0.15
+    },
+    "confidence": 0.88,
+    "target_direction": "front-left",
+    "turn_direction": "left",
+    "turn_angle_deg": 90,
+    "forward_distance": 10,
+    "vertical_movement": 3,
+    "notes": "Building visible ahead-left; forward path mostly clear."
+}
+
+--- Parsed Action ---
+{
+    "type": "motion",
+    "turn": {
+        "direction": "left",
+        "angle_deg": 90.0
+    },
+    "forward": 10.0,
+    "vertical": 3.0,
+    "raw": {
+        "scores": {
+            "front": 0.82,
+            "left": 0.4,
+            "right": 0.1,
+            "back": 0.02,
+            "down": 0.15
+        },
+        "confidence": 0.88,
+        "target_direction": "front-left",
+        "turn_direction": "left",
+        "turn_angle_deg": 90,
+        "forward_distance": 10,
+        "vertical_movement": 3,
+        "notes": "Building visible ahead-left; forward path mostly clear."
+    }
+}
+
+--- Drone State ---
+{
+    "x": 6500.9697265625,
+    "y": -4188.755859375,
+    "z": -4.706368923187256,
+    "pitch": 0.31058392509569327,
+    "roll": 0.005611877579477965,
+    "yaw": 1.6199679216745715
+}
+
+--- Depth Summary ---
+{
+    "front": 2.0198566913604736,
+    "left": 2.169921875,
+    "topdown": 0.6669921875,
+    "right": 1.6866629123687744,
+    "back": 2.000493049621582
+}
+============================================================
+
+============================================================
+Timestamp: 2026-03-18 15:59:22
+
+--- Prompt JSON ---
+{
+    "image": "<base64 placeholder>",
+    "depth_summary": {
+        "front": 7.775460243225098,
+        "left": 8.403085708618164,
+        "topdown": 4.013525485992432,
+        "right": 8.358349800109863,
+        "back": 5.05357027053833
+    },
+    "drone_state": {
+        "x": 6500.97,
+        "y": -4189.76,
+        "z": -4.74,
+        "pitch": -0.0,
+        "roll": -0.0,
+        "yaw": 1.62
+    },
+    "task_context": {
+        "task_id": 2,
+        "task_kind": "vln",
+        "instruction": "Cross the road along the right zebra crossing",
+        "start_rot_deg": [
+            0.0,
+            0.0,
+            180.0
+        ],
+        "start_yaw_deg": 180.0,
+        "start_pos_m": [
+            6501.50258149,
+            -4199.694137529999,
+            -1.31595741
+        ]
+    }
+}
+
+--- LLM Output ---
+{
+    "scores": {
+        "front": 0.3,
+        "left": 0.05,
+        "right": 0.75,
+        "back": 0.01,
+        "down": 0.2
+    },
+    "confidence": 0.92,
+    "target_direction": "front-right",
+    "turn_direction": "right",
+    "turn_angle_deg": -90,
+    "forward_distance": 10,
+    "vertical_movement": 3,
+    "notes": "Right corridor is open; building visible on the right side."
+}
+
+--- Parsed Action ---
+{
+    "type": "motion",
+    "turn": {
+        "direction": "right",
+        "angle_deg": -90.0
+    },
+    "forward": 10.0,
+    "vertical": 3.0,
+    "raw": {
+        "scores": {
+            "front": 0.3,
+            "left": 0.05,
+            "right": 0.75,
+            "back": 0.01,
+            "down": 0.2
+        },
+        "confidence": 0.92,
+        "target_direction": "front-right",
+        "turn_direction": "right",
+        "turn_angle_deg": -90,
+        "forward_distance": 10,
+        "vertical_movement": 3,
+        "notes": "Right corridor is open; building visible on the right side."
+    }
+}
+
+--- Drone State ---
+{
+    "x": 6500.46337890625,
+    "y": -4178.82568359375,
+    "z": -8.127191543579102,
+    "pitch": 0.3104577812377827,
+    "roll": 0.013637407551278671,
+    "yaw": 1.6179821486791583
+}
+
+--- Depth Summary ---
+{
+    "front": 7.775460243225098,
+    "left": 8.403085708618164,
+    "topdown": 4.013525485992432,
+    "right": 8.358349800109863,
+    "back": 5.05357027053833
+}
+============================================================
+
+============================================================
+Timestamp: 2026-03-18 15:59:59
+
+--- Prompt JSON ---
+{
+    "image": "<base64 placeholder>",
+    "depth_summary": {
+        "front": 1.5562958717346191,
+        "left": 12.143308639526367,
+        "topdown": 7.331787586212158,
+        "right": 14.693963050842285,
+        "back": 15.458765983581543
+    },
+    "drone_state": {
+        "x": 6500.46,
+        "y": -4179.84,
+        "z": -8.16,
+        "pitch": -0.0,
+        "roll": -0.0,
+        "yaw": 1.62
+    },
+    "task_context": {
+        "task_id": 2,
+        "task_kind": "vln",
+        "instruction": "Cross the road along the right zebra crossing",
+        "start_rot_deg": [
+            0.0,
+            0.0,
+            180.0
+        ],
+        "start_yaw_deg": 180.0,
+        "start_pos_m": [
+            6501.50258149,
+            -4199.694137529999,
+            -1.31595741
+        ]
+    }
+}
+
+--- LLM Output ---
+{
+    "scores": {
+        "front": 0.1,
+        "left": 0.7,
+        "right": 0.2,
+        "back": 0.05,
+        "down": 0.05
+    },
+    "confidence": 0.8,
+    "target_direction": "left",
+    "turn_direction": "left",
+    "turn_angle_deg": 45,
+    "forward_distance": 10,
+    "vertical_movement": -3,
+    "notes": "Obstacle ahead; safer path is left with required altitude gain."
+}
+
+--- Parsed Action ---
+{
+    "type": "motion",
+    "turn": {
+        "direction": "left",
+        "angle_deg": 45.0
+    },
+    "forward": 10.0,
+    "vertical": -3.0,
+    "raw": {
+        "scores": {
+            "front": 0.1,
+            "left": 0.7,
+            "right": 0.2,
+            "back": 0.05,
+            "down": 0.05
+        },
+        "confidence": 0.8,
+        "target_direction": "left",
+        "turn_direction": "left",
+        "turn_angle_deg": 45,
+        "forward_distance": 10,
+        "vertical_movement": -3,
+        "notes": "Obstacle ahead; safer path is left with required altitude gain."
+    }
+}
+
+--- Drone State ---
+{
+    "x": 6507.66748046875,
+    "y": -4171.97607421875,
+    "z": -5.870105743408203,
+    "pitch": 0.10548828405635528,
+    "roll": -0.0009158966913589947,
+    "yaw": 0.831278728604506
+}
+
+--- Depth Summary ---
+{
+    "front": 1.5562958717346191,
+    "left": 12.143308639526367,
+    "topdown": 7.331787586212158,
+    "right": 14.693963050842285,
+    "back": 15.458765983581543
+}
+============================================================
+
+============================================================
+Timestamp: 2026-03-18 16:00:08
+
+--- Prompt JSON ---
+{
+    "image": "<base64 placeholder>",
+    "depth_summary": {
+        "front": 4.771663665771484,
+        "left": 7.980453014373779,
+        "topdown": 4.754617691040039,
+        "right": 4.811941146850586,
+        "back": 5.743738174438477
+    },
+    "drone_state": {
+        "x": 6506.91,
+        "y": -4172.7,
+        "z": -5.87,
+        "pitch": -0.08,
+        "roll": -0.01,
+        "yaw": 0.82
+    },
+    "task_context": {
+        "task_id": 2,
+        "task_kind": "vln",
+        "instruction": "Cross the road along the right zebra crossing",
+        "start_rot_deg": [
+            0.0,
+            0.0,
+            180.0
+        ],
+        "start_yaw_deg": 180.0,
+        "start_pos_m": [
+            6501.50258149,
+            -4199.694137529999,
+            -1.31595741
+        ]
+    }
+}
+
+--- LLM Output ---
+{
+    "done": true,
+    "message": "Mission completed.",
+    "target_location_direction": "front-left"
+}
+
+--- Parsed Action ---
+{
+    "type": "done",
+    "message": "Mission completed.",
+    "target_location_direction": "front-left",
+    "raw": {
+        "done": true,
+        "message": "Mission completed.",
+        "target_location_direction": "front-left"
+    }
+}
+
+--- Drone State ---
+{
+    "x": 6506.90478515625,
+    "y": -4172.70068359375,
+    "z": -5.872077465057373,
+    "pitch": -0.07515005604729516,
+    "roll": -0.009683706508547288,
+    "yaw": 0.8167614657555503
+}
+
+--- Depth Summary ---
+{
+    "front": 4.771663665771484,
+    "left": 7.980453014373779,
+    "topdown": 4.754617691040039,
+    "right": 4.811941146850586,
+    "back": 5.743738174438477
+}
+============================================================

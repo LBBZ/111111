@@ -1,9 +1,7 @@
-[2026-03-18 15:32:17][INFO] workflow start dataset_root=Datasets\vln task_ids=[2]
-[2026-03-18 15:32:17][TASK] task start id=bootstrap kind=bootstrap_simple
-[2026-03-18 15:32:48][TASK] end id=bootstrap status=FAILED end_reason=error
-[2026-03-18 15:32:48][WARN] bootstrap failed, continue dispatching normal tasks
-[2026-03-18 15:32:48][TASK] task start id=2 kind=vln
-[2026-03-18 15:33:22][TASK] end id=2 status=FAILED end_reason=error
-[2026-03-18 15:33:22][WARN] task_id=2 failed, continue to next task
-[2026-03-18 15:33:22][INFO] workflow summary bootstrap_ok=False task_total=1 task_ok=0 task_failed=1
-[2026-03-18 15:33:22][INFO] workflow end
+[2026-03-18 15:58:31][INFO] workflow start dataset_root=Datasets\vln task_ids=[2]
+[2026-03-18 15:58:31][TASK] task start id=bootstrap kind=bootstrap_simple
+[2026-03-18 15:58:52][TASK] end id=bootstrap status=OK end_reason=done
+[2026-03-18 15:58:52][TASK] task start id=2 kind=vln
+[2026-03-18 16:00:08][TASK] end id=2 status=OK end_reason=done
+[2026-03-18 16:00:08][INFO] workflow summary bootstrap_ok=True task_total=1 task_ok=1 task_failed=0
+[2026-03-18 16:00:08][INFO] workflow end
