@@ -1,6 +1,6 @@
 # DEV_AGENT_NAV (Upload This File)
 
-Last updated: 2026-03-16
+Last updated: 2026-03-18
 Use case: This is the single file to upload for a coding agent.
 
 ## A. Development Goal
@@ -21,6 +21,7 @@ Use case: This is the single file to upload for a coding agent.
   - perception: sensors and image processing
   - infra: AirSim client integration
   - io: logs and artifact writing
+  - workflow: task specs, per-task processor, workflow scheduler
 
 ## D. Dependency Direction
 - Allowed:
@@ -80,8 +81,9 @@ Online workflow output path:
 ## H. Workflow Entrypoints
 - Online single-case eval:
   - DroneController/run_vln_workflow_eval.py
-  - args: --dataset_root, --task_root, --task_ids
+  - args: --dataset_root, --task_root, --task_ids, --max_steps, --bootstrap_max_steps
   - always prepends a bootstrap_simple warm-up task using first task init pose
+  - dispatch continues even if one task fails (including bootstrap)
 - Offline fake eval:
   - DroneController/run_vln_eval_fake.py
 
@@ -115,7 +117,7 @@ Use layered imports, e.g.:
 
 ## K. Validation Commands
 - D:/Conda/envs/airsim/python.exe -m compileall DroneController
-- D:/Conda/envs/airsim/python.exe -u DroneController/run_vln_workflow_eval.py --dataset_root Datasets/vln --task_root task --task_id 0
+- D:/Conda/envs/airsim/python.exe -u DroneController/run_vln_workflow_eval.py --dataset_root Datasets/vln --task_root task --task_ids 0
 
 ## L. Change Playbooks
 - Add new prompt field:

@@ -17,10 +17,14 @@
   - plan.json：每步决策与动作明细
   - results.json：评测指标（SR/NE/SPL等）与任务总结
   - meta.json：任务元信息（起点、指令、时间戳等）
-  - images/：每步采集的图像（如有）
+  - lifecycle.jsonl：任务生命周期阶段日志
+  - step_visual/：每步采集的图像与深度图（如有）
 
 ## 4. bootstrap/  子目录
 - 启动/热身任务的输出（如有），结构同上。
+
+## 5. workflow_summary.json
+- 本次工作流汇总（bootstrap状态、每个任务成功/失败、关键指标和输出目录）。
 
 ---
 

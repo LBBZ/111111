@@ -17,6 +17,10 @@ Scope: practical architecture map for coding tasks.
 - io/
   - logger.py
   - artifact_writer.py
+- workflow/
+  - models.py
+  - task_processor.py
+  - manager.py
 - run_vln_workflow_eval.py
 - run_vln_eval_fake.py
 - vln_metrics.py

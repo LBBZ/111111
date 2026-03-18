@@ -1,6 +1,6 @@
 # Development Agent Total Rule
 
-Last updated: 2026-03-16
+Last updated: 2026-03-18
 Status: SINGLE SOURCE OF TRUTH FOR CODING AGENTS
 Usage: Import this file only for normal development tasks.
 
@@ -32,6 +32,10 @@ Usage: Import this file only for normal development tasks.
 - io/
   - logger.py
   - artifact_writer.py
+- workflow/
+  - models.py
+  - task_processor.py
+  - manager.py
 - top-level runtime scripts:
   - run_vln_workflow_eval.py (online single-case)
   - run_vln_eval_fake.py (legacy/offline fake eval)
@@ -71,6 +75,8 @@ Use layered imports instead, for example:
   - DroneController(executor=None, log_filename="drone_log.txt", output_dir=None, overwrite_logs=True)
 - Main method:
   - run(max_steps=None, on_step_end=None, task_context=None) -> dict
+- Callback timing:
+  - on_step_end is triggered right after sensor capture (pre-LLM stage), before prompt/model call.
 - Init helper:
   - initialize_episode(start_pos_m, start_rot_deg) -> dict (expects per-task preprocessed pose)
 - Return contract:
@@ -116,6 +122,23 @@ Use layered imports instead, for example:
 - write_json(name, obj)
 - write_traj_csv(name, positions)
 - save_step_visual(step_idx, sensor_data, camera)
+- append_jsonl(name, obj)
+
+### 6.5 workflow.task_processor.TaskProcessor
+- run_one(spec: TaskSpec) -> TaskRunResult
+- Responsibilities:
+  - load GT/init info
+  - initialize episode pose
+  - build task_context (bootstrap/vln)
+  - execute controller loop
+  - compute metrics and persist per-task artifacts
+
+### 6.6 workflow.manager.WorkflowManager
+- run(task_ids) -> WorkflowRunResult
+- Responsibilities:
+  - scheduling only (bootstrap first, then each task_id in order)
+  - workflow-level console/file logging
+  - tolerant dispatch: one task failure does not stop remaining tasks
 
 ## 7) Online Workflow Script Contract
 - Script: DroneController/run_vln_workflow_eval.py
@@ -123,22 +146,31 @@ Use layered imports instead, for example:
   - --dataset_root (default Datasets/vln)
   - --task_root (default task)
   - --task_ids (required task sequence, e.g. 1 2 3; single task uses one id)
+  - --max_steps (default 200)
+  - --bootstrap_max_steps (default 5)
 - Behavior:
   - always run bootstrap_simple task first using init pose from first task id
   - each task id maps to one dataset case id
   - sequence mode executes tasks in given order, one-by-one
+  - single task failure (including bootstrap) does not stop scheduling of remaining tasks
   - initialize vehicle pose from dataset start_loc before loop
   - convert start pos cm->m and apply z sign inversion: z_m = -(z_cm / 100)
   - inject instruction + heading info as task_context into prompt loop
-  - flat outputs under task/<task_id>/
+    - outputs include task root logs plus per-task subdirs under task/
 
-Required files under task/<task_id>/:
+    Workflow root files under task/:
+    - console.log
+    - error.log
+    - workflow_summary.json
+
+    Typical files under task/<task_id>/ (or task/bootstrap/):
 - meta.json
-- results.json
-- traj.csv
-- plan.json
+    - results.json (if run reaches result stage)
+    - traj.csv (if run reaches trajectory write stage)
+    - plan.json (if run reaches plan write stage)
 - drone_log.txt
 - drone_log.json
+    - lifecycle.jsonl
 - step_visual/step_xxx/... (if run path includes visual saving callback)
 
 ## 8) Metrics Contract (vln_metrics.py)
@@ -170,7 +202,7 @@ Required files under task/<task_id>/:
 - Compile package:
   - D:/Conda/envs/airsim/python.exe -m compileall DroneController
 - Run online workflow:
-  - D:/Conda/envs/airsim/python.exe -u DroneController/run_vln_workflow_eval.py --dataset_root Datasets/vln --task_root task --task_id 0
+  - D:/Conda/envs/airsim/python.exe -u DroneController/run_vln_workflow_eval.py --dataset_root Datasets/vln --task_root task --task_ids 0
 - Basic output check target:
   - task/0/results.json exists
 
@@ -229,3 +261,6 @@ These are supplementary only. This file remains authoritative.
 - 2026-03-16: Refined responsibilities: workflow task section now performs dataset conversion, while DroneMotion only executes pose initialization (simSetVehiclePose + takeoff + hover).
 - 2026-03-16: Switched task input to JSON-first (episode_index/groups) with start_loc fallback; added workflow task sequence CLI (--task_ids).
 - 2026-03-16: Removed single-task CLI entry; all runs go through task sequence with mandatory bootstrap_simple warm-up task.
+- 2026-03-18: Added workflow package (models/task_processor/manager) and manager-based scheduling entrypoint.
+- 2026-03-18: Updated workflow behavior to continue dispatching remaining tasks after single-task failures (including bootstrap).
+- 2026-03-18: Added workflow root logs (console.log/error.log/workflow_summary.json), lifecycle.jsonl append support, and pre-LLM snapshot callback timing.
