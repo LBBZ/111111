@@ -10,10 +10,21 @@ from DroneController.perception.image_processing import compute_depth_index, mer
 class MotionExecutor:
     """Parse model output and execute motion commands."""
 
+    _instance = None
+    _initialized = False
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
     def __init__(self, client=None, motion=None, camera=None):
+        if self.__class__._initialized:
+            return
         self.client = client if client is not None else AirSimClientSingleton()
         self.motion = motion if motion is not None else DroneMotion()
         self.camera = camera if camera is not None else DroneCamera()
+        self.__class__._initialized = True
 
     def parse(self, action_json: dict):
         if "done" in action_json:
