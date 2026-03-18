@@ -1,0 +1,41 @@
+{
+  "task_id": 2,
+  "task_kind": "vln",
+  "dataset_root": "Datasets\\vln",
+  "started_at": "2026-03-18 14:59:53",
+  "finished_at": "2026-03-18 15:00:27",
+  "script": "DroneController/run_vln_workflow_eval.py",
+  "source_task_id": null,
+  "controller_mode": "online_airsim_mock_llm",
+  "dataset_input_priority": "json(episode_index.json+groups.json) > start_loc.txt",
+  "dataset_coord_transform": "use preprocessed start_pos_m from vln_metrics (cm->m, z sign handled there)",
+  "episode_init": {
+    "dataset_index": 2,
+    "start_pos_raw_cm": [
+      650150.258149,
+      -419969.413753,
+      131.595741
+    ],
+    "start_pos_m": [
+      6501.50258149,
+      -4199.694137529999,
+      -1.31595741
+    ],
+    "start_rot_deg": [
+      0.0,
+      0.0,
+      180.0
+    ],
+    "start_yaw_deg": 180.0,
+    "instruction": "Cross the road along the right zebra crossing",
+    "applied_state": {
+      "x": 6501.50244140625,
+      "y": -4199.6943359375,
+      "z": -1.3186701536178589,
+      "pitch": -6.734516277946999e-10,
+      "roll": -8.086455333646221e-12,
+      "yaw": -3.141592652945302
+    }
+  },
+  "error": "[motion] move_to_target timeout target=(6499.105,-4198.870,-2.265) current=(6499.042,-4198.847,-2.125) dist=0.155 arrive_dist_m=0.100"
+}

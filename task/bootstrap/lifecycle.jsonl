@@ -1,0 +1,5 @@
+{"stage": "load_gt:start", "idx": 2, "time": "2026-03-18 14:59:22"}
+{"stage": "load_gt:ok", "idx": 2, "instruction": "Cross the road along the right zebra crossing", "time": "2026-03-18 14:59:22"}
+{"stage": "initialize:ok", "time": "2026-03-18 14:59:25"}
+{"stage": "run:start", "max_steps": 5, "time": "2026-03-18 14:59:25"}
+{"stage": "step:snapshot_saved", "phase": "pre_llm", "step": 1, "time": "2026-03-18 14:59:33"}
