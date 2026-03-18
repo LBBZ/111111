@@ -34,6 +34,8 @@ class DroneMotion:
             ex, ey, ez = tx - x, ty - y, tz - z
             dist = math.sqrt(ex * ex + ey * ey + ez * ez)
             if dist <= float(arrive_dist_m):
+                # Wait briefly to ensure hover is stable before returning.
+                time.sleep(0.1)
                 print(f"[motion] move_to_target:arrived dist={dist:.4f} pos=({x:.3f},{y:.3f},{z:.3f})")
                 break
             if time.time() - t0 > float(timeout_s):

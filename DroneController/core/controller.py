@@ -45,6 +45,19 @@ class DroneController:
             sensor_data = self.executor.get_sensor_data()
             print(f"[run][task={task_id}][step={step_count + 1}] sensor:ok {int((time.time() - sensor_t0) * 1000)}ms")
 
+            if callable(on_step_end):
+                cb_t0 = time.time()
+                print(f"[run][task={task_id}][step={step_count + 1}] callback(pre_llm):start")
+                on_step_end(
+                    step_count=step_count + 1,
+                    stage="pre_llm",
+                    sensor_data=sensor_data,
+                )
+                print(
+                    f"[run][task={task_id}][step={step_count + 1}] callback(pre_llm):ok "
+                    f"{int((time.time() - cb_t0) * 1000)}ms"
+                )
+
             llm_t0 = time.time()
             prompt = self.executor.build_prompt(sensor_data, task_context=task_context)
             print(f"[run][task={task_id}][step={step_count + 1}] llm:start")
@@ -84,18 +97,6 @@ class DroneController:
                 }
             )
 
-            if callable(on_step_end):
-                cb_t0 = time.time()
-                print(f"[run][task={task_id}][step={step_count}] callback:start")
-                on_step_end(
-                    step_count=step_count,
-                    sensor_data=sensor_data,
-                    action_json=action_json,
-                    parsed_action=parsed,
-                    execute_status=exec_status,
-                    drone_state=drone_state,
-                )
-                print(f"[run][task={task_id}][step={step_count}] callback:ok {int((time.time() - cb_t0) * 1000)}ms")
 
             if parsed["type"] == "done":
                 print(f"[run][task={task_id}] done by model at step={step_count}")

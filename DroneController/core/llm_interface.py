@@ -55,7 +55,7 @@ class LLMInterface:
                 return (
                     {
                         "scores": {"front": 0.1, "left": 0.1, "right": 0.1, "back": 0.1, "down": 0.9},
-                        "confidence": 0.99,
+                        "confidence": 1,
                         "target_direction": "up",
                         "turn_direction": "none",
                         "turn_angle_deg": 0.0,

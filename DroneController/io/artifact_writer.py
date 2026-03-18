@@ -31,6 +31,10 @@ class WorkflowArtifactWriter:
         if old_step_visual_dir.exists() and old_step_visual_dir.is_dir():
             shutil.rmtree(old_step_visual_dir)
 
+        old_lifecycle = self.output_dir / "lifecycle.jsonl"
+        if old_lifecycle.exists() and old_lifecycle.is_file():
+            old_lifecycle.unlink()
+
     @staticmethod
     def now_str() -> str:
         return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
@@ -39,6 +43,12 @@ class WorkflowArtifactWriter:
         path = self.output_dir / name
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(obj, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    def append_jsonl(self, name: str, obj) -> None:
+        path = self.output_dir / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("a", encoding="utf-8") as f:
+            f.write(json.dumps(obj, ensure_ascii=False) + "\n")
 
     def write_traj_csv(self, name: str, positions_m: Iterable[Iterable[float]]) -> None:
         path = self.output_dir / name
