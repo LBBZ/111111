@@ -1,0 +1,356 @@
+[
+  {
+    "timestamp": "2026-03-18 16:25:12",
+    "prompt": {
+      "image": "<base64 placeholder>",
+      "depth_summary": {
+        "front": 0.3770577609539032,
+        "left": 0.3770926296710968,
+        "topdown": null,
+        "right": 0.3770926296710968,
+        "back": 0.37994384765625
+      },
+      "drone_state": {
+        "x": 6501.5,
+        "y": -4199.69,
+        "z": -0.35,
+        "pitch": 0.0,
+        "roll": 0.0,
+        "yaw": -3.14
+      },
+      "task_context": {
+        "task_id": 3,
+        "task_kind": "vln",
+        "instruction": "Go to Right front red building",
+        "start_rot_deg": [
+          0.0,
+          0.0,
+          180.0
+        ],
+        "start_yaw_deg": 180.0,
+        "start_pos_m": [
+          6501.50258149,
+          -4199.694137529999,
+          -1.31595741
+        ]
+      }
+    },
+    "llm_output": {
+      "scores": {
+        "front": 0.82,
+        "left": 0.4,
+        "right": 0.1,
+        "back": 0.02,
+        "down": 0.15
+      },
+      "confidence": 0.88,
+      "target_direction": "front-left",
+      "turn_direction": "left",
+      "turn_angle_deg": 90,
+      "forward_distance": 10,
+      "vertical_movement": 3,
+      "notes": "Building visible ahead-left; forward path mostly clear."
+    },
+    "parsed_action": {
+      "type": "motion",
+      "turn": {
+        "direction": "left",
+        "angle_deg": 90.0
+      },
+      "forward": 10.0,
+      "vertical": 3.0,
+      "raw": {
+        "scores": {
+          "front": 0.82,
+          "left": 0.4,
+          "right": 0.1,
+          "back": 0.02,
+          "down": 0.15
+        },
+        "confidence": 0.88,
+        "target_direction": "front-left",
+        "turn_direction": "left",
+        "turn_angle_deg": 90,
+        "forward_distance": 10,
+        "vertical_movement": 3,
+        "notes": "Building visible ahead-left; forward path mostly clear."
+      }
+    },
+    "drone_state": {
+      "x": 6501.021484375,
+      "y": -4188.02783203125,
+      "z": -3.9670181274414062,
+      "pitch": 0.10853795612464993,
+      "roll": 0.005681651527958198,
+      "yaw": 1.611268162172478
+    },
+    "sensor_data": {
+      "depth_summary": {
+        "front": 0.3770577609539032,
+        "left": 0.3770926296710968,
+        "topdown": null,
+        "right": 0.3770926296710968,
+        "back": 0.37994384765625
+      }
+    }
+  },
+  {
+    "timestamp": "2026-03-18 16:25:32",
+    "prompt": {
+      "image": "<base64 placeholder>",
+      "depth_summary": {
+        "front": 8.043768882751465,
+        "left": 6.9121222496032715,
+        "topdown": 3.167072057723999,
+        "right": 6.747567653656006,
+        "back": 6.084113597869873
+      },
+      "drone_state": {
+        "x": 6499.82,
+        "y": -4187.55,
+        "z": -3.86,
+        "pitch": 0.0,
+        "roll": 0.0,
+        "yaw": 1.61
+      },
+      "task_context": {
+        "task_id": 3,
+        "task_kind": "vln",
+        "instruction": "Go to Right front red building",
+        "start_rot_deg": [
+          0.0,
+          0.0,
+          180.0
+        ],
+        "start_yaw_deg": 180.0,
+        "start_pos_m": [
+          6501.50258149,
+          -4199.694137529999,
+          -1.31595741
+        ]
+      }
+    },
+    "llm_output": {
+      "scores": {
+        "front": 0.3,
+        "left": 0.05,
+        "right": 0.75,
+        "back": 0.01,
+        "down": 0.2
+      },
+      "confidence": 0.92,
+      "target_direction": "front-right",
+      "turn_direction": "right",
+      "turn_angle_deg": 90,
+      "forward_distance": 10,
+      "vertical_movement": 3,
+      "notes": "Right corridor is open; building visible on the right side."
+    },
+    "parsed_action": {
+      "type": "motion",
+      "turn": {
+        "direction": "right",
+        "angle_deg": 90.0
+      },
+      "forward": 10.0,
+      "vertical": 3.0,
+      "raw": {
+        "scores": {
+          "front": 0.3,
+          "left": 0.05,
+          "right": 0.75,
+          "back": 0.01,
+          "down": 0.2
+        },
+        "confidence": 0.92,
+        "target_direction": "front-right",
+        "turn_direction": "right",
+        "turn_angle_deg": 90,
+        "forward_distance": 10,
+        "vertical_movement": 3,
+        "notes": "Right corridor is open; building visible on the right side."
+      }
+    },
+    "drone_state": {
+      "x": 6488.36083984375,
+      "y": -4188.0791015625,
+      "z": -7.492463111877441,
+      "pitch": 0.23425222883266306,
+      "roll": 0.004097300542660411,
+      "yaw": -3.0901337388115677
+    },
+    "sensor_data": {
+      "depth_summary": {
+        "front": 8.043768882751465,
+        "left": 6.9121222496032715,
+        "topdown": 3.167072057723999,
+        "right": 6.747567653656006,
+        "back": 6.084113597869873
+      }
+    }
+  },
+  {
+    "timestamp": "2026-03-18 16:26:11",
+    "prompt": {
+      "image": "<base64 placeholder>",
+      "depth_summary": {
+        "front": 17.291255950927734,
+        "left": 12.640118598937988,
+        "topdown": 6.379005432128906,
+        "right": 9.02487850189209,
+        "back": 8.098255157470703
+      },
+      "drone_state": {
+        "x": 6489.61,
+        "y": -4188.08,
+        "z": -7.37,
+        "pitch": -0.0,
+        "roll": 0.0,
+        "yaw": -3.09
+      },
+      "task_context": {
+        "task_id": 3,
+        "task_kind": "vln",
+        "instruction": "Go to Right front red building",
+        "start_rot_deg": [
+          0.0,
+          0.0,
+          180.0
+        ],
+        "start_yaw_deg": 180.0,
+        "start_pos_m": [
+          6501.50258149,
+          -4199.694137529999,
+          -1.31595741
+        ]
+      }
+    },
+    "llm_output": {
+      "scores": {
+        "front": 0.1,
+        "left": 0.7,
+        "right": 0.2,
+        "back": 0.05,
+        "down": 0.05
+      },
+      "confidence": 0.8,
+      "target_direction": "left",
+      "turn_direction": "left",
+      "turn_angle_deg": 45,
+      "forward_distance": 10,
+      "vertical_movement": -3,
+      "notes": "Obstacle ahead; safer path is left with required altitude gain."
+    },
+    "parsed_action": {
+      "type": "motion",
+      "turn": {
+        "direction": "left",
+        "angle_deg": 45.0
+      },
+      "forward": 10.0,
+      "vertical": -3.0,
+      "raw": {
+        "scores": {
+          "front": 0.1,
+          "left": 0.7,
+          "right": 0.2,
+          "back": 0.05,
+          "down": 0.05
+        },
+        "confidence": 0.8,
+        "target_direction": "left",
+        "turn_direction": "left",
+        "turn_angle_deg": 45,
+        "forward_distance": 10,
+        "vertical_movement": -3,
+        "notes": "Obstacle ahead; safer path is left with required altitude gain."
+      }
+    },
+    "drone_state": {
+      "x": 6481.00634765625,
+      "y": -4180.46142578125,
+      "z": -4.722650051116943,
+      "pitch": 0.1937040692348147,
+      "roll": 0.057665093826910395,
+      "yaw": 2.4050686419787217
+    },
+    "sensor_data": {
+      "depth_summary": {
+        "front": 17.291255950927734,
+        "left": 12.640118598937988,
+        "topdown": 6.379005432128906,
+        "right": 9.02487850189209,
+        "back": 8.098255157470703
+      }
+    }
+  },
+  {
+    "timestamp": "2026-03-18 16:26:19",
+    "prompt": {
+      "image": "<base64 placeholder>",
+      "depth_summary": {
+        "front": 11.008780479431152,
+        "left": 8.005189895629883,
+        "topdown": 3.7354698181152344,
+        "right": 7.3295440673828125,
+        "back": 6.71484375
+      },
+      "drone_state": {
+        "x": 6481.39,
+        "y": -4181.44,
+        "z": -4.6,
+        "pitch": 0.03,
+        "roll": -0.06,
+        "yaw": 2.42
+      },
+      "task_context": {
+        "task_id": 3,
+        "task_kind": "vln",
+        "instruction": "Go to Right front red building",
+        "start_rot_deg": [
+          0.0,
+          0.0,
+          180.0
+        ],
+        "start_yaw_deg": 180.0,
+        "start_pos_m": [
+          6501.50258149,
+          -4199.694137529999,
+          -1.31595741
+        ]
+      }
+    },
+    "llm_output": {
+      "done": true,
+      "message": "Mission completed.",
+      "target_location_direction": "front-left"
+    },
+    "parsed_action": {
+      "type": "done",
+      "message": "Mission completed.",
+      "target_location_direction": "front-left",
+      "raw": {
+        "done": true,
+        "message": "Mission completed.",
+        "target_location_direction": "front-left"
+      }
+    },
+    "drone_state": {
+      "x": 6481.388671875,
+      "y": -4181.43798828125,
+      "z": -4.604381084442139,
+      "pitch": 0.026695750907078177,
+      "roll": -0.05984301290464615,
+      "yaw": 2.4243472541157023
+    },
+    "sensor_data": {
+      "depth_summary": {
+        "front": 11.008780479431152,
+        "left": 8.005189895629883,
+        "topdown": 3.7354698181152344,
+        "right": 7.3295440673828125,
+        "back": 6.71484375
+      }
+    }
+  }
+]

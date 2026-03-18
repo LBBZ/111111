@@ -1,27 +1,28 @@
 
 ============================================================
-Timestamp: 2026-03-16 17:40:13
+Timestamp: 2026-03-18 16:56:07
 
 --- Prompt JSON ---
 {
     "image": "<base64 placeholder>",
     "depth_summary": {
-        "front": 1.467736005783081,
-        "left": 1.8103255033493042,
-        "topdown": 1.0090765953063965,
-        "right": 2.1701266765594482,
-        "back": 2.9517645835876465
+        "front": 0.3769879937171936,
+        "left": 0.3769879937171936,
+        "topdown": null,
+        "right": 0.3769879937171936,
+        "back": 0.379852294921875
     },
     "drone_state": {
-        "x": 6494.46,
-        "y": -4198.73,
-        "z": -3.3,
-        "pitch": 0.04,
-        "roll": -0.0,
-        "yaw": -3.08
+        "x": 6501.5,
+        "y": -4199.69,
+        "z": -0.35,
+        "pitch": 0.0,
+        "roll": 0.0,
+        "yaw": -3.14
     },
     "task_context": {
         "task_id": 1,
+        "task_kind": "vln",
         "instruction": "Under the red tree",
         "start_rot_deg": [
             0.0,
@@ -49,9 +50,9 @@ Timestamp: 2026-03-16 17:40:13
     "confidence": 0.88,
     "target_direction": "front-left",
     "turn_direction": "left",
-    "turn_angle_deg": 18.0,
-    "forward_distance": 2.5,
-    "vertical_movement": 0.2,
+    "turn_angle_deg": 90,
+    "forward_distance": 10,
+    "vertical_movement": 3,
     "notes": "Building visible ahead-left; forward path mostly clear."
 }
 
@@ -60,10 +61,10 @@ Timestamp: 2026-03-16 17:40:13
     "type": "motion",
     "turn": {
         "direction": "left",
-        "angle_deg": 18.0
+        "angle_deg": 90.0
     },
-    "forward": 2.5,
-    "vertical": 0.2,
+    "forward": 10.0,
+    "vertical": 3.0,
     "raw": {
         "scores": {
             "front": 0.82,
@@ -75,56 +76,57 @@ Timestamp: 2026-03-16 17:40:13
         "confidence": 0.88,
         "target_direction": "front-left",
         "turn_direction": "left",
-        "turn_angle_deg": 18.0,
-        "forward_distance": 2.5,
-        "vertical_movement": 0.2,
+        "turn_angle_deg": 90,
+        "forward_distance": 10,
+        "vertical_movement": 3,
         "notes": "Building visible ahead-left; forward path mostly clear."
     }
 }
 
 --- Drone State ---
 {
-    "x": 6492.009765625,
-    "y": -4198.10107421875,
-    "z": -3.5389535427093506,
-    "pitch": -0.01687645333950641,
-    "roll": -0.0019419564596886226,
-    "yaw": 2.883765767093845
+    "x": 6501.0185546875,
+    "y": -4187.9228515625,
+    "z": -3.5418500900268555,
+    "pitch": 0.11921934459546735,
+    "roll": 0.005564093266703709,
+    "yaw": 1.609039376146054
 }
 
 --- Depth Summary ---
 {
-    "front": 1.467736005783081,
-    "left": 1.8103255033493042,
-    "topdown": 1.0090765953063965,
-    "right": 2.1701266765594482,
-    "back": 2.9517645835876465
+    "front": 0.3769879937171936,
+    "left": 0.3769879937171936,
+    "topdown": null,
+    "right": 0.3769879937171936,
+    "back": 0.379852294921875
 }
 ============================================================
 
 ============================================================
-Timestamp: 2026-03-16 17:40:25
+Timestamp: 2026-03-18 16:56:26
 
 --- Prompt JSON ---
 {
     "image": "<base64 placeholder>",
     "depth_summary": {
-        "front": 5.881246566772461,
-        "left": 5.563638210296631,
-        "topdown": 2.822277307510376,
-        "right": 4.534644603729248,
-        "back": 3.7563421726226807
+        "front": 7.296191692352295,
+        "left": 6.104198455810547,
+        "topdown": 2.7481677532196045,
+        "right": 5.957215309143066,
+        "back": 5.4398193359375
     },
     "drone_state": {
-        "x": 6492.0,
-        "y": -4198.1,
-        "z": -3.54,
+        "x": 6499.8,
+        "y": -4187.4,
+        "z": -3.42,
         "pitch": 0.0,
         "roll": 0.0,
-        "yaw": 2.88
+        "yaw": 1.61
     },
     "task_context": {
         "task_id": 1,
+        "task_kind": "vln",
         "instruction": "Under the red tree",
         "start_rot_deg": [
             0.0,
@@ -152,9 +154,9 @@ Timestamp: 2026-03-16 17:40:25
     "confidence": 0.92,
     "target_direction": "front-right",
     "turn_direction": "right",
-    "turn_angle_deg": 25.0,
-    "forward_distance": 3.0,
-    "vertical_movement": 0.0,
+    "turn_angle_deg": 90,
+    "forward_distance": 10,
+    "vertical_movement": 3,
     "notes": "Right corridor is open; building visible on the right side."
 }
 
@@ -163,10 +165,10 @@ Timestamp: 2026-03-16 17:40:25
     "type": "motion",
     "turn": {
         "direction": "right",
-        "angle_deg": 25.0
+        "angle_deg": 90.0
     },
-    "forward": 3.0,
-    "vertical": 0.0,
+    "forward": 10.0,
+    "vertical": 3.0,
     "raw": {
         "scores": {
             "front": 0.3,
@@ -178,56 +180,57 @@ Timestamp: 2026-03-16 17:40:25
         "confidence": 0.92,
         "target_direction": "front-right",
         "turn_direction": "right",
-        "turn_angle_deg": 25.0,
-        "forward_distance": 3.0,
-        "vertical_movement": 0.0,
+        "turn_angle_deg": 90,
+        "forward_distance": 10,
+        "vertical_movement": 3,
         "notes": "Right corridor is open; building visible on the right side."
     }
 }
 
 --- Drone State ---
 {
-    "x": 6489.05517578125,
-    "y": -4198.57373046875,
-    "z": -3.6183969974517822,
-    "pitch": 0.12279815161652365,
-    "roll": -0.0009920984505838721,
-    "yaw": -2.9907530442840535
+    "x": 6488.36083984375,
+    "y": -4187.9384765625,
+    "z": -6.615636348724365,
+    "pitch": 0.24908567033985304,
+    "roll": 0.0038553627851567354,
+    "yaw": -3.085941382545954
 }
 
 --- Depth Summary ---
 {
-    "front": 5.881246566772461,
-    "left": 5.563638210296631,
-    "topdown": 2.822277307510376,
-    "right": 4.534644603729248,
-    "back": 3.7563421726226807
+    "front": 7.296191692352295,
+    "left": 6.104198455810547,
+    "topdown": 2.7481677532196045,
+    "right": 5.957215309143066,
+    "back": 5.4398193359375
 }
 ============================================================
 
 ============================================================
-Timestamp: 2026-03-16 17:40:40
+Timestamp: 2026-03-18 16:57:04
 
 --- Prompt JSON ---
 {
     "image": "<base64 placeholder>",
     "depth_summary": {
-        "front": 8.417464256286621,
-        "left": 5.989413261413574,
-        "topdown": 2.816349506378174,
-        "right": 5.450188159942627,
-        "back": 5.134860038757324
+        "front": 15.385376930236816,
+        "left": 11.074246406555176,
+        "topdown": 5.533496856689453,
+        "right": 8.946784973144531,
+        "back": 8.012334823608398
     },
     "drone_state": {
-        "x": 6488.94,
-        "y": -4198.6,
-        "z": -3.62,
-        "pitch": 0.0,
+        "x": 6489.74,
+        "y": -4187.94,
+        "z": -6.49,
+        "pitch": -0.0,
         "roll": 0.0,
-        "yaw": -2.99
+        "yaw": -3.09
     },
     "task_context": {
         "task_id": 1,
+        "task_kind": "vln",
         "instruction": "Under the red tree",
         "start_rot_deg": [
             0.0,
@@ -255,9 +258,9 @@ Timestamp: 2026-03-16 17:40:40
     "confidence": 0.8,
     "target_direction": "left",
     "turn_direction": "left",
-    "turn_angle_deg": 30.0,
-    "forward_distance": 1.5,
-    "vertical_movement": 0.8,
+    "turn_angle_deg": 45,
+    "forward_distance": 10,
+    "vertical_movement": -3,
     "notes": "Obstacle ahead; safer path is left with required altitude gain."
 }
 
@@ -266,10 +269,10 @@ Timestamp: 2026-03-16 17:40:40
     "type": "motion",
     "turn": {
         "direction": "left",
-        "angle_deg": 30.0
+        "angle_deg": 45.0
     },
-    "forward": 1.5,
-    "vertical": 0.8,
+    "forward": 10.0,
+    "vertical": -3.0,
     "raw": {
         "scores": {
             "front": 0.1,
@@ -281,56 +284,57 @@ Timestamp: 2026-03-16 17:40:40
         "confidence": 0.8,
         "target_direction": "left",
         "turn_direction": "left",
-        "turn_angle_deg": 30.0,
-        "forward_distance": 1.5,
-        "vertical_movement": 0.8,
+        "turn_angle_deg": 45,
+        "forward_distance": 10,
+        "vertical_movement": -3,
         "notes": "Obstacle ahead; safer path is left with required altitude gain."
     }
 }
 
 --- Drone State ---
 {
-    "x": 6487.541015625,
-    "y": -4198.06689453125,
-    "z": -4.376597881317139,
-    "pitch": -0.009193569971459143,
-    "roll": 0.0028684414312400114,
-    "yaw": 2.8084656277070486
+    "x": 6480.9736328125,
+    "y": -4180.34033203125,
+    "z": -3.5428125858306885,
+    "pitch": 0.20865422194678504,
+    "roll": 0.06131438020614829,
+    "yaw": 2.4062751155229116
 }
 
 --- Depth Summary ---
 {
-    "front": 8.417464256286621,
-    "left": 5.989413261413574,
-    "topdown": 2.816349506378174,
-    "right": 5.450188159942627,
-    "back": 5.134860038757324
+    "front": 15.385376930236816,
+    "left": 11.074246406555176,
+    "topdown": 5.533496856689453,
+    "right": 8.946784973144531,
+    "back": 8.012334823608398
 }
 ============================================================
 
 ============================================================
-Timestamp: 2026-03-16 17:40:48
+Timestamp: 2026-03-18 16:57:12
 
 --- Prompt JSON ---
 {
     "image": "<base64 placeholder>",
     "depth_summary": {
-        "front": 7.489518642425537,
-        "left": 7.723456382751465,
-        "topdown": 3.6609389781951904,
-        "right": 7.714505672454834,
-        "back": 6.928668022155762
+        "front": 8.665358543395996,
+        "left": 5.893118858337402,
+        "topdown": 2.6105258464813232,
+        "right": 5.250463008880615,
+        "back": 4.775735855102539
     },
     "drone_state": {
-        "x": 6487.56,
-        "y": -4198.09,
-        "z": -4.38,
-        "pitch": 0.0,
-        "roll": -0.0,
-        "yaw": 2.81
+        "x": 6481.42,
+        "y": -4181.42,
+        "z": -3.42,
+        "pitch": 0.04,
+        "roll": -0.07,
+        "yaw": 2.43
     },
     "task_context": {
         "task_id": 1,
+        "task_kind": "vln",
         "instruction": "Under the red tree",
         "start_rot_deg": [
             0.0,
@@ -367,20 +371,20 @@ Timestamp: 2026-03-16 17:40:48
 
 --- Drone State ---
 {
-    "x": 6487.56201171875,
-    "y": -4198.08837890625,
-    "z": -4.376482963562012,
-    "pitch": 4.251576500172875e-06,
-    "roll": -1.462090929979976e-07,
-    "yaw": 2.808425242610635
+    "x": 6481.421875,
+    "y": -4181.42041015625,
+    "z": -3.420992612838745,
+    "pitch": 0.036444806607410084,
+    "roll": -0.07029392741817102,
+    "yaw": 2.430563780322058
 }
 
 --- Depth Summary ---
 {
-    "front": 7.489518642425537,
-    "left": 7.723456382751465,
-    "topdown": 3.6609389781951904,
-    "right": 7.714505672454834,
-    "back": 6.928668022155762
+    "front": 8.665358543395996,
+    "left": 5.893118858337402,
+    "topdown": 2.6105258464813232,
+    "right": 5.250463008880615,
+    "back": 4.775735855102539
 }
 ============================================================

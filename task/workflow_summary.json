@@ -10,6 +10,26 @@
   },
   "tasks": [
     {
+      "task_id": 1,
+      "task_kind": "vln",
+      "ok": true,
+      "end_reason": "done",
+      "steps": 4,
+      "error": null,
+      "metrics": {
+        "task_id": 1,
+        "success": 0,
+        "ne": 89.24551572494441,
+        "spl": 0.0,
+        "sr": 0.0,
+        "path_length_pred": 37.16750982412273,
+        "path_length_gt": 101.38511715515918,
+        "steps": 4,
+        "end_reason": "done"
+      },
+      "output_dir": "task\\1"
+    },
+    {
       "task_id": 2,
       "task_kind": "vln",
       "ok": true,
@@ -19,15 +39,35 @@
       "metrics": {
         "task_id": 2,
         "success": 0,
-        "ne": 73.0725793665928,
+        "ne": 49.01108166662513,
         "spl": 0.0,
         "sr": 0.0,
-        "path_length_pred": 33.22503876886113,
+        "path_length_pred": 37.00340515500871,
         "path_length_gt": 71.20848803553831,
         "steps": 4,
         "end_reason": "done"
       },
       "output_dir": "task\\2"
+    },
+    {
+      "task_id": 3,
+      "task_kind": "vln",
+      "ok": true,
+      "end_reason": "done",
+      "steps": 4,
+      "error": null,
+      "metrics": {
+        "task_id": 3,
+        "success": 0,
+        "ne": 54.00956010290108,
+        "spl": 0.0,
+        "sr": 0.0,
+        "path_length_pred": 37.121187198489075,
+        "path_length_gt": 68.54393575454525,
+        "steps": 4,
+        "end_reason": "done"
+      },
+      "output_dir": "task\\3"
     }
   ],
   "all_ok": true

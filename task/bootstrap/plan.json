@@ -14,7 +14,7 @@
       "turn_direction": "none",
       "turn_angle_deg": 0.0,
       "forward_distance": 0.0,
-      "vertical_movement": 1.0,
+      "vertical_movement": 3,
       "notes": "Bootstrap warm-up: move up once."
     },
     "parsed_action": {
@@ -24,7 +24,7 @@
         "angle_deg": 0.0
       },
       "forward": 0.0,
-      "vertical": 1.0,
+      "vertical": 3.0,
       "raw": {
         "scores": {
           "front": 0.1,
@@ -38,7 +38,7 @@
         "turn_direction": "none",
         "turn_angle_deg": 0.0,
         "forward_distance": 0.0,
-        "vertical_movement": 1.0,
+        "vertical_movement": 3,
         "notes": "Bootstrap warm-up: move up once."
       }
     },
@@ -46,10 +46,10 @@
     "drone_state_after": {
       "x": 6501.50244140625,
       "y": -4199.6943359375,
-      "z": -1.3128612041473389,
-      "pitch": -5.942076987823874e-09,
-      "roll": 1.2570548188583467e-08,
-      "yaw": 3.1415926432801093
+      "z": -3.438429594039917,
+      "pitch": 0.0,
+      "roll": 0.0,
+      "yaw": -3.1415924787441973
     }
   },
   {
@@ -73,10 +73,10 @@
     "drone_state_after": {
       "x": 6501.50244140625,
       "y": -4199.6943359375,
-      "z": -1.3129030466079712,
-      "pitch": -1.424058220156317e-09,
-      "roll": 2.1629224975822844e-09,
-      "yaw": -3.141592639289345
+      "z": -3.435084581375122,
+      "pitch": 0.0,
+      "roll": 0.0,
+      "yaw": -3.1415924787441973
     }
   }
 ]

@@ -53,24 +53,29 @@ class MotionExecutor:
         if parsed_action["type"] == "done":
             return "done"
 
+        vertical = parsed_action["vertical"]
+        if vertical > 0:
+            self.motion.move_up(abs(vertical))
+            time.sleep(1)
+        elif vertical < 0:
+            self.motion.move_down(abs(vertical))
+            time.sleep(1)
+
         turn = parsed_action["turn"]
         direction = turn["direction"]
         angle = turn["angle_deg"]
 
         if direction == "left" and angle > 0:
             self.motion.turn_left(angle)
+            time.sleep(1)
         elif direction == "right" and angle > 0:
             self.motion.turn_right(angle)
+            time.sleep(1)
 
         forward = parsed_action["forward"]
         if forward > 0:
             self.motion.move_forward(forward)
-
-        vertical = parsed_action["vertical"]
-        if vertical > 0:
-            self.motion.move_up(abs(vertical))
-        elif vertical < 0:
-            self.motion.move_down(abs(vertical))
+            time.sleep(1)
 
         return "ok"
 

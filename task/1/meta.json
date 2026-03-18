@@ -1,10 +1,12 @@
 {
   "task_id": 1,
+  "task_kind": "vln",
   "dataset_root": "Datasets\\vln",
-  "started_at": "2026-03-16 17:39:58",
-  "finished_at": "2026-03-16 17:40:48",
-  "controller_mode": "online_airsim_mock_llm",
+  "started_at": "2026-03-18 16:55:47",
+  "finished_at": "2026-03-18 16:57:13",
   "script": "DroneController/run_vln_workflow_eval.py",
+  "source_task_id": null,
+  "controller_mode": "online_airsim_mock_llm",
   "dataset_input_priority": "json(episode_index.json+groups.json) > start_loc.txt",
   "dataset_coord_transform": "use preprocessed start_pos_m from vln_metrics (cm->m, z sign handled there)",
   "episode_init": {
@@ -29,10 +31,10 @@
     "applied_state": {
       "x": 6501.50244140625,
       "y": -4199.6943359375,
-      "z": -1.3162857294082642,
-      "pitch": -0.0834594204704237,
-      "roll": -0.039228161872886774,
-      "yaw": -3.13997567759294
+      "z": -1.3008731603622437,
+      "pitch": 0.0,
+      "roll": 0.0,
+      "yaw": 3.141592653589793
     }
   }
 }

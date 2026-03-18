@@ -24,15 +24,16 @@ class DroneMotion:
         pitch, roll, yaw = airsim.to_eularian_angles(s.kinematics_estimated.orientation)
         return pitch, roll, yaw
 
-    def _move_to_world_target(self, tx, ty, tz, timeout_s=20.0, arrive_dist_m=0.10):
+    def _move_to_world_target(self, tx, ty, tz, timeout_s=20.0):
         # Use AirSim position API directly; tx/ty/tz are already world-frame targets.
-        self.client.simPause(False)
+        _, _, yaw = self.get_yaw()
         self.client.moveToPositionAsync(
             float(tx),
             float(ty),
             float(tz),
             float(self.base_speed),
             timeout_sec=float(timeout_s),
+            yaw_mode=airsim.YawMode(is_rate=False, yaw_or_rate=math.degrees(yaw)),
             vehicle_name=self.vehicle_name,
         ).join()
 
@@ -77,6 +78,10 @@ class DroneMotion:
 
     def initialize_pose(self, x, y, z, yaw_deg=0.0, pitch_deg=0.0, roll_deg=0.0):
         """Initialize vehicle pose in NED meters and keep simulator running for follow-up steps."""
+        self.client.reset()
+        self.client.enableApiControl(True)
+        self.client.armDisarm(True)
+
         v3d = airsim.Vector3r(float(x), float(y), float(z))
         qua = airsim.to_quaternion(
             math.radians(float(pitch_deg)),
@@ -98,11 +103,13 @@ class DroneMotion:
         p = state.kinematics_estimated.position
 
         self.client.simPause(False)
+        _, _, yaw = self.get_yaw()
         self.client.moveToPositionAsync(
             p.x_val,
             p.y_val,
             p.z_val,
             1,
+            yaw_mode=airsim.YawMode(is_rate=False, yaw_or_rate=math.degrees(yaw)),
             vehicle_name=self.vehicle_name
         ).join()
 
