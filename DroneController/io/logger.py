@@ -29,8 +29,21 @@ class Logger:
             Path(self.txt_file).write_text("", encoding="utf-8")
             Path(self.json_file).write_text("[]", encoding="utf-8")
 
+    @staticmethod
+    def _now() -> str:
+        return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    def log_step(self, step: int, target_pos: dict, task_id=None) -> None:
+        line = (
+            f"[step={int(step)}] target=({float(target_pos.get('x', 0.0)):.2f},"
+            f" {float(target_pos.get('y', 0.0)):.2f}, {float(target_pos.get('z', 0.0)):.2f})"
+        )
+        if task_id is not None:
+            line = f"[task={task_id}] " + line
+        print(Color.CYAN + line + Color.RESET)
+
     def log(self, entry: dict):
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        timestamp = self._now()
         prompt_dict = {}
 
         with open(self.txt_file, "a", encoding="utf-8") as f:

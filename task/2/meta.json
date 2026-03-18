@@ -2,8 +2,8 @@
   "task_id": 2,
   "task_kind": "vln",
   "dataset_root": "Datasets\\vln",
-  "started_at": "2026-03-18 14:59:53",
-  "finished_at": "2026-03-18 15:00:27",
+  "started_at": "2026-03-18 15:32:48",
+  "finished_at": "2026-03-18 15:33:22",
   "script": "DroneController/run_vln_workflow_eval.py",
   "source_task_id": null,
   "controller_mode": "online_airsim_mock_llm",
@@ -31,11 +31,11 @@
     "applied_state": {
       "x": 6501.50244140625,
       "y": -4199.6943359375,
-      "z": -1.3186701536178589,
-      "pitch": -6.734516277946999e-10,
-      "roll": -8.086455333646221e-12,
-      "yaw": -3.141592652945302
+      "z": -1.3196920156478882,
+      "pitch": -3.1428588618973632e-09,
+      "roll": -1.711122910308562e-09,
+      "yaw": -3.14159265341306
     }
   },
-  "error": "[motion] move_to_target timeout target=(6499.105,-4198.870,-2.265) current=(6499.042,-4198.847,-2.125) dist=0.155 arrive_dist_m=0.100"
+  "error": "[motion] move_to_target timeout target=(6499.105,-4198.874,-2.267) current=(6499.048,-4198.845,-2.123) dist=0.157 arrive_dist_m=0.100"
 }

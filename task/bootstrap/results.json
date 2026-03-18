@@ -1,7 +1,0 @@
-{
-  "task_kind": "bootstrap_simple",
-  "source_task_id": 2,
-  "steps": 2,
-  "end_reason": "done",
-  "done": true
-}

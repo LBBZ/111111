@@ -5,7 +5,7 @@
     "task_id": "bootstrap",
     "ok": false,
     "end_reason": "error",
-    "error": "[motion] move_to_target timeout target=(6501.502,-4199.694,-2.313) current=(6501.502,-4199.694,-2.173) dist=0.140 arrive_dist_m=0.100",
+    "error": "[motion] move_to_target timeout target=(6501.502,-4199.694,-2.313) current=(6501.502,-4199.694,-2.172) dist=0.141 arrive_dist_m=0.100",
     "output_dir": "task\\bootstrap"
   },
   "tasks": [
@@ -15,7 +15,7 @@
       "ok": false,
       "end_reason": "error",
       "steps": 0,
-      "error": "[motion] move_to_target timeout target=(6499.105,-4198.870,-2.265) current=(6499.042,-4198.847,-2.125) dist=0.155 arrive_dist_m=0.100",
+      "error": "[motion] move_to_target timeout target=(6499.105,-4198.874,-2.267) current=(6499.048,-4198.845,-2.123) dist=0.157 arrive_dist_m=0.100",
       "metrics": {},
       "output_dir": "task\\2"
     }

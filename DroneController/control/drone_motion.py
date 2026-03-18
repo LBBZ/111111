@@ -26,7 +26,6 @@ class DroneMotion:
 
     def _move_to_world_target(self, tx, ty, tz, timeout_s=20.0, arrive_dist_m=0.10):
         t0 = time.time()
-        print(f"[motion] move_to_target:start target=({tx:.3f},{ty:.3f},{tz:.3f})")
         while True:
             # Guard against simulator paused state between tasks.
             self.client.simPause(False)
@@ -36,7 +35,6 @@ class DroneMotion:
             if dist <= float(arrive_dist_m):
                 # Wait briefly to ensure hover is stable before returning.
                 time.sleep(0.1)
-                print(f"[motion] move_to_target:arrived dist={dist:.4f} pos=({x:.3f},{y:.3f},{z:.3f})")
                 break
             if time.time() - t0 > float(timeout_s):
                 raise TimeoutError(
@@ -98,9 +96,6 @@ class DroneMotion:
             math.radians(float(yaw_deg)),
         )
         pose = airsim.Pose(v3d, qua)
-        print(f"初始化位置: \n{v3d}")
-        print(f"初始化朝向: \n{qua}")
-
         self.client.simPause(True)
         self.client.simSetVehiclePose(
             pose,
@@ -110,7 +105,6 @@ class DroneMotion:
         self.client.simPause(False)
         time.sleep(0.05)
         self.client.simPause(True)
-        print("等待姿态稳定...")
         # 同步控制器目标
         state = self.client.getMultirotorState(vehicle_name=self.vehicle_name)
         p = state.kinematics_estimated.position
@@ -123,8 +117,6 @@ class DroneMotion:
             1,
             vehicle_name=self.vehicle_name
         ).join()
-        print("姿态稳定完毕, 进入悬停状态")
-        print(f"当前实际位置: {self.get_pos()}")
 
     def _normalize_angle(self, a):
         while a > math.pi:
@@ -134,10 +126,8 @@ class DroneMotion:
         return a
 
     def _turn_to_yaw(self, target_yaw_rad, timeout_s=20.0):
-        print(f"[motion] turn_to_yaw:start target={target_yaw_rad:.6f}")
         self.client.simPause(False)
         target_deg = math.degrees(self._normalize_angle(target_yaw_rad))
-        print(f"[motion] turn_to_yaw:rotateToYawAsync target_deg={target_deg:.3f}")
         self.client.rotateToYawAsync(target_deg, timeout_sec=float(timeout_s), vehicle_name=self.vehicle_name).join()
 
         # Poll for convergence because some simulator states return from async before yaw settles.
@@ -156,7 +146,6 @@ class DroneMotion:
 
         if abs(err) >= math.radians(3):
             # Fallback: force-set yaw directly if rotate API is unavailable/stalled.
-            print("[motion] turn_to_yaw:fallback simSetVehiclePose")
             x, y, z = self.get_pos()
             q = airsim.to_quaternion(0.0, 0.0, self._normalize_angle(target_yaw_rad))
             self.client.simSetVehiclePose(
@@ -171,7 +160,6 @@ class DroneMotion:
             raise TimeoutError(
                 f"[motion] turn_to_yaw timeout target={target_yaw_rad:.6f} current={yaw:.6f} err={err:.6f}"
             )
-        print(f"[motion] turn_to_yaw:arrived yaw={yaw:.6f} err={err:.6f}")
 
     def turn_left(self, angle_deg):
         _, _, curr = self.get_yaw()

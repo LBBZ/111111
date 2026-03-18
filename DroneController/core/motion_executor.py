@@ -1,5 +1,6 @@
 import time
 import json
+import math
 
 from DroneController.control.drone_motion import DroneMotion
 from DroneController.infra.airsim_client import AirSimClientSingleton
@@ -55,39 +56,49 @@ class MotionExecutor:
         turn = parsed_action["turn"]
         direction = turn["direction"]
         angle = turn["angle_deg"]
-        print(f"[execute] turn direction={direction} angle_deg={angle}")
 
         if direction == "left" and angle > 0:
-            t0 = time.time()
-            print("[execute] turn_left:start")
             self.motion.turn_left(angle)
-            print(f"[execute] turn_left:ok dt={int((time.time() - t0) * 1000)}ms")
         elif direction == "right" and angle > 0:
-            t0 = time.time()
-            print("[execute] turn_right:start")
             self.motion.turn_right(angle)
-            print(f"[execute] turn_right:ok dt={int((time.time() - t0) * 1000)}ms")
 
         forward = parsed_action["forward"]
         if forward > 0:
-            t0 = time.time()
-            print(f"[execute] move_forward:start d={forward}")
             self.motion.move_forward(forward)
-            print(f"[execute] move_forward:ok dt={int((time.time() - t0) * 1000)}ms")
 
         vertical = parsed_action["vertical"]
         if vertical > 0:
-            t0 = time.time()
-            print(f"[execute] move_up:start d={abs(vertical)}")
             self.motion.move_up(abs(vertical))
-            print(f"[execute] move_up:ok dt={int((time.time() - t0) * 1000)}ms")
         elif vertical < 0:
-            t0 = time.time()
-            print(f"[execute] move_down:start d={abs(vertical)}")
             self.motion.move_down(abs(vertical))
-            print(f"[execute] move_down:ok dt={int((time.time() - t0) * 1000)}ms")
 
         return "ok"
+
+    @staticmethod
+    def estimate_target_position(current_state: dict, parsed_action: dict):
+        x = float(current_state.get("x", 0.0))
+        y = float(current_state.get("y", 0.0))
+        z = float(current_state.get("z", 0.0))
+        yaw_rad = float(current_state.get("yaw", 0.0))
+
+        if parsed_action.get("type") != "motion":
+            return {"x": x, "y": y, "z": z}
+
+        turn = parsed_action.get("turn", {})
+        direction = turn.get("direction", "none")
+        angle_rad = math.radians(float(turn.get("angle_deg", 0.0)))
+        if direction == "left":
+            yaw_rad -= angle_rad
+        elif direction == "right":
+            yaw_rad += angle_rad
+
+        forward = float(parsed_action.get("forward", 0.0))
+        vertical = float(parsed_action.get("vertical", 0.0))
+        return {
+            "x": x + forward * math.cos(yaw_rad),
+            "y": y + forward * math.sin(yaw_rad),
+            "z": z - vertical,
+        }
 
     def get_sensor_data(self):
         imgs = self.camera.capture_all()

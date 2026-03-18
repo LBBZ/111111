@@ -17,7 +17,6 @@
   - plan.json：每步决策与动作明细
   - results.json：评测指标（SR/NE/SPL等）与任务总结
   - meta.json：任务元信息（起点、指令、时间戳等）
-  - lifecycle.jsonl：任务生命周期阶段日志
   - step_visual/：每步采集的图像与深度图（如有）
 
 ## 4. bootstrap/  子目录

@@ -45,9 +45,6 @@ class TaskProcessor:
             meta["dataset_coord_transform"] = "use preprocessed start_pos_m from vln_metrics (cm->m, z sign handled there)"
         return meta
 
-    def _append_lifecycle_event(self, writer: WorkflowArtifactWriter, event: Dict[str, Any]) -> None:
-        writer.append_jsonl("lifecycle.jsonl", event)
-
     def run_one(self, spec: TaskSpec) -> TaskRunResult:
         output_dir = self._output_dir_for(spec)
         writer = WorkflowArtifactWriter(output_dir)
@@ -57,17 +54,7 @@ class TaskProcessor:
 
         try:
             load_idx = int(spec.source_task_id if spec.task_kind == "bootstrap_simple" else spec.task_id)
-            self._append_lifecycle_event(writer, {"stage": "load_gt:start", "idx": load_idx, "time": writer.now_str()})
             gt = vln_metrics.load_gt_episode(self.dataset_root, load_idx)
-            self._append_lifecycle_event(
-                writer,
-                {
-                    "stage": "load_gt:ok",
-                    "idx": int(gt.idx),
-                    "instruction": gt.instruction,
-                    "time": writer.now_str(),
-                },
-            )
 
             controller = DroneController(output_dir=str(output_dir), overwrite_logs=True)
             start_pos_m = tuple(map(float, gt.start_pos_m))
@@ -82,7 +69,6 @@ class TaskProcessor:
                 "applied_state": init_state,
             }
             writer.write_json("meta.json", meta)
-            self._append_lifecycle_event(writer, {"stage": "initialize:ok", "time": writer.now_str()})
 
             task_context: Dict[str, Any]
             max_steps = self.max_steps
@@ -107,26 +93,14 @@ class TaskProcessor:
 
             def on_step_end(**kwargs):
                 step_count = int(kwargs["step_count"])
-                stage = str(kwargs.get("stage", "pre_llm"))
                 writer.save_step_visual_async(
                     step_idx=step_count,
                     sensor_data=kwargs["sensor_data"],
                     camera=controller.executor.camera,
                 )
-                self._append_lifecycle_event(
-                    writer,
-                    {
-                        "stage": "step:snapshot_saved",
-                        "phase": stage,
-                        "step": step_count,
-                        "time": writer.now_str(),
-                    },
-                )
 
-            self._append_lifecycle_event(writer, {"stage": "run:start", "max_steps": int(max_steps), "time": writer.now_str()})
             run_artifacts = controller.run(max_steps=max_steps, on_step_end=on_step_end, task_context=task_context)
             writer.wait_for_pending()
-            self._append_lifecycle_event(writer, {"stage": "run:ok", "time": writer.now_str()})
 
             pred_positions = run_artifacts.get("trajectory", [])
             plan_steps = run_artifacts.get("plan_steps", [])
@@ -199,7 +173,6 @@ class TaskProcessor:
             "plan.json": "每步决策与动作明细",
             "traj.csv": "轨迹点（step,x,y,z）",
             "results.json": "任务结果指标与终止原因",
-            "lifecycle.jsonl": "生命周期阶段日志（可用于问题排查）",
             "drone_log.txt": "控制器详细文本日志",
             "drone_log.json": "控制器结构化日志",
             "step_visual/": "每步图像与深度图快照",
