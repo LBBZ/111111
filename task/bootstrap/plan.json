@@ -1,0 +1,82 @@
+[
+  {
+    "step": 1,
+    "raw_model_output": {
+      "scores": {
+        "front": 0.1,
+        "left": 0.1,
+        "right": 0.1,
+        "back": 0.1,
+        "down": 0.9
+      },
+      "confidence": 1,
+      "target_direction": "up",
+      "turn_direction": "none",
+      "turn_angle_deg": 0.0,
+      "forward_distance": 0.0,
+      "vertical_movement": 3,
+      "notes": "Bootstrap warm-up: move up once."
+    },
+    "parsed_action": {
+      "type": "motion",
+      "turn": {
+        "direction": "none",
+        "angle_deg": 0.0
+      },
+      "forward": 0.0,
+      "vertical": 3.0,
+      "raw": {
+        "scores": {
+          "front": 0.1,
+          "left": 0.1,
+          "right": 0.1,
+          "back": 0.1,
+          "down": 0.9
+        },
+        "confidence": 1,
+        "target_direction": "up",
+        "turn_direction": "none",
+        "turn_angle_deg": 0.0,
+        "forward_distance": 0.0,
+        "vertical_movement": 3,
+        "notes": "Bootstrap warm-up: move up once."
+      }
+    },
+    "execute_status": "ok",
+    "drone_state_after": {
+      "x": 6501.50244140625,
+      "y": -4199.6943359375,
+      "z": -3.438429594039917,
+      "pitch": 0.0,
+      "roll": 0.0,
+      "yaw": -3.1415924787441973
+    }
+  },
+  {
+    "step": 2,
+    "raw_model_output": {
+      "done": true,
+      "message": "Bootstrap completed.",
+      "target_location_direction": "up"
+    },
+    "parsed_action": {
+      "type": "done",
+      "message": "Bootstrap completed.",
+      "target_location_direction": "up",
+      "raw": {
+        "done": true,
+        "message": "Bootstrap completed.",
+        "target_location_direction": "up"
+      }
+    },
+    "execute_status": "done",
+    "drone_state_after": {
+      "x": 6501.50244140625,
+      "y": -4199.6943359375,
+      "z": -3.435084581375122,
+      "pitch": 0.0,
+      "roll": 0.0,
+      "yaw": -3.1415924787441973
+    }
+  }
+]

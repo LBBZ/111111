@@ -1,0 +1,352 @@
+[
+  {
+    "timestamp": "2026-03-16 17:39:22",
+    "prompt": {
+      "image": "<base64 placeholder>",
+      "depth_summary": {
+        "front": 2.801778793334961,
+        "left": 2.995814800262451,
+        "topdown": 1.1103515625,
+        "right": 2.4712507724761963,
+        "back": 2.7879750728607178
+      },
+      "drone_state": {
+        "x": 6501.5,
+        "y": -4199.69,
+        "z": -2.22,
+        "pitch": -0.0,
+        "roll": 0.0,
+        "yaw": 3.14
+      },
+      "task_context": {
+        "task_id": 0,
+        "instruction": "Under the traffic light beads across the street",
+        "start_rot_deg": [
+          0.0,
+          0.0,
+          180.0
+        ],
+        "start_yaw_deg": 180.0,
+        "start_pos_m": [
+          6501.50258149,
+          -4199.694137529999,
+          -1.31595741
+        ]
+      }
+    },
+    "llm_output": {
+      "scores": {
+        "front": 0.82,
+        "left": 0.4,
+        "right": 0.1,
+        "back": 0.02,
+        "down": 0.15
+      },
+      "confidence": 0.88,
+      "target_direction": "front-left",
+      "turn_direction": "left",
+      "turn_angle_deg": 18.0,
+      "forward_distance": 2.5,
+      "vertical_movement": 0.2,
+      "notes": "Building visible ahead-left; forward path mostly clear."
+    },
+    "parsed_action": {
+      "type": "motion",
+      "turn": {
+        "direction": "left",
+        "angle_deg": 18.0
+      },
+      "forward": 2.5,
+      "vertical": 0.2,
+      "raw": {
+        "scores": {
+          "front": 0.82,
+          "left": 0.4,
+          "right": 0.1,
+          "back": 0.02,
+          "down": 0.15
+        },
+        "confidence": 0.88,
+        "target_direction": "front-left",
+        "turn_direction": "left",
+        "turn_angle_deg": 18.0,
+        "forward_distance": 2.5,
+        "vertical_movement": 0.2,
+        "notes": "Building visible ahead-left; forward path mostly clear."
+      }
+    },
+    "drone_state": {
+      "x": 6499.1162109375,
+      "y": -4198.91845703125,
+      "z": -2.4579482078552246,
+      "pitch": -0.01754620644093708,
+      "roll": -0.0027980828612396503,
+      "yaw": 2.815834928850219
+    },
+    "sensor_data": {
+      "depth_summary": {
+        "front": 2.801778793334961,
+        "left": 2.995814800262451,
+        "topdown": 1.1103515625,
+        "right": 2.4712507724761963,
+        "back": 2.7879750728607178
+      }
+    }
+  },
+  {
+    "timestamp": "2026-03-16 17:39:34",
+    "prompt": {
+      "image": "<base64 placeholder>",
+      "depth_summary": {
+        "front": 3.991908550262451,
+        "left": 3.88732647895813,
+        "topdown": 1.7595696449279785,
+        "right": 2.6417477130889893,
+        "back": 4.1357197761535645
+      },
+      "drone_state": {
+        "x": 6499.1,
+        "y": -4198.93,
+        "z": -2.46,
+        "pitch": 0.0,
+        "roll": 0.0,
+        "yaw": 2.82
+      },
+      "task_context": {
+        "task_id": 0,
+        "instruction": "Under the traffic light beads across the street",
+        "start_rot_deg": [
+          0.0,
+          0.0,
+          180.0
+        ],
+        "start_yaw_deg": 180.0,
+        "start_pos_m": [
+          6501.50258149,
+          -4199.694137529999,
+          -1.31595741
+        ]
+      }
+    },
+    "llm_output": {
+      "scores": {
+        "front": 0.3,
+        "left": 0.05,
+        "right": 0.75,
+        "back": 0.01,
+        "down": 0.2
+      },
+      "confidence": 0.92,
+      "target_direction": "front-right",
+      "turn_direction": "right",
+      "turn_angle_deg": 25.0,
+      "forward_distance": 3.0,
+      "vertical_movement": 0.0,
+      "notes": "Right corridor is open; building visible on the right side."
+    },
+    "parsed_action": {
+      "type": "motion",
+      "turn": {
+        "direction": "right",
+        "angle_deg": 25.0
+      },
+      "forward": 3.0,
+      "vertical": 0.0,
+      "raw": {
+        "scores": {
+          "front": 0.3,
+          "left": 0.05,
+          "right": 0.75,
+          "back": 0.01,
+          "down": 0.2
+        },
+        "confidence": 0.92,
+        "target_direction": "front-right",
+        "turn_direction": "right",
+        "turn_angle_deg": 25.0,
+        "forward_distance": 3.0,
+        "vertical_movement": 0.0,
+        "notes": "Right corridor is open; building visible on the right side."
+      }
+    },
+    "drone_state": {
+      "x": 6496.13671875,
+      "y": -4199.21826171875,
+      "z": -2.538384437561035,
+      "pitch": 0.12344067377539586,
+      "roll": -0.0020716627562638785,
+      "yaw": -3.0586391033366893
+    },
+    "sensor_data": {
+      "depth_summary": {
+        "front": 3.991908550262451,
+        "left": 3.88732647895813,
+        "topdown": 1.7595696449279785,
+        "right": 2.6417477130889893,
+        "back": 4.1357197761535645
+      }
+    }
+  },
+  {
+    "timestamp": "2026-03-16 17:39:49",
+    "prompt": {
+      "image": "<base64 placeholder>",
+      "depth_summary": {
+        "front": 5.938779354095459,
+        "left": 4.170397758483887,
+        "topdown": 1.7980707883834839,
+        "right": 3.5986647605895996,
+        "back": 3.4506092071533203
+      },
+      "drone_state": {
+        "x": 6496.03,
+        "y": -4199.23,
+        "z": -2.54,
+        "pitch": 0.0,
+        "roll": 0.0,
+        "yaw": -3.06
+      },
+      "task_context": {
+        "task_id": 0,
+        "instruction": "Under the traffic light beads across the street",
+        "start_rot_deg": [
+          0.0,
+          0.0,
+          180.0
+        ],
+        "start_yaw_deg": 180.0,
+        "start_pos_m": [
+          6501.50258149,
+          -4199.694137529999,
+          -1.31595741
+        ]
+      }
+    },
+    "llm_output": {
+      "scores": {
+        "front": 0.1,
+        "left": 0.7,
+        "right": 0.2,
+        "back": 0.05,
+        "down": 0.05
+      },
+      "confidence": 0.8,
+      "target_direction": "left",
+      "turn_direction": "left",
+      "turn_angle_deg": 30.0,
+      "forward_distance": 1.5,
+      "vertical_movement": 0.8,
+      "notes": "Obstacle ahead; safer path is left with required altitude gain."
+    },
+    "parsed_action": {
+      "type": "motion",
+      "turn": {
+        "direction": "left",
+        "angle_deg": 30.0
+      },
+      "forward": 1.5,
+      "vertical": 0.8,
+      "raw": {
+        "scores": {
+          "front": 0.1,
+          "left": 0.7,
+          "right": 0.2,
+          "back": 0.05,
+          "down": 0.05
+        },
+        "confidence": 0.8,
+        "target_direction": "left",
+        "turn_direction": "left",
+        "turn_angle_deg": 30.0,
+        "forward_distance": 1.5,
+        "vertical_movement": 0.8,
+        "notes": "Obstacle ahead; safer path is left with required altitude gain."
+      }
+    },
+    "drone_state": {
+      "x": 6494.64599609375,
+      "y": -4198.67578125,
+      "z": -3.2882027626037598,
+      "pitch": -0.009495760656376355,
+      "roll": -0.0026852469857678632,
+      "yaw": 2.7429980657012543
+    },
+    "sensor_data": {
+      "depth_summary": {
+        "front": 5.938779354095459,
+        "left": 4.170397758483887,
+        "topdown": 1.7980707883834839,
+        "right": 3.5986647605895996,
+        "back": 3.4506092071533203
+      }
+    }
+  },
+  {
+    "timestamp": "2026-03-16 17:39:58",
+    "prompt": {
+      "image": "<base64 placeholder>",
+      "depth_summary": {
+        "front": 5.555995464324951,
+        "left": 3.5171446800231934,
+        "topdown": 2.5909371376037598,
+        "right": 3.657714366912842,
+        "back": 3.197855234146118
+      },
+      "drone_state": {
+        "x": 6494.66,
+        "y": -4198.68,
+        "z": -3.29,
+        "pitch": 0.0,
+        "roll": -0.0,
+        "yaw": 2.74
+      },
+      "task_context": {
+        "task_id": 0,
+        "instruction": "Under the traffic light beads across the street",
+        "start_rot_deg": [
+          0.0,
+          0.0,
+          180.0
+        ],
+        "start_yaw_deg": 180.0,
+        "start_pos_m": [
+          6501.50258149,
+          -4199.694137529999,
+          -1.31595741
+        ]
+      }
+    },
+    "llm_output": {
+      "done": true,
+      "message": "Mission completed.",
+      "target_location_direction": "front-left"
+    },
+    "parsed_action": {
+      "type": "done",
+      "message": "Mission completed.",
+      "target_location_direction": "front-left",
+      "raw": {
+        "done": true,
+        "message": "Mission completed.",
+        "target_location_direction": "front-left"
+      }
+    },
+    "drone_state": {
+      "x": 6494.65966796875,
+      "y": -4198.67919921875,
+      "z": -3.288532018661499,
+      "pitch": 2.9381686382376826e-06,
+      "roll": -1.1549665695191869e-08,
+      "yaw": 2.743022456092592
+    },
+    "sensor_data": {
+      "depth_summary": {
+        "front": 5.555995464324951,
+        "left": 3.5171446800231934,
+        "topdown": 2.5909371376037598,
+        "right": 3.657714366912842,
+        "back": 3.197855234146118
+      }
+    }
+  }
+]

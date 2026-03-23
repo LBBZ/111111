@@ -1,0 +1,38 @@
+{
+  "task_id": 0,
+  "dataset_root": "Datasets\\vln",
+  "started_at": "2026-03-16 17:39:06",
+  "finished_at": "2026-03-16 17:39:58",
+  "controller_mode": "online_airsim_mock_llm",
+  "script": "DroneController/run_vln_workflow_eval.py",
+  "dataset_input_priority": "json(episode_index.json+groups.json) > start_loc.txt",
+  "dataset_coord_transform": "use preprocessed start_pos_m from vln_metrics (cm->m, z sign handled there)",
+  "episode_init": {
+    "dataset_index": 0,
+    "start_pos_raw_cm": [
+      650150.258149,
+      -419969.413753,
+      131.595741
+    ],
+    "start_pos_m": [
+      6501.50258149,
+      -4199.694137529999,
+      -1.31595741
+    ],
+    "start_rot_deg": [
+      0.0,
+      0.0,
+      180.0
+    ],
+    "start_yaw_deg": 180.0,
+    "instruction": "Under the traffic light beads across the street",
+    "applied_state": {
+      "x": 6501.50244140625,
+      "y": -4199.6943359375,
+      "z": -1.3221925497055054,
+      "pitch": 4.736832260073743e-09,
+      "roll": 4.536695907509772e-09,
+      "yaw": 3.141592653454252
+    }
+  }
+}

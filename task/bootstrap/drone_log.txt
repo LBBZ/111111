@@ -1,0 +1,180 @@
+
+============================================================
+Timestamp: 2026-03-18 16:55:40
+
+--- Prompt JSON ---
+{
+    "image": "<base64 placeholder>",
+    "depth_summary": {
+        "front": 0.3775111734867096,
+        "left": 0.3775111734867096,
+        "topdown": null,
+        "right": 0.3775111734867096,
+        "back": 0.38037109375
+    },
+    "drone_state": {
+        "x": 6501.5,
+        "y": -4199.69,
+        "z": -0.35,
+        "pitch": 0.0,
+        "roll": 0.0,
+        "yaw": -3.14
+    },
+    "task_context": {
+        "task_id": "bootstrap",
+        "task_kind": "bootstrap_simple",
+        "instruction": "Simple warm-up: move up once from initial position.",
+        "start_pos_m": [
+            6501.50258149,
+            -4199.694137529999,
+            -1.31595741
+        ],
+        "start_rot_deg": [
+            0.0,
+            0.0,
+            180.0
+        ]
+    }
+}
+
+--- LLM Output ---
+{
+    "scores": {
+        "front": 0.1,
+        "left": 0.1,
+        "right": 0.1,
+        "back": 0.1,
+        "down": 0.9
+    },
+    "confidence": 1,
+    "target_direction": "up",
+    "turn_direction": "none",
+    "turn_angle_deg": 0.0,
+    "forward_distance": 0.0,
+    "vertical_movement": 3,
+    "notes": "Bootstrap warm-up: move up once."
+}
+
+--- Parsed Action ---
+{
+    "type": "motion",
+    "turn": {
+        "direction": "none",
+        "angle_deg": 0.0
+    },
+    "forward": 0.0,
+    "vertical": 3.0,
+    "raw": {
+        "scores": {
+            "front": 0.1,
+            "left": 0.1,
+            "right": 0.1,
+            "back": 0.1,
+            "down": 0.9
+        },
+        "confidence": 1,
+        "target_direction": "up",
+        "turn_direction": "none",
+        "turn_angle_deg": 0.0,
+        "forward_distance": 0.0,
+        "vertical_movement": 3,
+        "notes": "Bootstrap warm-up: move up once."
+    }
+}
+
+--- Drone State ---
+{
+    "x": 6501.50244140625,
+    "y": -4199.6943359375,
+    "z": -3.438429594039917,
+    "pitch": 0.0,
+    "roll": 0.0,
+    "yaw": -3.1415924787441973
+}
+
+--- Depth Summary ---
+{
+    "front": 0.3775111734867096,
+    "left": 0.3775111734867096,
+    "topdown": null,
+    "right": 0.3775111734867096,
+    "back": 0.38037109375
+}
+============================================================
+
+============================================================
+Timestamp: 2026-03-18 16:55:47
+
+--- Prompt JSON ---
+{
+    "image": "<base64 placeholder>",
+    "depth_summary": {
+        "front": 2.1938705444335938,
+        "left": 2.6687211990356445,
+        "topdown": 2.431640625,
+        "right": 1.8432552814483643,
+        "back": 4.334120273590088
+    },
+    "drone_state": {
+        "x": 6501.5,
+        "y": -4199.69,
+        "z": -3.44,
+        "pitch": 0.0,
+        "roll": 0.0,
+        "yaw": -3.14
+    },
+    "task_context": {
+        "task_id": "bootstrap",
+        "task_kind": "bootstrap_simple",
+        "instruction": "Simple warm-up: move up once from initial position.",
+        "start_pos_m": [
+            6501.50258149,
+            -4199.694137529999,
+            -1.31595741
+        ],
+        "start_rot_deg": [
+            0.0,
+            0.0,
+            180.0
+        ]
+    }
+}
+
+--- LLM Output ---
+{
+    "done": true,
+    "message": "Bootstrap completed.",
+    "target_location_direction": "up"
+}
+
+--- Parsed Action ---
+{
+    "type": "done",
+    "message": "Bootstrap completed.",
+    "target_location_direction": "up",
+    "raw": {
+        "done": true,
+        "message": "Bootstrap completed.",
+        "target_location_direction": "up"
+    }
+}
+
+--- Drone State ---
+{
+    "x": 6501.50244140625,
+    "y": -4199.6943359375,
+    "z": -3.435084581375122,
+    "pitch": 0.0,
+    "roll": 0.0,
+    "yaw": -3.1415924787441973
+}
+
+--- Depth Summary ---
+{
+    "front": 2.1938705444335938,
+    "left": 2.6687211990356445,
+    "topdown": 2.431640625,
+    "right": 1.8432552814483643,
+    "back": 4.334120273590088
+}
+============================================================

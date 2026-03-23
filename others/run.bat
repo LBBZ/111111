@@ -1,0 +1,1 @@
+TrafficSimulation.exe -dx12 -RenderOffscreen -ResX=640 -ResY=480 -windowed

@@ -1,0 +1,160 @@
+Step 1:
+  Action: move_up(9.19)
+  Start Position
+  Position: x=0.00, y=0.00, z=0.00
+  Orientation: pitch=0.00, roll=0.00, yaw=0.00
+
+  End Position
+  Position: x=-0.00, y=-0.00, z=-9.14
+  Orientation: pitch=-0.00, roll=-0.00, yaw=0.00
+
+Step 2:
+  Action: move_forward(5.46)
+  Start Position
+  Position: x=-0.00, y=-0.00, z=-9.15
+  Orientation: pitch=-0.00, roll=0.00, yaw=-0.00
+
+  End Position
+  Position: x=5.51, y=0.00, z=-9.16
+  Orientation: pitch=0.01, roll=-0.00, yaw=-0.00
+
+Step 3:
+  Action: move_down(7.76)
+  Start Position
+  Position: x=5.48, y=0.00, z=-9.17
+  Orientation: pitch=0.00, roll=-0.00, yaw=-0.00
+
+  End Position
+  Position: x=5.48, y=0.00, z=-1.45
+  Orientation: pitch=-0.00, roll=0.00, yaw=0.00
+
+Step 4:
+  Action: move_forward(5.86)
+  Start Position
+  Position: x=5.48, y=0.00, z=-1.46
+  Orientation: pitch=0.00, roll=0.00, yaw=0.00
+
+  End Position
+  Position: x=11.39, y=0.00, z=-1.47
+  Orientation: pitch=0.01, roll=-0.00, yaw=0.00
+
+Step 5:
+  Action: turn_right(90.00)
+  Start Position
+  Position: x=11.36, y=0.00, z=-1.48
+  Orientation: pitch=0.00, roll=-0.00, yaw=0.00
+
+  End Position
+  Position: x=11.36, y=0.00, z=-1.39
+  Orientation: pitch=0.00, roll=0.00, yaw=1.61
+
+Step 6:
+  Action: move_left(6.99)
+  Start Position
+  Position: x=11.36, y=0.00, z=-1.40
+  Orientation: pitch=0.00, roll=0.00, yaw=1.61
+
+  End Position
+  Position: x=18.12, y=0.24, z=-1.42
+  Orientation: pitch=0.00, roll=-0.00, yaw=1.61
+
+Step 7:
+  Action: turn_right(90.00)
+  Start Position
+  Position: x=18.16, y=0.12, z=-1.42
+  Orientation: pitch=-0.00, roll=-0.00, yaw=1.61
+
+  End Position
+  Position: x=18.16, y=0.12, z=-1.33
+  Orientation: pitch=0.00, roll=0.00, yaw=-3.07
+
+Step 8:
+  Action: turn_left(90.00)
+  Start Position
+  Position: x=18.16, y=0.12, z=-1.34
+  Orientation: pitch=0.00, roll=-0.00, yaw=-3.07
+
+  End Position
+  Position: x=18.16, y=0.12, z=-1.25
+  Orientation: pitch=0.00, roll=0.00, yaw=1.61
+
+Step 9:
+  Action: move_right(9.48)
+  Start Position
+  Position: x=18.16, y=0.12, z=-1.26
+  Orientation: pitch=0.00, roll=0.00, yaw=1.61
+
+  End Position
+  Position: x=8.92, y=-0.21, z=-1.28
+  Orientation: pitch=-0.00, roll=0.00, yaw=1.61
+
+Step 10:
+  Action: move_backward(9.29)
+  Start Position
+  Position: x=8.88, y=-0.10, z=-1.28
+  Orientation: pitch=0.00, roll=0.00, yaw=1.61
+
+  End Position
+  Position: x=9.20, y=-9.15, z=-1.31
+  Orientation: pitch=0.00, roll=0.00, yaw=1.61
+
+Step 11:
+  Action: move_backward(8.87)
+  Start Position
+  Position: x=9.09, y=-9.19, z=-1.31
+  Orientation: pitch=0.00, roll=-0.00, yaw=1.61
+
+  End Position
+  Position: x=9.39, y=-17.82, z=-1.33
+  Orientation: pitch=0.00, roll=0.00, yaw=1.61
+
+Step 12:
+  Action: turn_left(90.00)
+  Start Position
+  Position: x=9.28, y=-17.86, z=-1.34
+  Orientation: pitch=0.00, roll=-0.00, yaw=1.61
+
+  End Position
+  Position: x=9.27, y=-17.86, z=-1.25
+  Orientation: pitch=0.00, roll=-0.00, yaw=0.00
+
+Step 13:
+  Action: move_up(5.05)
+  Start Position
+  Position: x=9.27, y=-17.86, z=-1.26
+  Orientation: pitch=0.00, roll=0.00, yaw=0.00
+
+  End Position
+  Position: x=9.27, y=-17.86, z=-6.25
+  Orientation: pitch=-0.00, roll=0.00, yaw=0.00
+
+Step 14:
+  Action: move_right(7.78)
+  Start Position
+  Position: x=9.27, y=-17.86, z=-6.26
+  Orientation: pitch=-0.00, roll=0.00, yaw=0.00
+
+  End Position
+  Position: x=9.26, y=-10.04, z=-6.28
+  Orientation: pitch=-0.00, roll=-0.01, yaw=0.00
+
+Step 15:
+  Action: move_up(6.94)
+  Start Position
+  Position: x=9.26, y=-10.07, z=-6.29
+  Orientation: pitch=-0.00, roll=-0.00, yaw=0.00
+
+  End Position
+  Position: x=9.26, y=-10.07, z=-13.17
+  Orientation: pitch=-0.00, roll=-0.00, yaw=0.00
+
+Step 16:
+  Action: move_forward(9.48)
+  Start Position
+  Position: x=9.26, y=-10.07, z=-13.17
+  Orientation: pitch=0.00, roll=-0.00, yaw=0.00
+
+  End Position
+  Position: x=18.78, y=-10.06, z=-13.19
+  Orientation: pitch=0.01, roll=-0.00, yaw=0.00
+

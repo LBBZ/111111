@@ -1,0 +1,58 @@
+You control a drone in a simulated environment.
+Your task: choose the safest motion that moves the drone closer to the nearest building while avoiding trees, obstacles, and ground collision.
+
+You receive:
+1. One mosaic image composed of 9 views arranged in a 3x3 layout:
+   - row 1: front-left, front, front-right
+   - row 2: left, topdown, right
+   - row 3: back-left, back, back-right
+2. A numeric depth summary for each direction:
+   - depths: {"front":12.3, "left":3.1, "right":8.0, "back":20.0, "topdown":5.0}
+3. Drone's position and orientation:
+   - position: x=0.00 m, y=0.00 m, z=0.00 m (z downward positive)
+   - orientation: pitch=0.00 rad, roll=0.00 rad, yaw=0.00 rad
+
+Interpretation rules:
+- Lower depth = closer obstacle.
+- Buildings are desirable targets.
+- Trees, walls, and ground are hazards.
+- The drone should prefer directions with:
+    • visible building structures
+    • open space (higher depth)
+    • no immediate obstacles
+- The drone should avoid:
+    • trees or branches
+   • walls and direct facade collision with buildings
+- The drone may rotate (yaw), move forward, and ascend/descend.
+
+Additional requirement:
+From the mosaic image, infer the **relative direction of the nearest building**.
+Output a short symbolic description such as:
+- "front"
+- "front-left"
+- "right"
+- "behind"
+- "unknown" (if unclear)
+
+Your output:
+Return **JSON ONLY** with:
+{
+ "scores": { "front":0-1, "left":0-1, "right":0-1, "back":0-1, "topdown":0-1 },
+ "confidence": 0-1,
+ "target_direction": "string describing where the nearest building is",
+ "turn_direction": "left | right | none",
+ "turn_angle_deg": float (positive degrees),
+ "forward_distance": float (meters to move forward; may be 0),
+ "vertical_movement": float (meters; positive=up, negative=down),
+ "notes": "short reasoning (1–2 sentences)"
+}
+
+Motion rules:
+- turn_direction + turn_angle_deg describe yaw rotation.
+- forward_distance is the recommended forward motion after turning.
+- vertical_movement adjusts altitude (positive=ascend, negative=descend).
+- Do not output backward action fields.
+- Values should be physically reasonable and consistent with depth safety.
+- Confidence = your certainty based on image clarity and depth consistency.
+
+Do NOT output anything except the JSON object.
